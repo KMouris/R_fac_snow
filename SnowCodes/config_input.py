@@ -146,7 +146,7 @@ image_location_folder_name = "IMG_DATA"
 
 # Thresholds for snow detection
 NDSI_min = 0.4
-red_min = 700
+blue_red_min = 0.85
 blue_min = 1700
 
 """

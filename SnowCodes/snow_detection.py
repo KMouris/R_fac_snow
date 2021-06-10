@@ -161,17 +161,17 @@ def calculate_snow_cover(folder, date):
     red_dataset, red_array, red_geotransform = gu.raster2array(Band4)
     SWIR_dataset, SWIR_array, SWIR_geotransform = gu.raster2array(Band11)
 
-
     # NDSI calculation
-    NDSI = (green_array-SWIR_array)/(green_array+SWIR_array)
+    NDSI = (green_array - SWIR_array) / (green_array + SWIR_array)
+    blue_red_ratio = blue_array / red_array
 
     # Calculate Snow Array
-    red_blue = np.where(np.logical_and(red_array > red_min, blue_array > blue_min), 1, 0)
-    Snow = np.where(np.logical_and(NDSI>NDSI_min, red_blue == 1), 1, 0)
+    red_blue = np.where(np.logical_and(blue_red_ratio > blue_red_min, blue_array > blue_min), 1, 0)
+    snow = np.where(np.logical_and(NDSI > NDSI_min, red_blue == 1), 1, 0)
 
     # Save resulting snow Raster
     snow_raster = snow_cover_path + "\\SnowCover_" + date.strftime("%Y%m") + ".tif"
-    np.savetxt('Snow', Snow, fmt='%s')
+    np.savetxt('Snow', snow, fmt='%s')
     gu.create_raster(snow_raster, Snow, epsg=32634, nan_val=-9999, rdtype=gdal.GDT_UInt32, geo_info=blue_geotransform)
 
 
