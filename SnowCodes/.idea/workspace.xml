@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="2a3c1daa-0147-48ce-b5ad-3b1f8212671f" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1r4dXObL1GO25zU1XIudr0xiZdh" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Python-Course-Project/Project_Codes" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunManager" selected="Python.main_snow_codes">
+    <configuration name="ero_snow" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="SnowCodes" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ero_snow.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main_snow_codes" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="SnowCodes" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main_snow_codes.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="snow_detection" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="SnowCodes" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/snow_detection.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main_snow_codes" />
+        <item itemvalue="Python.snow_detection" />
+        <item itemvalue="Python.ero_snow" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2a3c1daa-0147-48ce-b5ad-3b1f8212671f" name="Default Changelist" comment="" />
+      <created>1621238998409</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1621238998409</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="499" y="159" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1621262879989">
+      <screen x="0" y="0" width="1536" height="826" />
+    </state>
+    <state x="499" y="159" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1536.826@0.0.1536.826" timestamp="1621262879989" />
+    <state width="812" height="438" key="DebuggerActiveHint" timestamp="1622742761044">
+      <screen x="0" y="0" width="1536" height="826" />
+    </state>
+    <state width="812" height="438" key="DebuggerActiveHint/0.0.1536.826@0.0.1536.826" timestamp="1622742761044" />
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1622123982894">
+      <screen x="0" y="0" width="1536" height="826" />
+    </state>
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.826@0.0.1536.826" timestamp="1622123982894" />
+    <state width="1514" height="241" key="GridCell.Tab.0.bottom" timestamp="1623150169695">
+      <screen x="0" y="0" width="1536" height="826" />
+    </state>
+    <state width="1514" height="241" key="GridCell.Tab.0.bottom/0.0.1536.826@0.0.1536.826" timestamp="1623150169695" />
+    <state width="1514" height="241" key="GridCell.Tab.0.center" timestamp="1623150169695">
+      <screen x="0" y="0" width="1536" height="826" />
+    </state>
+    <state width="1514" height="241" key="GridCell.Tab.0.center/0.0.1536.826@0.0.1536.826" timestamp="1623150169695" />
+    <state width="1514" height="241" key="GridCell.Tab.0.left" timestamp="1623150169695">
+      <screen x="0" y="0" width="1536" height="826" />
+    </state>
+    <state width="1514" height="241" key="GridCell.Tab.0.left/0.0.1536.826@0.0.1536.826" timestamp="1623150169695" />
+    <state width="1514" height="241" key="GridCell.Tab.0.right" timestamp="1623150169695">
+      <screen x="0" y="0" width="1536" height="826" />
+    </state>
+    <state width="1514" height="241" key="GridCell.Tab.0.right/0.0.1536.826@0.0.1536.826" timestamp="1623150169695" />
+    <state width="1514" height="241" key="GridCell.Tab.1.bottom" timestamp="1623150169696">
+      <screen x="0" y="0" width="1536" height="826" />
+    </state>
+    <state width="1514" height="241" key="GridCell.Tab.1.bottom/0.0.1536.826@0.0.1536.826" timestamp="1623150169696" />
+    <state width="1514" height="241" key="GridCell.Tab.1.center" timestamp="1623150169696">
+      <screen x="0" y="0" width="1536" height="826" />
+    </state>
+    <state width="1514" height="241" key="GridCell.Tab.1.center/0.0.1536.826@0.0.1536.826" timestamp="1623150169696" />
+    <state width="1514" height="241" key="GridCell.Tab.1.left" timestamp="1623150169695">
+      <screen x="0" y="0" width="1536" height="826" />
+    </state>
+    <state width="1514" height="241" key="GridCell.Tab.1.left/0.0.1536.826@0.0.1536.826" timestamp="1623150169695" />
+    <state width="1514" height="241" key="GridCell.Tab.1.right" timestamp="1623150169696">
+      <screen x="0" y="0" width="1536" height="826" />
+    </state>
+    <state width="1514" height="241" key="GridCell.Tab.1.right/0.0.1536.826@0.0.1536.826" timestamp="1623150169696" />
+    <state x="277" y="44" key="SettingsEditor" timestamp="1622124017387">
+      <screen x="0" y="0" width="1536" height="826" />
+    </state>
+    <state x="277" y="44" key="SettingsEditor/0.0.1536.826@0.0.1536.826" timestamp="1622124017387" />
+    <state width="775" height="420" key="XDebugger.FullValuePopup" timestamp="1621267557417">
+      <screen x="0" y="0" width="1536" height="826" />
+    </state>
+    <state width="775" height="420" key="XDebugger.FullValuePopup/0.0.1536.826@0.0.1536.826" timestamp="1621267557417" />
+    <state x="431" y="147" width="672" height="678" key="search.everywhere.popup" timestamp="1621950212642">
+      <screen x="0" y="0" width="1536" height="826" />
+    </state>
+    <state x="431" y="147" width="672" height="678" key="search.everywhere.popup/0.0.1536.826@0.0.1536.826" timestamp="1621950212642" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../Kilian_Codes/Project_Codes/main.py</url>
+          <line>7</line>
+          <option name="timeStamp" value="138" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../Kilian_Codes/Project_Codes/main.py</url>
+          <line>139</line>
+          <option name="timeStamp" value="140" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../Kilian_Codes/Project_Codes/main.py</url>
+          <line>83</line>
+          <option name="timeStamp" value="143" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../Kilian_Codes/Project_Codes/main.py</url>
+          <line>84</line>
+          <option name="timeStamp" value="144" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../Kilian_Codes/Project_Codes/main.py</url>
+          <line>87</line>
+          <option name="timeStamp" value="145" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/snow_detection.py</url>
+          <line>148</line>
+          <option name="timeStamp" value="201" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pt_raster_manipulation.py</url>
+          <line>119</line>
+          <option name="timeStamp" value="232" />
+        </line-breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
