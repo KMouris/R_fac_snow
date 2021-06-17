@@ -49,7 +49,7 @@ Boolean variables to determine which programs to run and which input parameters 
     - run_total_factor: 'True' to calculate the total precipitation factor (rain + snow)
 """
 run_pt_manipulation = False
-run_ero_snow = False
+run_rain_snow_rasters = False
 run_snow_detection = True
 run_snow_melt = False
 run_r_factor = False

@@ -1,7 +1,7 @@
 
 import file_management
 import snow_detection
-import ero_snow
+import rain_snow_rasters
 import pt_raster_manipulation
 import config_input
 from config_input import *
@@ -13,8 +13,9 @@ import total_precip_factor
 
 """
 Main code author: Maria Fernanda Morales Oreamuno
-Main code in order to call the Ero_Sno and Snow Detection programs for a given month or group of months 
-    - Ero_Sno: generates monthly snow and rain rasters from input precipitation and temperature data. 
+Main code in order to call the rain and snow raster generation and Snow Detection programs for a given month or group 
+of months 
+    - rain_snow_rasters: generates monthly snow and rain rasters from input precipitation and temperature data. 
     - Snow_Detection: Detects areas of snow from input satellite (Sentinel2) data and returns a binary data raster, 
       where 1 equals an area of snow and 0 no snow
 
@@ -41,21 +42,21 @@ if __name__ == '__main__':
         print("Finished running PT_raster manipulation. *************************************************************")
 # ------------------------------------------------------------------------------------------------------------------- #
 
-# --- RUN ero_snow -------------------------------------------------------------------------------------------------- #
+# --- RUN rain_snow_rasters ----------------------------------------------------------------------------------------- #
     # Generate the rain and snow rasters from the precipitation and temperature  in .csv files ---------------------- #
-    if run_ero_snow:
-        print("Generating rain and snow rasters *********************************************************************")
+    if run_rain_snow_rasters:
+        print("Generating rain and snow rasters")
         # save all contents in the folder to a list
         csv_list = os.listdir(PT_path)
         # Check if more folders or if there are .csv files (to determine if 1 run or multiple)
         if any(".csv" in string for string in csv_list):  # If any .csv files in folder, loop through 1 folder
-            ero_snow.generate_rain_snow_rasters(config_input.PT_path)
+            rain_snow_rasters.generate_rain_snow_rasters(config_input.PT_path)
         else:  # Loop through each sub-folder
             # clip csv_list to include only dates within input range
-            csv_list = file_management.filter_raster_lists(csv_list, start_date, end_date, "ero_snow.py")
+            csv_list = file_management.filter_raster_lists(csv_list, start_date, end_date, "rain_snow_rasters.py")
             for date in csv_list:  # Run code for each folder (date) at a time
-                ero_snow.generate_rain_snow_rasters(PT_path + "\\" + date)
-        print("Finished running ero_snow. ***************************************************************************")
+                rain_snow_rasters.generate_rain_snow_rasters(PT_path + "\\" + date)
+        print("Finished rain and snow raster generation")
 # ------------------------------------------------------------------------------------------------------------------- #
 
 # --- RUN snow_detection -------------------------------------------------------------------------------------------- #
