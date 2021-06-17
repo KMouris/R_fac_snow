@@ -15,7 +15,8 @@ NOTES:
 - Program runs for one month at a time. Therefore, the folder path ir receives must contain .csv files for a given 
     month. The program will not differentiate between months within a given .csv file. 
 - If multiple dates are to be analyzed, input a folder with multiple subfolders, one for each month and whose folder 
-    name corresponds to the date. The main_snow_codes file will loop through each folder and run ero_snow for each. 
+    name corresponds to the date. The main_snow_codes file will loop through each folder and run rain_snow_rasters
+    for each. 
 - Program can be run individually or through "SnowCode_Main" and will run if input folder contains the .csv files for 
 a given month
 - Code calls program "Resampling" in order to resample the rasters to the given cell resolution of 25x25
@@ -90,7 +91,7 @@ def snow_station(Station, snow):
 
 
 def generate_rain_snow_rasters(path):
-    print("Running ero_snow: Data reading from: ", path)
+    print("Running rain and snow raster generation.\n Reading data from: ", path)
     start_time = time.time()
 
     # Get all the .csv files in the input folder, and save the names in a list, to iterate through them
@@ -230,7 +231,7 @@ def main():
 
 
 if __name__ == '__main__':
-    print("Calling Ero_Snow directly")
+    print("Calling rain_snow_rasters directly")
     main()
 else:
     pass
