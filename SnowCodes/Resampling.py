@@ -1,8 +1,4 @@
-import numpy as np
-import pandas as pd
-import os
-import time
-import gdal
+from config_input import *
 
 from scipy.interpolate import griddata
 import raster_calculations as rc
