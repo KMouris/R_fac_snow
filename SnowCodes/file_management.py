@@ -329,7 +329,7 @@ else:
     else:
         config_input.PT_path = PT_path_input
 # ------------------------------------------------------------------------------------------------------------------- #
-    if run_ero_snow:
+    if run_rain_snow_rasters:
         config_input.snow_raster_path = results_path + "\\snow_per_month"
         create_folder(config_input.snow_raster_path)
         config_input.rain_raster_path = results_path + "\\rain_per_month"
