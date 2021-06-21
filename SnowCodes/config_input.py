@@ -52,11 +52,11 @@ Boolean variables to determine which programs to run and which input parameters 
 """
 run_pt_manipulation = False
 run_rain_snow_rasters = False
-run_snow_cover = True
-run_satellite_image_clip_merge = True
+run_snow_cover = False
+run_satellite_image_clip_merge = False
 run_snow_melt = False
 run_r_factor = False
-run_total_factor = False
+run_total_factor = True
 # ------------------------------------------------------------------------------------------------------------------- #
 
 """
@@ -185,7 +185,8 @@ If run_snow_melt is False (AND run_total_factor is True) ***********************
     - snow_melt_input: folder where .tif snow melt rasters are located (each file name must contain the date)
 """
 
-snow_melt_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\Snowmelt'
+# snow_melt_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\Snowmelt'
+snow_melt_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\Snowmelt'
 
 # ------------------------------------------------------------------------------------------------------------------- #
 
@@ -202,7 +203,8 @@ if run_Rfactor is False (AND run_total_factor is True)
     -r_factor_input: folder path with .tif R factor rasters (with the raster name including the date)
 """
 
-r_factor_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\R_factor_REM_db'
+# r_factor_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\R_factor_REM_db'
+r_factor_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\R_factor_REM_db'
 # ------------------------------------------------------------------------------------------------------------------- #
 
 """
