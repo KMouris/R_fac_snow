@@ -147,9 +147,11 @@ def main():
     # Saving arrays as raster
     k = 0
     for entry in snow_melt:
-        save_path = r'' + os.path.abspath('../Results/Snow_end_month') + "/snow_end_month" + str(date[k][0]) + ".tif"
+        # save_path = r'' + os.path.abspath('../Results/Snow_end_month') + "/snow_end_month" + str(date[k][0]) + ".tif"
+        save_path = results_path +'\\Snow_end_month' + "\\snow_end_month_" + str(date[k][0]) + ".tif"
         DataManagement.save_raster(save_path, snow_end_month[k], gt, proj)
-        save_path = r'' + os.path.abspath('../Results/Snowmelt') + "/snowmelt" + str(date[k][0]) + ".tif"
+        # save_path = r'' + os.path.abspath('../Results/Snowmelt') + "/snowmelt" + str(date[k][0]) + ".tif"
+        save_path = results_path + '\\Snowmelt\snowmelt' + str(date[k][0]) + ".tif"
         DataManagement.save_raster(save_path, snow_melt[k], gt, proj)
         k += 1
 
