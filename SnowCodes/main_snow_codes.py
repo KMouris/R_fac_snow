@@ -8,7 +8,7 @@ from config_input import *
 
 from snow_melt import main as snow_main
 from Rfactor_REM_db import Rfactor_main
-import total_precip_factor
+import total_R_factor
 
 
 """
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
 # --- RUN total_precit_factor --------------------------------------------------------------------------------------- #
     if run_total_factor:
-        total_precip_factor.main()
+        total_R_factor.main()
 # ------------------------------------------------------------------------------------------------------------------- #
 
 
