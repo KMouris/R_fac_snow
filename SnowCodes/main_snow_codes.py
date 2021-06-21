@@ -1,6 +1,6 @@
 
 import file_management
-import snow_detection
+import snow_cover
 import rain_snow_rasters
 import pt_raster_manipulation
 import config_input
@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
 # --- RUN snow_detection -------------------------------------------------------------------------------------------- #
     # Generate a binary snow detection raster, to determine cells with snow ----------------------------------------- #
-    if run_snow_detection:
+    if run_snow_cover:
         si_list = os.listdir(SI_folder_path)  # list with satellite image folders
         if input_si_dates:  # If user inputs the dates to use:
             si_list = file_management.check_input_si_dates(si_list, date_list, si_image_dates)
@@ -73,7 +73,7 @@ if __name__ == '__main__':
         print("Folders to loop through:, ", si_list)
         for f, d in zip(si_list, date_list):
             path = SI_folder_path + "\\" + str(f)
-            snow_detection.calculate_snow_cover(path, d)
+            snow_cover.calculate_snow_cover(path, d)
 # ------------------------------------------------------------------------------------------------------------------- #
 
 # --- RUN snow_melt ------------------------------------------------------------------------------------------------- #
