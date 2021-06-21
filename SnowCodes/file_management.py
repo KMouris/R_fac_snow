@@ -255,36 +255,12 @@ def check_input_si_dates(folders, date_list, si_image_dates):
     :param si_image_dates: the user input variable with the sensing dates to use
     :return: list of satellite image sensing dates to analyze.
     """
-    # Step 1: # Check if the input dates exist:
-    for folder in folders:
-        if str(folder) not in folders:
-            message = "There is no satellite image for {}".format(str(folder))
+    # Step 1: # Check if the input dates exist in the input satellite image folder:
+    for s_date in si_image_dates:
+        if str(s_date) not in folders:
+            message = "There is no satellite image for {} in input satellite image folder. Check user input".format(str(s_date))
             sys.exit(message)
-    # Step 2. Check if there are as much input dates as dates to analyze:
-    # 2.1 if there are as much input dates as dates to analyze, use all the input dates as the satellite image date to
-    # analyze
-    # if len(date_list) != len(si_image_dates):
-    #     # Check if the input dates correspond, in order, to the analysis dates:
-    #     for date, si_date in zip(date_list, si_image_dates):
-    #         # get last day of the given month in "date"
-    #         date = date.replace(day=calendar.monthrange(date.year, date.month)[1])
-    #         # convert input to datetime object:
-    #         si_date_format = get_date(str(si_date))
-    #         # subtract the analysis date from all folder dates to get day difference between each folder and "date"
-    #         sub = date - si_date_format
-    #         # if time difference is more than 15 days, it is no longer considered the end of the month.
-    #         if abs(sub) > datetime.timedelta(days=15):
-    #             message = "The input date {} does not correspond to the end of month {}. Check input.".format(
-    #                 str(si_date.strftime('%Y%m%d')),
-    #                 str(date.strftime('%Y%m')))
-    #             sys.exit(message)
-    #     # if it passed through the loop: means the input si dates are in order and they correspond to each analysis date
-    #     # (in ascending order)
-    #     folders_to_analyze = date
-    # Step 2:  If less dates are given than the total number if dates to analyze, only change the dates corresponding to the
-    # given input dates
-    # else:
-        # get last of the month satellite image date for each date_list (analysis date)
+    # Get list of available satellite images for each date in analysis range, calculated automatically
     last_of_month_list = generate_satellite_image_date_list(folders, date_list)
     folder_date_list = []  # list to save the folder names as dates
     # convert each last_of_month_list folder name to datetime format
