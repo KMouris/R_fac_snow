@@ -70,16 +70,19 @@ Files needed regardless of which codes to run:
     - results path: path where to save all results 
     - geo_utils_path: path where geoutils modules are located
 """
-snapraster_path = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Input\DEM\fildemBanja.tif'
-shape_path = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Input\Shapes\totalboundary.shp'
+snapraster_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Input\DEM\fildemBanja.tif'
+shape_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Input\Shapes\totalboundary.shp'
 # shape_path = r'Y:\Abt1\hiwi\Oreamuno\GIS\ArcBanja_Jan20\catchment_banja_adap.shp'
 
-results_path = r'' + os.path.abspath('../Results')
+# results_path = r'' + os.path.abspath('../Results')
+results_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Git_scores\Results'
 
+# start_date = '201605'
 start_date = '201605'
-end_date = '201804'
-
-path_geo_utils = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\geo-utils/'
+# end_date = '201804'
+end_date = '201710'
+# path_geo_utils = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\geo-utils/'
+path_geo_utils = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\geo-utils/'
 # ------------------------------------------------------------------------------------------------------------------- #
 # ------------------------------------------------------------------------------------------------------------------- #
 """
@@ -141,6 +144,7 @@ If "run_snow_cover" = True:
     - Thresholds for snow detection (NDSI, Red and Blue)
 """
 SI_folder_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Satellite_data\Downloaded_MF'
+# SI_folder_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\snow_cover\SatelliteImages'
 
 input_si_dates = True
 si_image_dates = [20161223]
