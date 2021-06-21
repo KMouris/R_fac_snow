@@ -346,7 +346,7 @@ else:
 
 # ------------------------------------------------------------------------------------------------------------------- #
     if run_total_factor:
-        config_input.total_factor_path = results_path + "\\Total_Precipitation_factor"
+        config_input.total_factor_path = results_path + "\\R_factor_Total"
         create_folder(config_input.total_factor_path)
         # Check needed folders:
         check_folder(config_input.r_factor_path, 'r_factor_path')
