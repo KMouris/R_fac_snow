@@ -40,8 +40,10 @@ Boolean variables to determine which programs to run and which input parameters 
         the temperature and precipitation values for each raster cell. 
     - run_ero_snow: 'True' to run Ero_Sno program to calculate rain and snow rasters, 'False' to input the snow and/or
      precipitation rasters directly for the snow_melt
-    - run_snow_detection: "True" to run snow_detection code, 'False' to directly input the binary snow raster, to 
+    - run_snow_cover: "True" to run snow_cover code, 'False' to directly input the binary snow raster, to 
         calculate areas of snow from satellite images
+    - run_satellite_image_clip_merge: 'True' to run si_clip_merge.py and merge and clip the input satellite images. 
+        'False if user inputs previously clipped and merged satellite images. 
     - run_snow_melt: 'True' to run the python programs to calculate the snow at the end of the month and the total snow
         melt from the snow detection and snow rasters.
     - run_r_factor: 'True' to run the python program to calculate the R(ain) factor for the RUSLE model, from the rain
@@ -50,7 +52,8 @@ Boolean variables to determine which programs to run and which input parameters 
 """
 run_pt_manipulation = False
 run_rain_snow_rasters = False
-run_snow_detection = True
+run_snow_cover = True
+run_satellite_image_clip_merge = True
 run_snow_melt = False
 run_r_factor = False
 run_total_factor = False
@@ -110,14 +113,14 @@ nodata = -9999.0
 
 # ------------------------------------------------------------------------------------------------------------------- #
 """
-If Run_EroSnow = True: 
+If run_rain_snow_rasters = True: 
     - T_snow:minimum temperature threshold, very low value means the whole precipitation is considered as rain
     - Ero_S_results_folder: folder in which to save the snow_ero results (snow and precipitation rasters)
 """
 T_snow = 0
 
 """
-If Run_EroSnow = False: (AND run_snow_melt is True OR run_r_factor is True) ******************************************
+If run_rain_snow_rasters = False: (AND run_snow_melt is True OR run_r_factor is True) ********************************
 snow_raster: folder path where .tif snow rasters are located (Needed for snow_melt calculation)
 rain_raster: folder path where .tif rain rasters are located (needed for R factor calculation)
 """
@@ -126,9 +129,10 @@ rain_raster_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\rain_
 # ------------------------------------------------------------------------------------------------------------------- #
 
 """
-If "run_snow_detection = True: 
+If "run_snow_cover" = True: 
     - SI_folder path:  Folder with satellite images for a given date: folder must have a subfolder for each satellite 
-        (e.g. one for TDL and one for TDK)
+        (e.g. one for TDL and one for TDK), The input files can be raw satellite images (located in folder 'image_
+        _location_folder_name') or pre-processed (clipped and merged) .tif files. 
     - input_dates_si: boolean that determines if the user sets the image dates to use or if the program calculates the 
         dates automatically. if "True" the program uses the dates in si_image_dates. If "False" the program automatically uses 
     - image_list: Name of bands to merge, clip and resample. The name in the list must correspond to the final suffix of 
@@ -150,7 +154,7 @@ blue_red_min = 0.85
 blue_min = 1700
 
 """
-If "Run_SnowDetection = False (and run_snow_melt is True) **********************************************
+If "run_snow_cover" = False (and run_snow_melt is True) *************************************************************
     -snowcover_raster_input: folder path where .tif binary snow cover rasters are located: 
 """
 snowcover_raster_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\snow_cover'
@@ -191,7 +195,7 @@ fEL_path = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Input\DEM\f_L_E.tif'
 
 """ ****************************************************************************************************
 if run_Rfactor is False (AND run_total_factor is True)
-    -r_factor_inpu: folder path with .tif R factor rasters (with the raster name including the date)
+    -r_factor_input: folder path with .tif R factor rasters (with the raster name including the date)
 """
 
 r_factor_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\R_factor_REM_db'
