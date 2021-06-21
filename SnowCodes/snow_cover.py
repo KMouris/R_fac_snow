@@ -1,7 +1,6 @@
-import config_input
-from config_input import *
+
 import file_management
-import raster_calculations as rc
+from config_input import *
 import si_merge_clip as satellite_images
 
 """
@@ -21,9 +20,12 @@ NOTES:
 - An error is generates if any of the needed bands (02, 03, 04, 11) are not available. If the TCI rasters are not 
 available, the program will skip this step, since it is not necessary for the calculations. 
 
-Input files: [In Input_configuration]
-1. SI_folder_path: Folder with satellite images for a given date: folder must have a subfolder for each satellite 
-(e.g. one for TDL and one for TDK) 
+Input files/data: [In Input_configuration]
+1. SI_folder_path: Folder with satellite images for a given date
+    1.1 folder must have a subfolder for each satellite 
+        (e.g. one for TDL and one for TDK) in case original satellite images must be clipped and merged. 
+    1.2 If input has pre-processed satellite images, the resampled ones must have the band name and '_r' to identify 
+        them. 
 2. Thresholds for snow detection (NDSI, Red and Blue)
 
 if run_satellite_image_merge_clip: 
@@ -46,9 +48,33 @@ def calculate_snow_cover(folder, date):
     print(" Calculating snow cover for date {} with satellite image sensing date: {}".format(date.strftime('%Y%m'),
                                                                                             os.path.split(folder)[1]))
     if run_satellite_image_clip_merge:
+        print("     Merging and resampling input satellite images")
         band_results = satellite_images.sat_image_merge_clip(folder)
-    else:
-        pass
+    else:  # Read pre-processed rasters (clipped and merged) form input folder.
+        print("     Reading pre-processed input satellite images")
+        band_results = []
+        raster_list = glob.glob(folder + "\*.tif")
+        if len(raster_list) == 0:  # if there are no .tif files in input folder
+            message = "There are no pre-processed rasters available in '{}' folder path. Check user input satellite image folder.".format(folder)
+            sys.exit(message)
+        for band in image_list:  # Loop through each band name
+            if band != "TCI":  # Ignore TCI rasters
+                # Check if any file contains the band name, and has a '_r' in the name, identifying it as resampled from
+                # the si_merge_clip.py file
+                match = [f for f in raster_list if (band in f and "_r" in f)]
+                if len(match) == 0:  #If there are no files for the given band: give error
+                    s_date = file_management.get_date(folder)
+                    message = "ERROR: There is no resampled raster corresponding to band [{}] and sampling date {}. Check input ".format(
+                        band, s_date.strftime('%Y%m%d')) +\
+                        "\nNOTE: Resampled rasters must be identified by a '_r' in the file name. "
+                    sys.exit(message)
+                elif len(match) > 1:  # If there is more than one available raster for the given band
+                    s_date = file_management.get_date(folder)
+                    message = "There is more than 1 available resampled raster file for band [{}] and sampling date {}. Check input.".format(
+                    band, s_date.strftime('%Y%m%d'))
+                    sys.exit(message)
+                else:
+                    band_results.append(match[0])
 
     # --------------------------------- Snow Detection Calculation -------------------------------------------------- #
 
@@ -84,6 +110,7 @@ def main():
     :return:
     """
     calculate_snow_cover(SI_folder_path, start_date)
+
 
 if __name__ == '__main__':
     print("Running code directly")
