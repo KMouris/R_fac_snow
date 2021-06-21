@@ -6,7 +6,7 @@ import pt_raster_manipulation
 import config_input
 from config_input import *
 
-from snow_melt import main as snow_main
+from snow_melt import snow_melt_main
 from Rfactor_REM_db import Rfactor_main
 import total_R_factor
 
@@ -79,7 +79,7 @@ if __name__ == '__main__':
 # --- RUN snow_melt ------------------------------------------------------------------------------------------------- #
     # Generate end of month snow rasters and snow melt rasters
     if run_snow_melt:
-        snow_main.main()
+        snow_melt_main.main()
 # ------------------------------------------------------------------------------------------------------------------- #
 
 # --- RUN Rfactor_REM_db -------------------------------------------------------------------------------------------- #
