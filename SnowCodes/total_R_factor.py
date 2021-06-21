@@ -44,7 +44,7 @@ def main():
         total_factor = np.where(total_factor.mask == True, np.nan, total_factor)
 
         # 6.6 Save rasters:
-        output_name = total_factor_path + "\\total_precipitation_factor_" + str(date.strftime('%Y%m')) + ".tif"
+        output_name = total_factor_path + "\\RFactor_total_" + str(date.strftime('%Y%m')) + ".tif"
         raster_calculations.save_raster(total_factor, output_name, gt, proj, nodata=np.nan)
 
 
