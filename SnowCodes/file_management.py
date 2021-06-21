@@ -341,7 +341,7 @@ else:
         config_input.snow_raster_path = snow_raster_input
         config_input.rain_raster_path = rain_raster_input
 # ------------------------------------------------------------------------------------------------------------------- #
-    if run_snow_detection:
+    if run_snow_cover:
         config_input.snow_cover_path = results_path + "\\snow_cover"
         create_folder(config_input.snow_cover_path)
         # Check if needed input folders exist:
