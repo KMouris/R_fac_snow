@@ -20,7 +20,7 @@ Depending on your input data some pre-processing steps might not be necessary.
 Will be added as soon as code is released.
 
 ## Input Data
-The following have to be provided to run the whole code:
+The following input data has to be provided to run the whole code:
 
 | Input argument | Type | Description |
 |-----------------|------|-------------|
@@ -31,13 +31,8 @@ The following have to be provided to run the whole code:
 |`shape_path`| STRING |  Path (name.shp) of the shapefile to which to clip the resampled rasters|
 |`precipitation_path`| STRING | Folder of precipitation rasters |
 |`temperature_path`| STRING | Folder of temperature rasters|
-|`T_snow`| INTEGER | Temperature threshold for snowfall|
 |`SI_folder_path`| STRING | Folder of satellite images |
-|`image_list`| LIST | Name (STR) of bands to merge, clip and resample|
-|`image_location_folder_name`| STRING | Name of the folder in which the satellite images are directly located|
-|`NDSI_min`| FLOAT |NDSI threshold|
-|`blue_red_min`| FLOAT | Blue to red band ratio threshold|
-|`blue_min`| FLOAT | Blue band threshold|
+
 
 ## Modules (not complete)
 Overview of the main modules without detailed explanation of each function.
