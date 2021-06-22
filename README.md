@@ -26,12 +26,13 @@ The following input data has to be provided to run the whole code:
 |-----------------|------|-------------|
 |`start_date`| STRING | Determines time interval for analysis (format: YYYYMM) |
 |`end_date`| STRING | Determines time interval for analysis (format: YYYYMM)  |
-|`results_path`| STRING |Path of the main result folder|
 |`snapraster_path`| STRING |Path (name.tif) of the raster to which to snap the resampled rasters|
 |`shape_path`| STRING |  Path (name.shp) of the shapefile to which to clip the resampled rasters|
 |`precipitation_path`| STRING | Folder of precipitation rasters |
 |`temperature_path`| STRING | Folder of temperature rasters|
 |`SI_folder_path`| STRING | Folder of satellite images |
+|`fEL_path`| STRING | Path to raster file expressing the influence of site elevation and latitude on the rainfall erosivity|
+|`results_path`| STRING |Path of the main result folder|
 
 
 ## Modules (not complete)
