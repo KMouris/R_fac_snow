@@ -140,7 +140,7 @@ If "run_snow_cover" = True:
     - image_list: Name of bands to merge, clip and resample. The name in the list must correspond to the final suffix of 
         the satellite image name. They must be in the following order: band02, band03, band04, band11
     - image_location_folder_name: Name of the folder in which the satellite images are directly located 
-    - Thresholds for snow detection (NDSI, Red and Blue)
+    - Thresholds for snow detection (NDSI, Blue to Red ratio and Blue)
 """
 SI_folder_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Satellite_data\Downloaded_MF'
 # SI_folder_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\snow_cover\SatelliteImages'
