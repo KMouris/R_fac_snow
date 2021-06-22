@@ -20,6 +20,7 @@ Depending on your input data some pre-processing steps might not be necessary.
 Will be added as soon as code is released.
 
 ## Modules
+Overview of the main modules without an explanation of each function.
 ### pt_raster_manipulation.py
 Code reads precipitation and temperature values from .txt ASCII raster files (in either monthly, daily or hourly time 
 intervals) and saves the data for each raster cell in .csv files with the following information: 
@@ -27,23 +28,27 @@ year-month-day-hour-minute-second-Precipitation-Temperature-Row-Column
 
 | Input argument | Type | Description |
 |-----------------|------|-------------|
-|`precipitation_path`| STRING | Path of precipitation rasters |
-|`temperature_path`| STRING | Path of temperature rasters|
+|`precipitation_path`| STRING | Folder of precipitation rasters |
+|`temperature_path`| STRING | Folder of temperature rasters|
 
 Each input .txt file corresponds to the data for the given year-month-day-hour (format: YYYYMMDD_0HH.txt).
 
 **Result folder:** `PT_CSV_per_cell` contains .csv files for every cell  (format: row_columns.csv)
 
-### 
+### rain_snow_rasters.py
+Program determines if precipitation is snow or rain, from input .csv files, and generates a rain and snow raster, 
+resampled and snapped to a desired cell resolution (based on an example raster (snapraster, e.g. DEM used in RUSLE, or manually defined by the user).
 
+| Input argument | Type | Description |
+|-----------------|------|-------------|
+|`PT_path_input`| STRING | Folder of cell-specific precipitation and temperature over time |
+|`T_snow`| INTEGER | Temperature Threshold for snowfall|
+|`snapraster_path`| STRING |path (name.tif) of the raster to which to snap the resampled rasters|
+|`shape_path`| STRING |  path (name.shp) of the shapefile to which to clip the resampled rasters|
+
+**Result folder:** 
+
+`rain_per_month` contains monthly rain raster files (.tif) snapped and clipped to example raster
+  `snow_per_month` contains monthly snow raster files (.tif) snapped and clipped to example raster
 ## Input Data
 The following rasters have to be provided to run the code:
-1. Raster files of temperature and precipitation
-1. Raster of measured snow depth 
-2. Raster of satellite data of the snow cover with the values 0 and 1, describing if there is snow (1) or if there is not (0)
-3. Shapefile defining the zone for the statistical calculations 
-
-Both rasters listed in 1. and 2. have to be provided as `.tif` rasters and have to include the month and the year in the following way:
-
-***yy_mm**.tif
-

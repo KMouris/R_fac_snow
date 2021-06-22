@@ -97,12 +97,11 @@ precipitation_path = r'' + os.path.abspath('../Input/Precipitation_Data/Precip_B
 temperature_path = r'' + os.path.abspath('../Input/Temperature_Data')
 
 """
-If Run_PTManipulation = 'False' (AND run_erosnow = True) *************************************************************
+If Run_PTManipulation = 'False' (AND run_rain_snow_rasters = True) *************************************************************
     - PT_path = folder with precipitation and Temperature data, for each cell, for time span to analyze. Each file is
      a .csv file corresponding to the row_column of each cell. Each row in the array is a different year-month-day-hour.
-     Each column is year-month-day-hour-minute-second-Precipitation-Temperature-Row-Column .csv files are the result 
-     from the RasterManipulation_02 python program
-    -  Original raster information: number or columns, numbe rof rows, coordinates of lower left corner (xllcorner and 
+     Each column is year-month-day-hour-minute-second-Precipitation-Temperature-Row-Column
+    -  Original raster information: number or columns, number of rows, coordinates of lower left corner (xllcorner and 
         yllcorner), cellsize (cell resolution) and nodata value  
 """
 PT_path_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\PT_CSV_per_cell'
