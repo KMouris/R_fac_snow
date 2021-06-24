@@ -157,6 +157,7 @@ def main():
 
     # Path to calculated results to be used for statistical calculations
     snow_result_paths = sorted(glob.glob(results_path + '\\Snow_end_month' + "\\*.tif"))
+    snow_result_paths = filter(snow_result_paths)
     # Calculate and plot zonal statistics
     zonal_statistics = ZonStatistics(path_raster=snow_result_paths, shape=shape_zone, datelist=date,
                                      parameter=statistical_param)
