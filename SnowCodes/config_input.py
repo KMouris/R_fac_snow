@@ -52,9 +52,9 @@ Boolean variables to determine which programs to run and which input parameters 
 """
 run_pt_manipulation = False
 run_rain_snow_rasters = False
-run_snow_cover = False
+run_snow_cover = True
 run_satellite_image_clip_merge = False
-run_snow_melt = True
+run_snow_melt = False
 run_r_factor = False
 run_total_factor = False
 # ------------------------------------------------------------------------------------------------------------------- #
@@ -70,18 +70,18 @@ Files needed regardless of which codes to run:
     - results path: path where to save all results 
     - geo_utils_path: path where geoutils modules are located
 """
-snapraster_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Input\DEM\fildemBanja.tif'
-shape_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Input\Shapes\totalboundary.shp'
+snapraster_path = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Input\DEM\fildemBanja.tif'
+shape_path = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Input\Shapes\totalboundary.shp'
 # shape_path = r'Y:\Abt1\hiwi\Oreamuno\GIS\ArcBanja_Jan20\catchment_banja_adap.shp'
 
-# results_path = r'' + os.path.abspath('../Results')
-results_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Git_scores\Results'
+results_path = r'' + os.path.abspath('../Results')
+#results_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Git_scores\Results'
 
-start_date = '201605'
-end_date = '201804'
+start_date = '201802'
+end_date = '201802'
 
-# path_geo_utils = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\geo-utils/'
-path_geo_utils = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\geo-utils/'
+path_geo_utils = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\geo-utils/'
+#path_geo_utils = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\geo-utils/'
 # ------------------------------------------------------------------------------------------------------------------- #
 # ------------------------------------------------------------------------------------------------------------------- #
 """
@@ -125,8 +125,8 @@ If run_rain_snow_rasters = False: (AND run_snow_melt is True OR run_r_factor is 
 snow_raster: folder path where .tif snow rasters are located (Needed for snow_melt calculation)
 rain_raster: folder path where .tif rain rasters are located (needed for R factor calculation)
 """
-# snow_raster_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\snow_per_month'
-snow_raster_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\snow_per_month'
+snow_raster_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\snow_per_month'
+#snow_raster_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\snow_per_month'
 rain_raster_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\rain_per_month'
 # ------------------------------------------------------------------------------------------------------------------- #
 
@@ -142,8 +142,8 @@ If "run_snow_cover" = True:
     - image_location_folder_name: Name of the folder in which the satellite images are directly located 
     - Thresholds for snow detection (NDSI, Blue to Red ratio and Blue)
 """
-SI_folder_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Satellite_data\Downloaded_MF'
-# SI_folder_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\snow_cover\SatelliteImages'
+#SI_folder_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Satellite_data\Downloaded_MF'
+SI_folder_path = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\SatelliteImages' # is to be used if there are already processed SI
 
 input_si_dates = True
 si_image_dates = [20161223]
@@ -152,16 +152,15 @@ image_list = ['B02', 'B03', 'B04', 'B11', 'TCI']
 image_location_folder_name = "IMG_DATA"
 
 # Thresholds for snow detection
-NDSI_min = 0.4
-blue_red_min = 0.85
-blue_min = 1700
+NDSI_min = 0.2
+blue_min = 1800
 
 """
 If "run_snow_cover" = False (and run_snow_melt is True) *************************************************************
     -snowcover_raster_input: folder path where .tif binary snow cover rasters are located: 
 """
-# snowcover_raster_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\snow_cover'
-snowcover_raster_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\snow_cover'
+snowcover_raster_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\snow_cover'
+# snowcover_raster_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\snow_cover'
 # ------------------------------------------------------------------------------------------------------------------- #
 """
 If "run_snow_melt" is True: 
@@ -186,7 +185,7 @@ If run_snow_melt is False (AND run_total_factor is True) ***********************
 """
 
 # snow_melt_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\Snowmelt'
-snow_melt_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\Snowmelt'
+snow_melt_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\Snowmelt'
 
 # ------------------------------------------------------------------------------------------------------------------- #
 

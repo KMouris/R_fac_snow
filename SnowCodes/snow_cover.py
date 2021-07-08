@@ -80,22 +80,18 @@ def calculate_snow_cover(folder, date):
 
     Band2 = band_results[0]  # B02 raster
     Band3 = band_results[1]  # B03 raster
-    Band4 = band_results[2]  # B04 raster
     Band11 = band_results[3]  # B11 raster
 
     # Extract raster, raster data as array, raster geotransform
     blue_dataset, blue_array, blue_geotransform = gu.raster2array(Band2)
     green_dataset, green_array, green_geotransform = gu.raster2array(Band3)
-    red_dataset, red_array, red_geotransform = gu.raster2array(Band4)
     SWIR_dataset, SWIR_array, SWIR_geotransform = gu.raster2array(Band11)
 
     # NDSI calculation
     NDSI = (green_array - SWIR_array) / (green_array + SWIR_array)
-    blue_red_ratio = blue_array / red_array
 
     # Calculate Snow Array
-    red_blue = np.where(np.logical_and(blue_red_ratio > blue_red_min, blue_array > blue_min), 1, 0)
-    snow = np.where(np.logical_and(NDSI > NDSI_min, red_blue == 1), 1, 0)
+    snow = np.where(np.logical_and(NDSI > NDSI_min, blue_array > blue_min), 1, 0)
 
     # Save resulting snow Raster
     snow_raster = snow_cover_path + "\\SnowCover_" + date.strftime("%Y%m") + ".tif"
