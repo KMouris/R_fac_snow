@@ -90,7 +90,7 @@ def main():
     for file in filenames:  # Iterate through each monthly precipitation file
         # 1. Get complete name of raster being analyzed (including extension)
         name = os.path.basename(file)
-        print("Running for: ", name)
+        print("Running REM R Factor for: ", name)
 
         # 2. Get the date and them month for the corresponding file
         date = data_management.get_date(name)
@@ -107,7 +107,7 @@ def main():
         output_name = r_factor_path + "\\RFactor_REM_db_" + str(date.strftime('%Y%m')) + ".tif"
         raster_calc.save_raster(R_factor_array, output_name, GT, Proj)
 
-    print('Total time: ', time.time() - start_time)
+    # print('Total time: ', time.time() - start_time)
 
 
 if __name__ == '__main__':
