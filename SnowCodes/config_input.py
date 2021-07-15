@@ -52,10 +52,10 @@ Boolean variables to determine which programs to run and which input parameters 
 """
 run_pt_manipulation = False
 run_rain_snow_rasters = False
-run_snow_cover = True
+run_snow_cover = False
 run_satellite_image_clip_merge = False
-run_snow_melt = False
-run_r_factor = False
+run_snow_melt = True
+run_r_factor = True
 run_total_factor = False
 # ------------------------------------------------------------------------------------------------------------------- #
 
@@ -70,18 +70,17 @@ Files needed regardless of which codes to run:
     - results path: path where to save all results 
     - geo_utils_path: path where geoutils modules are located
 """
-snapraster_path = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Input\DEM\fildemBanja.tif'
-shape_path = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Input\Shapes\totalboundary.shp'
-# shape_path = r'Y:\Abt1\hiwi\Oreamuno\GIS\ArcBanja_Jan20\catchment_banja_adap.shp'
+snapraster_path = r'' + os.path.abspath('..\Input\DEM\\fildemBanja.tif')
+shape_path = r'' + os.path.abspath('..\Input\Shapes\\totalboundary.shp')
 
 results_path = r'' + os.path.abspath('../Results')
 #results_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Git_scores\Results'
 
-start_date = '201802'
-end_date = '201802'
+start_date = '201703'
+end_date = '201804'
 
-path_geo_utils = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\geo-utils/'
-#path_geo_utils = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\geo-utils/'
+# path_geo_utils = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\geo-utils/'
+path_geo_utils = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\geo-utils/'
 # ------------------------------------------------------------------------------------------------------------------- #
 # ------------------------------------------------------------------------------------------------------------------- #
 """
@@ -125,9 +124,9 @@ If run_rain_snow_rasters = False: (AND run_snow_melt is True OR run_r_factor is 
 snow_raster: folder path where .tif snow rasters are located (Needed for snow_melt calculation)
 rain_raster: folder path where .tif rain rasters are located (needed for R factor calculation)
 """
-snow_raster_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\snow_per_month'
-#snow_raster_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\snow_per_month'
-rain_raster_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\rain_per_month'
+# snow_raster_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\snow_per_month'
+snow_raster_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\snow_per_month'
+rain_raster_input = r'\\LWW-027\Data\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\rain_per_month'
 # ------------------------------------------------------------------------------------------------------------------- #
 
 """
@@ -159,8 +158,8 @@ blue_min = 1800
 If "run_snow_cover" = False (and run_snow_melt is True) *************************************************************
     -snowcover_raster_input: folder path where .tif binary snow cover rasters are located: 
 """
-snowcover_raster_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\snow_cover'
-# snowcover_raster_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\snow_cover'
+# snowcover_raster_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\snow_cover'
+snowcover_raster_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\snow_cover'
 # ------------------------------------------------------------------------------------------------------------------- #
 """
 If "run_snow_melt" is True: 
@@ -170,7 +169,7 @@ If "run_snow_melt" is True:
 """
 # Input for statistics
 # Disable (False) or enable (True) plot
-plot_statistic = True
+plot_statistic = False
 # Location of shapefile used for zonal statistics (different from clipping shape)
 shape_zone = r'' + os.path.abspath('../Input/Shapes/catchment_kokel.shp')
 # Definition of statistical parameter to be plotted ('min', 'mean', 'max', 'range', 'sum', 'coverage')
@@ -195,7 +194,7 @@ if run_Rfactor is True:
 
 """
 
-fEL_path = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Input\DEM\f_L_E.tif'
+fEL_path = r'' + os.path.abspath('..\Input\DEM\\f_L_E.tif')
 
 """ ****************************************************************************************************
 if run_Rfactor is False (AND run_total_factor is True)
