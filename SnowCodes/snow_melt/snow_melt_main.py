@@ -24,7 +24,7 @@ def raster2list(list_rasterpaths1, list_rasterpaths2):
         # get the raster path (STR) from the list_rasterpaths (LIST)
         filenames1, filenames2 = get_path_from_list(list_rasterpaths1[i], list_rasterpaths2[i])
         # create date string (YY/mm)
-        print("File sent to get date: ", filenames1)
+        # print("File sent to get date: ", filenames1)
         data_manager = DataManagement(path=r'' + os.path.abspath('../Results'), filename=filenames1)
         month_year = data_manager.create_date_string()
         # use raster2array method to get the arrays from the raster files
@@ -157,7 +157,7 @@ def main():
 
     # Path to calculated results to be used for statistical calculations
     snow_result_paths = sorted(glob.glob(results_path + '\\Snow_end_month' + "\\*.tif"))
-    snow_result_paths = filter(snow_result_paths)
+    snow_result_paths = filter_raster_lists(snow_result_paths)
     # Calculate and plot zonal statistics
     zonal_statistics = ZonStatistics(path_raster=snow_result_paths, shape=shape_zone, datelist=date,
                                      parameter=statistical_param)
