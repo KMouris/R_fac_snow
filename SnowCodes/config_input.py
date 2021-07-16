@@ -2,7 +2,7 @@
 """
 Input configuration: Input files and folders that are constant for all programs
 """
-# import all needed basic python libraries
+# import all needed modules from the python standard library
 try:
     import glob
     import logging
@@ -28,28 +28,26 @@ try:
     from tqdm import tqdm
 except ModuleNotFoundError as e:
     print('ModuleNotFoundError: Missing fundamental packages (required: gdal, maptlotlib.pyplot, numpy, '
-          'pandas, rasterstats, scipy')
+          'pandas, rasterstats, math, scipy, tqdm')
     print(e)
 
 # sys.path.extend([f'./{name}' for name in os.listdir(".") if os.path.isdir(name)])
 
-"""
-Boolean variables to determine which programs to run and which input parameters to include 
-    - run_pt_manipulation: 'True' to run precipitation and temperature manipulation file to obtain the .csv files which 
-        are used in "Ero_Sno" to determine precipitation and snow rasters. 'False' to directly input the .csv files with 
-        the temperature and precipitation values for each raster cell. 
-    - run_ero_snow: 'True' to run Ero_Sno program to calculate rain and snow rasters, 'False' to input the snow and/or
-     precipitation rasters directly for the snow_melt
-    - run_snow_cover: "True" to run snow_cover code, 'False' to directly input the binary snow raster, to 
-        calculate areas of snow from satellite images
-    - run_satellite_image_clip_merge: 'True' to run si_clip_merge.py and merge and clip the input satellite images. 
-        'False if user inputs previously clipped and merged satellite images. 
-    - run_snow_melt: 'True' to run the python programs to calculate the snow at the end of the month and the total snow
-        melt from the snow detection and snow rasters.
-    - run_r_factor: 'True' to run the python program to calculate the R(ain) factor for the RUSLE model, from the rain
-        rasters
-    - run_total_factor: 'True' to calculate the total precipitation factor (rain + snow)
-"""
+"""Boolean variables to determine which modules to run and which input parameters to include: 
+- run_pt_manipulation: 'True' to run precipitation and temperature manipulation code to obtain the .csv files which are 
+used in "rain_snow_rasters" to determine precipitation and snow rasters. 'False' to directly input the .csv files with 
+the temperature and precipitation values for each raster cell. 
+- run_ero_snow: 'True' to run Ero_Sno program to calculate rain and snow rasters, 'False' to input the snow and/or 
+precipitation rasters directly.
+- run_snow_cover: "True" to run snow_cover code, 'False' to directly input the binary snow raster, to calculate areas 
+of snow from satellite images.
+- run_satellite_image_clip_merge: 'True' to run si_clip_merge.py and merge and clip the raw input satellite images. 
+'False' if user inputs previously clipped and merged satellite images. 
+- run_snow_melt: 'True' to run the python programs to calculate the snow at the end of the month and the total snow melt 
+from the snow detection and snow rasters. 
+- run_r_factor: 'True' to run the python program to calculate the R(ain) factor for the 
+RUSLE model, from the rain rasters.
+- run_total_factor: 'True' to calculate the total precipitation factor (rain + snow) """
 run_pt_manipulation = False
 run_rain_snow_rasters = False
 run_snow_cover = False
