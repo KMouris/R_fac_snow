@@ -187,14 +187,12 @@ fEL_path = r'' + os.path.abspath('..\Input\DEM\\f_L_E.tif')
 if run_Rfactor is False (AND run_total_factor is True)
     - r_factor_input: Folder path with .tif R factor rasters (with the raster name including the date).
 """
-
 # r_factor_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\R_factor_REM_db'
 r_factor_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\R_factor_REM_db'
 
 """
 if run_total_factor is True: 
     - snow_factor: Factor with which to multiply the snow melt raster values to get the snow melt erosivity.
-
 """
 snow_factor = 2
 
