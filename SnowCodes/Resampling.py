@@ -20,9 +20,9 @@ start_time = time.time()
 
 # ----------------Save FUNCTIONS----------------------------------------------------------------------------- #
 
-def SaveCSV(points, save_name):
+def save_csv(points, save_name):
     """
-    Function receives an array with X, Y, Z point coordinates and converts it to a data frame, with the corresponding
+    Function receives an array with X, Y, Z point coordinates and converts it to a dataframe, with the corresponding
     column names and then saves the data frame as a .txt file
     :param points: array with (X,Y,Z) coordinates of cell centers
     :param save_name: file name with which to save input point array to .txt format
@@ -38,12 +38,12 @@ def SaveCSV(points, save_name):
 
 # ----------------Calculation FUNCTIONS----------------------------------------------------------------------------- #
 
-def get_raster_points(array, GT):
+def get_raster_points(array, gt):
     """
     Function gets the coordinates (X, Y, Z) of the center of all cells that have values and returns an array with the
     coordinate point data
     :param array: original raster array
-    :param GT: original raster geotransform data
+    :param gt: original raster geotransform data
     :return: array where the coordinate and values of the value cell centers are saved
     """
 
@@ -54,13 +54,14 @@ def get_raster_points(array, GT):
     # 2. Initialize an array with the same number of rows as non-zero cell values and 3 columns (X, Y, Z values)
     points = np.zeros((int(coord.shape[0]) - 1, 3))
 
-    # 3. Get upper left corner coordinates from Geotransform (Top left corner X, cell size, 0, Top left corner Y, 0, -cell size)
-    upper_left_x = GT[
+    # 3. Get upper left corner coordinates from Geotransform (Top left corner X, cell size, 0, Top left corner Y, 0,
+    # -cell size)
+    upper_left_x = gt[
         0]  # X coordinate of upper left corner. From this point, all cells go towards the right (positive)
-    upper_left_y = GT[3]  # Y coordinate of upper left corner. From this point all points go south (negative)
-    size = GT[1]  # Cell resolution
+    upper_left_y = gt[3]  # Y coordinate of upper left corner. From this point all points go south (negative)
+    size = gt[1]  # Cell resolution
 
-    # print("GT: ", GT)
+    # print("gt: ", gt)
     # print("Upper Left X: ", upper_left_x, "\nUpper Left Y: ", upper_left_y, "\nSize: ", size)
 
     for i in range(0, int(coord.shape[0]) - 1):  # go through all cells in coord array
@@ -77,10 +78,10 @@ def get_raster_points(array, GT):
 
     # print("Points: ", points[0][2])
 
-    # # The name of the .csv file must be "file" and it must be in the program working folder for it to be later read a .vrt file
-    # # In the VRT_File function. Does not work otherwise. FIle will be rewritten in each loop and erased at the end.
-    # points_path = "file.csv"  # Create the .csv file name as "file.csv" -
-    # SaveCSV(points, points_path)  # Save the XYZ coordinates array to a .csv file
+    # # The name of the .csv file must be "file" and it must be in the program working folder for it to be later read
+    # a .vrt file # In the VRT_File function. Does not work otherwise. FIle will be rewritten in each loop and erased
+    # at the end. points_path = "file.csv"  # Create the .csv file name as "file.csv" - SaveCSV(points, points_path)
+    # Save the XYZ coordinates array to a .csv file
 
     return points  # Return XYZ.csv file path
 
@@ -204,7 +205,7 @@ def interpolate_points(vrt_file, folder, snap_data, cell_size):
         "gdal_grid -a invdistnn:power=2.0:smoothing=0:max_points=12:radius=5000 -txe " + str(snap_data[0]) + " " + str(
             snap_data[2]) +
         " -tye " + str(snap_data[3]) + " " + str(
-            snap_data[1]) + " -outsize " + columns + " " + rows + " -of GTiff -a_srs EPSG:32634 " +
+            snap_data[1]) + " -outsize " + columns + " " + rows + " -of gtiff -a_srs EPSG:32634 " +
         "-ot Float32 " + vrt_file + " " + raster_name)
 
     return raster_name
@@ -214,7 +215,8 @@ def main(original_raster, snap_raster, snap_boundary, save_name):
     """
     Function is the main code, which calls all other resampling functions in order to resample an input raster to a
     different cell resolution and raster extent
-    :param original_array: path for the original raster 8in .tif format), to be resampled to a smaller/larger resolution
+    :param original_raster: path for the original raster 8in .tif format), to be resampled to a smaller/larger
+    resolution
     :param snap_raster: raster from which to get gt and projection in order to resample original raster
     :param snap_boundary: exact extent to which clip the resampled raster
     :param save_name: name.ext + path with which to save resampled raster
@@ -226,23 +228,23 @@ def main(original_raster, snap_raster, snap_boundary, save_name):
     results_folder = os.path.dirname(save_name)
 
     # 2 .Get projection and Geotransform from the snap raster:
-    GT, Proj, snap_data, cell_resolution = rc.get_snap_raster_data(snap_raster)
+    gt, proj, snap_data, cell_resolution = rc.get_snap_raster_data(snap_raster)
 
     # 3. Save the raster data to an array
     original_array = rc.raster_to_array(original_raster, mask=False)
     # --3.1: Convert all -9999 No data cells into numpy nan values
     original_array = np.where(original_array == -9999.0, np.nan, original_array)
 
-    # 4. Get the GT (geotransform) information from the original raster file
-    GT_original, proj_original = rc.get_raster_data(original_raster)  # Get GT information from the ASCII file
+    # 4. Get the gt (geotransform) information from the original raster file
+    gt_original, proj_original = rc.get_raster_data(original_raster)  # Get gt information from the ASCII file
 
     # 5. Get the coordinates of the center of all the cells WITH VALUES and save data the XYZ coordinates for each point
     # to an array
-    XYZ_array = get_raster_points(original_array, GT_original)  # Path with the .csv file with coordinates
+    xyz_array = get_raster_points(original_array, gt_original)  # Path with the .csv file with coordinates
 
     # 6. Save the XYZ coordinate data to a .csv file
     XYZ_CSV = "file.csv"
-    SaveCSV(XYZ_array, XYZ_CSV)  # Save array to .csv file
+    save_csv(xyz_array, XYZ_CSV)  # Save array to .csv file
 
     # 7. Create a .vrt file from the .csv in order to be read by the gdal grid command
     vrt_file = generate_vrt_file(XYZ_CSV)

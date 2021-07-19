@@ -4,7 +4,7 @@ from config_input import *
 @author Maria Fernanda Morales Oreamuno 
 
 This program calls functions needed in the "RFactor_main" python program, located in the same folder. The functions
-deal directly with input files/folders)
+deal directly with input files/folders.
 
 """
 
@@ -13,7 +13,6 @@ def filter_raster_lists(raster_list, s_date, e_date):
     """
     Function filters input list to only include dates in between the start and end date (analysis range). If there are
     no files for the given date range (new_list is empty), function throws an error.
-    [Author: María Fernanda Morales]
     :param raster_list: list with file paths, whose names contain the date in either YYYYMM or YYMM format
     :param s_date: analysis start date (in datetime format)
     :param e_date: analysis end date (in datetime format)
@@ -32,7 +31,7 @@ def filter_raster_lists(raster_list, s_date, e_date):
     # Check if there is one input file per month to analyze
     n_months = (e_date.year - s_date.year) * 12 + e_date.month - s_date.month + 1  # months to analyze
     if not n_months == len(new_list):
-        message = "ERROR: Missing rain (precipitation) rasters in input folder." +  \
+        message = "ERROR: Missing rain (precipitation) rasters in input folder." + \
                   "Check input rasters for missing date or check date range."
         sys.exit(message)
 

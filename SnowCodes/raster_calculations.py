@@ -3,7 +3,7 @@ from config_input import *
 """
 Author: María Fernanda Morales 
 
-File contains direct raster calculation functions (meaning it receives a raster path as input) 
+File contains direct raster calculation functions (raster paths as input).
 """
 
 
@@ -14,30 +14,21 @@ def get_snap_raster_data(raster_path):
     :param raster_path: path where the snap raster is located (including name and .tif extension)
     :return: returns geotransform, projection, snap raster extension, cell size
     """
-    raster = gdal.Open(raster_path) #Extract raster from path
-    gt = raster.GetGeoTransform()  #Get Geotransform Data: (Top left corner X, cell size, 0, Top left corner Y, 0, -cell size)
-    proj = raster.GetProjection()  #Get projection of raster
-    XSize = raster.RasterXSize  # Number of columns
-    YSize = raster.RasterYSize  # Number of rows
-
-    # print("GT: ", gt)
-    # print("Projection: ", proj)
-    # print("Number of columns: ", XSize)
-    # print("Number of rows: ", YSize)
+    raster = gdal.Open(raster_path)  # Extract raster from path
+    gt = raster.GetGeoTransform()  # Get Geotransform Data: (Top left corner X, cell size, 0, Top left corner Y, 0,
+    # -cell size)
+    proj = raster.GetProjection()  # Get projection of raster
+    x_size = raster.RasterXSize  # Number of columns
+    y_size = raster.RasterYSize  # Number of rows
 
     cell_size = gt[1]  # Cell resolution
     ulx = gt[0]  # Upper left X or Xmin
-    lrx = ulx + cell_size*XSize  # Lower right X or Xmax
+    lrx = ulx + cell_size * x_size  # Lower right X or Xmax
 
     uly = gt[3]  # Upper left Y or Ymax
-    lry = uly - cell_size*YSize  # Lower right Y or Ymin
-
-    # print("Min X: ", ulx, "Max X: ", lrx)
-    # print("Max Y: ", uly, "Min Y: ", lry)
+    lry = uly - cell_size * y_size  # Lower right Y or Ymin
 
     snap_data = [ulx, uly, lrx, lry]  # Upper left X, Upper left Y, Lower right X, Lower right Y
-
-    # print("Snap Data: ", snap_data)
 
     return gt, proj, snap_data, cell_size  # Return all 4 variables
 
@@ -48,15 +39,10 @@ def get_raster_data(raster_path):
     :param raster_path: raster file path
     :return: geotransform and projection
     """
-    raster = gdal.Open(raster_path) # Extract raster from path
+    raster = gdal.Open(raster_path)  # Extract raster from path
     gt = raster.GetGeoTransform()  # Get Geotransform Data: (Top left corner X, cell size, 0, Top left corner Y, 0,
-    #                                 -cell size)
+    # -cell size)
     proj = raster.GetProjection()  # Get projection of raster
-
-    band = raster.GetRasterBand(1)  # Get raster band (the 1st one, since the inputs have only 1)
-    no_data = np.float32(
-        band.GetNoDataValue())  # Get NoData value, since all input rasters could have different values and assign a n
-    #                               umpy type variable
 
     return gt, proj
 
@@ -82,12 +68,15 @@ def raster_to_array(raster_path, mask):
     :return: Masked array (masking no data values)
     """
     raster = gdal.Open(raster_path)  # Read raster file
-    band = raster.GetRasterBand(1)   #Get raster band (the 1st one, since the inputs have only 1)
-    no_data = np.float32(band.GetNoDataValue())  #Get NoData value, since all input rasters could have different values and assign a numpy type variable
+    band = raster.GetRasterBand(1)  # Get raster band (the 1st one, since the inputs have only 1)
+    no_data = np.float32(
+        band.GetNoDataValue())  # Get NoData value, since all input rasters could have different values and assign a
+    # numpy type variable
 
-    array = np.float32(band.ReadAsArray() )      #Save band info as array and assign the same data type as no_data to avoid inequalities
+    array = np.float32(
+        band.ReadAsArray())  # Save band info as array and assign the same data type as no_data to avoid inequalities
     if mask:
-        masked_array = create_masked_array(array, no_data)  #Create a masked array from the input data
+        masked_array = create_masked_array(array, no_data)  # Create a masked array from the input data
         return masked_array
     else:
         return array
@@ -126,17 +115,17 @@ def merge(raster_list, merge_name):
     g = None
 
 
-def warp_resample(output, input, resolution):
+def warp_resample(output_raster, input_raster, resolution):
     """
     Function resamples the input raster to a given resolution, using nearest neighbors and the gdal warp function
-    :param output: path of output, resampled raster path plus name (must include extension .tif)
-    :param input: path of raster to resample (including name.extension)
+    :param output_raster: path of output, resampled raster path plus name (must include extension .tif)
+    :param input_raster: path of raster to resample (including name.extension)
     :param resolution: cell resolution of the resulting raster
     :return: ---
     """
     # Generate options file: Nearest neighbor resampling algorithm and X resolution = Y resolution = user input
     options = gdal.WarpOptions(resampleAlg='near', xRes=resolution, yRes=resolution)
-    r = gdal.Warp(output, input, options=options)
+    r = gdal.Warp(output_raster, input_raster, options=options)
     r = None
 
 
@@ -160,9 +149,6 @@ def compare_extents(raster_path1, raster_path2):
         message = "Raster {} and {} have different raster resolutions and/or number of rows and columns. " \
                   "Check input rasters".format(os.path.basename(raster_path1), os.path.basename(raster_path2))
         sys.exit(message)
-    # else:
-    #     print("Rasters {} and {} have the same resolution".format(os.path.basename(raster_path1),
-    #                                                                os.path.basename(raster_path2)))
 
 
 def get_resolution(raster):
@@ -176,13 +162,13 @@ def get_resolution(raster):
     return resolution
 
 
-def save_raster(array, output_path, GT, Proj, nodata):
+def save_raster(array, output_path, gt, proj, nodata):
     """
     Function saves an array into a .tif raster file.
     :param array: raster data to save to array
     :param output_path: file name (with path and extension) with which to save raster array
-    :param GT: geotransform of resulting raster
-    :param Proj: projection for resulting raster
+    :param gt: geotransform of resulting raster
+    :param proj: projection for resulting raster
     :param nodata: no data value with which to save the raster
     :return: ---
     """
@@ -195,8 +181,8 @@ def save_raster(array, output_path, GT, Proj, nodata):
     outrs = driver.Create(output_path, xsize=array.shape[1], ysize=array.shape[0], bands=1, eType=gdal.GDT_Float32)
 
     # Step 3: Assign raster data and assaign the array to the raster
-    outrs.SetGeoTransform(GT)  # assign geo transform data from the original input raster (same size)
-    outrs.SetProjection(Proj)  # assign projection to raster from original input raster (same projection)
+    outrs.SetGeoTransform(gt)  # assign geo transform data from the original input raster (same size)
+    outrs.SetProjection(proj)  # assign projection to raster from original input raster (same projection)
     outband = outrs.GetRasterBand(1)  # Create a band in which to input our array into
     outband.WriteArray(array)  # Read array into band
     outband.SetNoDataValue(nodata)  # Set no data value as Numpy nan
@@ -209,6 +195,7 @@ def save_raster(array, output_path, GT, Proj, nodata):
 
     print("Saved raster: ", os.path.basename(output_path))
 
+
 # ------------- ASCII RASTER FUNCTIONS: ---------------------------------------------------------------------------- #
 
 
@@ -216,7 +203,7 @@ def get_ascii_gt(info_array):
     """
     Function receives the header of a .txt ASCII raster file and rearranges/transforms the data and generates a tuple
     geoTransform variable.
-    :param data: header of a .txt ASCII raster file, which corresponds to the ASCII format data, including
+    :param info_array: header of a .txt ASCII raster file, which corresponds to the ASCII format data, including
      [ncols, nrows, xllcorner, yllcorner, cellsize, nodata_value].
     :return: the GT information, obtained from the header information in the format Top left corner X, cell size, 0,
     Top left corner Y, 0, -cell size
@@ -227,11 +214,10 @@ def get_ascii_gt(info_array):
         1])  # Get uly by adding all the rows above the lly from the header information
     cell_size = float(info_array[4])  # Get cell size directly from the header information
 
-    GT_array = [ulx, cell_size, 0.0, uly, 0, -cell_size]
-    GT = tuple(GT_array)  # Convert to type tuple to be read by save raster functions
-    # print("GT: ", GT_array)
+    gt_array = [ulx, cell_size, 0.0, uly, 0, -cell_size]
+    geotransform = tuple(gt_array)  # Convert to type tuple to be read by save raster functions
 
-    return GT
+    return geotransform
 
 
 def get_ascii_data(path):
@@ -239,7 +225,7 @@ def get_ascii_data(path):
        Function extracts the information from the ASCII file in order to save the ASCII file header
        and extract the information needed to create a GEOTransform file (to later save the raster as a
        .tif file).
-       :param file_path: path where a .txt ASCII raster file is located
+       :param path: path where a .txt ASCII raster file is located
        :return: the GEOtransform raster information and the ASCII file header (to later save the results)
        """
     # Save the ASCII raster information into a pandas data frame. It will have the following order:
@@ -262,12 +248,3 @@ def ascii_to_array(path):
     """
     array = np.array(pd.read_csv(path, delimiter='\t', header=None, skiprows=6))
     return array
-
-
-
-
-
-
-
-
-

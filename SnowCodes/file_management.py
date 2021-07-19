@@ -321,7 +321,7 @@ else:
         config_input.snow_cover_path = results_path + "\\snow_cover"
         create_folder(config_input.snow_cover_path)
         # Check if needed input folders exist:
-        check_folder(SI_folder_path, 'SI_folder_path')
+        check_folder(si_folder_path, 'SI_folder_path')
     else:
         config_input.snow_cover_path = snowcover_raster_input
 

@@ -54,7 +54,7 @@ Each input .txt file corresponds to the data for the given year-month-day-hour (
 
 ### rain_snow_rasters.py
 - determines if precipitation is snow or rain
-- generates a rain and snow raster resampled and snapped to a desired raster format based on an example raster (snapraster, e.g. DEM used in RUSLE) or manually defined by the user.
+- generates a rain and snow raster resampled (Inverse distance weighting) and snapped to a desired raster format based on an example raster (snapraster, e.g. DEM used in RUSLE) or manually defined by the user. 
 
 | Input argument | Type | Description |
 |-----------------|------|-------------|
@@ -67,7 +67,7 @@ Each input .txt file corresponds to the data for the given year-month-day-hour (
 
 `rain_per_month` contains monthly rain raster files (.tif) snapped and clipped to target raster format
   `snow_per_month` contains monthly snow raster files (.tif) snapped and clipped to target raster format
-
+  
 ### si_merge_clip.py
 - reads input Sentinel 2 satellite images
 - merges the B02, B03, B04 and B11 raster bands from different locations

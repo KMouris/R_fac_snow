@@ -123,7 +123,7 @@ rain_raster_input = r'\\LWW-027\Data\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modific
 
 """
 If "run_snow_cover" = True: 
-    - SI_folder path:  Folder with satellite images for a given date: folder must have a subfolder for each satellite 
+    - si_folder_path:  Folder with satellite images for a given date: folder must have a subfolder for each satellite 
         (e.g. one for TDL and one for TDK), The input files can be raw satellite images (located in folder 'image_
         _location_folder_name') or pre-processed (clipped and merged) .tif files. 
     - input_si_dates: Boolean that determines if the user sets the image dates to use or if the program calculates the 
@@ -134,13 +134,13 @@ If "run_snow_cover" = True:
     - NDSI_min: NDSI threshold for snow detection.
     - blue_min: Blue band threshold for snow detection.
 """
-#SI_folder_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Satellite_data\Downloaded_MF'
-SI_folder_path = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\SatelliteImages' # is to be used if there are already processed SI
+#si_folder_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Satellite_data\Downloaded_MF'
+si_folder_path = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\SatelliteImages' # is to be used if there are already processed SI
 
 input_si_dates = True
 si_image_dates = [20161223]
 
-image_list = ['B02', 'B03', 'B04', 'B11', 'TCI']
+image_list = ['B02', 'B03', 'B11', 'TCI']
 image_location_folder_name = "IMG_DATA"
 
 # Thresholds for snow detection

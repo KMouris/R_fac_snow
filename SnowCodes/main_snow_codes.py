@@ -62,17 +62,17 @@ if __name__ == '__main__':
 # --- RUN snow_detection -------------------------------------------------------------------------------------------- #
     # Generate a binary snow detection raster, to determine cells with snow ----------------------------------------- #
     if run_snow_cover:
-        si_list = os.listdir(SI_folder_path)  # list with satellite image folders
+        si_list = os.listdir(si_folder_path)  # list with satellite image folders
         if input_si_dates:  # If user inputs the dates to use:
             si_list = file_management.check_input_si_dates(si_list, date_list, si_image_dates)
         else:  # get images whose sensing date is closest to end of month
             if len(si_list) == 2:  # if only 2 folders, only one sensing date was given
-                si_list = [os.path.basename(SI_folder_path)]
+                si_list = [os.path.basename(si_folder_path)]
             # If no dates to directly use (user input), get the satellite image closest to the end of the month.
             si_list = file_management.generate_satellite_image_date_list(si_list, date_list)
         print("Folders to loop through:, ", si_list)
         for f, d in zip(si_list, date_list):
-            path = SI_folder_path + "\\" + str(f)
+            path = si_folder_path + "\\" + str(f)
             snow_cover.calculate_snow_cover(path, d)
 # ------------------------------------------------------------------------------------------------------------------- #
 

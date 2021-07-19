@@ -4,7 +4,6 @@ import raster_calculations
 
 
 def main():
-
     # 1. Get lists with Rfactor and snow melt rasters
     filenames_r_factor = sorted(glob.glob(r_factor_path + "\*.tif"))
     filenames_snow_melt = sorted(glob.glob(snow_melt_path + "\*.tif"))
@@ -21,7 +20,7 @@ def main():
     # 4. Check raster extents:
     raster_calculations.compare_extents(filenames_r_factor[0], filenames_snow_melt[0])
 
-    # 5. Get rster data (GEOtransform and projetion from any raster:
+    # 5. Get raster data (GEOtransform and projection from any raster:
     gt, proj = raster_calculations.get_raster_data(filenames_r_factor[0])
 
     # 6. Loop through each file (date) in each raster list:

@@ -17,7 +17,7 @@ main sensing date folder, and the satellite images must be in a folder, whose na
 File can be called individually or through the main.py file. 
 
 Needed input files: [in config_input]
-1. SI_folder_path: Folder with satellite images for a given date: folder must have a subfolder for each location 
+1. si_folder_path: Folder with satellite images for a given date: folder must have a subfolder for each location 
 (e.g. one for TDL and one for TDK)
 2. image_list: Name of bands to merge, clip and resample. The name in the list must correspond to the final suffix of 
 the satellite image name (DO NOT CHANGE)
@@ -62,11 +62,11 @@ def sat_image_merge_clip(folder):
 
     # Generate folder in which to save the results from the satellite clip and merge for the given date ------------- #
     # ---- Generate a folder to save the Satellite Clipping and Merging
-    SI_results = results_path + "\\" + "SatelliteImages"
-    file_management.create_folder(SI_results)
+    si_results = results_path + "\\" + "SatelliteImages"
+    file_management.create_folder(si_results)
     # ---- Generate a folder to save the resulting rasters for the given date CHANGE NAME IF A SPECIFIC FORMAT IS NEEDED
-    SI_results = SI_results + "\\" + str(si_date.strftime("%Y%m%d"))
-    file_management.create_folder(SI_results)
+    si_results = si_results + "\\" + str(si_date.strftime("%Y%m%d"))
+    file_management.create_folder(si_results)
 
     # -- Save to a list all folders in main folder (each sub-folder corresponds to a satellite image location) ------ #
     satellite_list = os.listdir(folder)
@@ -99,7 +99,7 @@ def sat_image_merge_clip(folder):
             break
 
         # -- 1. Merge all images in the list ------------------------------------------------------------------------ #
-        merge_name = SI_results + "\\Merged_" + suffix + "_" + si_date.strftime("%Y%m%d") + ".tif"
+        merge_name = si_results + "\\Merged_" + suffix + "_" + si_date.strftime("%Y%m%d") + ".tif"
         rc.merge(images, merge_name)
 
         # -- 2. Check merged resolution ----------------------------------------------------------------------------- #
@@ -110,19 +110,19 @@ def sat_image_merge_clip(folder):
             pass
         else:  # Resample rasters that have a resolution different to 10x10
             name2 = merge_name
-            merge_name = SI_results + "\\Merged_" + suffix + "_" + si_date.strftime("%Y%m%d") + "resampled.tif"
+            merge_name = si_results + "\\Merged_" + suffix + "_" + si_date.strftime("%Y%m%d") + "resampled.tif"
             rc.warp_resample(merge_name, name2, resolution=10)
             print("Resampling {} raster from 20 to 10".format(suffix))
             if os.path.exists(name2):
                 os.remove(name2)
 
         # -- 3. Clip the merged rasters to shapefile ---------------------------------------------------------------- #
-        clip_name = SI_results + "\\" + suffix + "_" + si_date.strftime("%Y%m%d") + "_clip.tif"
+        clip_name = si_results + "\\" + suffix + "_" + si_date.strftime("%Y%m%d") + "_clip.tif"
         rc.clip(shape_path, clip_name, merge_name)
 
         # -- 4. Resample clipped raster ----------------------------------------------------------------------------- #
         if file_management.has_number(suffix):
-            resample_name = SI_results + "\\" + suffix + "_" + si_date.strftime("%Y%m%d") + "_r.tif"
+            resample_name = si_results + "\\" + suffix + "_" + si_date.strftime("%Y%m%d") + "_r.tif"
             rc.warp_resample(resample_name, clip_name, resolution=25)
 
             # Add band rasters to a list to later assign them to bands
@@ -143,17 +143,17 @@ def main():
     date_list = file_management.get_date_list(start_date, end_date)
 
     if run_snow_cover:
-        si_list = os.listdir(SI_folder_path)  # list with satellite image folders
+        si_list = os.listdir(si_folder_path)  # list with satellite image folders
         if input_si_dates:  # If user inputs the dates to use:
             si_list = file_management.check_input_si_dates(si_list, date_list, si_image_dates)
         else:  # get images whose sensing date is closest to end of month
             if len(si_list) == 2:  # if only 2 folders, only one sensing date was given
-                si_list = [os.path.basename(SI_folder_path)]
+                si_list = [os.path.basename(si_folder_path)]
             # If no dates to directly use (user input), get the satellite image closest to the end of the month.
             si_list = file_management.generate_satellite_image_date_list(si_list, date_list)
         print("Folders to loop through:, ", si_list)
         for f, d in zip(si_list, date_list):
-            path = SI_folder_path + "\\" + str(f)
+            path = si_folder_path + "\\" + str(f)
             band_paths = sat_image_merge_clip(path)
             print("Band results: ", band_paths)
 
