@@ -45,7 +45,8 @@ def get_values(P_array, T_array, no_data, cells):
                 value_array[n, 2] = i  # Save in first column the original row value, represented by "i"
                 value_array[n, 3] = j  # Save in second column the original column value, represented by "j"
                 # print("Saved value: ",storm_array[i,j] )
-                n += 1  # -increase the counter to fill a new row in each iteration, only when value fits the criteria in the IF
+                n += 1  # -increase the counter to fill a new row in each iteration, only when value fits the
+                # criteria in the IF
     return value_array
 
 
