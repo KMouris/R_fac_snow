@@ -1,6 +1,6 @@
 import config_input
 from config_input import *
-import Resampling
+import resampling
 import raster_calculations as rc
 import file_management
 
@@ -12,7 +12,7 @@ resampled to 25x25 cell resolution
 
 
 NOTES: 
-- Program runs for one month at a time. Therefore, the folder path ir receives must contain .csv files for a given 
+- Program runs for one month at a time. Therefore, the folder path it receives must contain .csv files for a given 
     month. The program will not differentiate between months within a given .csv file. 
 - If multiple dates are to be analyzed, input a folder with multiple subfolders, one for each month and whose folder 
     name corresponds to the date. The main_snow_codes file will loop through each folder and run rain_snow_rasters
@@ -35,48 +35,45 @@ in the original raster  and must contain the following information: year-month-d
 
 """
 
-start_time = time.time()
-
 
 # -----------------------------------------------FUNCTIONS----------------------------------------------------------- #
 
-def snow_ident(Station, T_snow):
+def snow_ident(station, T_snow):
     """
-    Function determines if the precipitation in each time stem is in rain or snow form. It is considered snow if
+    Function determines if the precipitation in each time step is in rain or snow form. It is considered snow if
      T < T_threshold
-    :param Station: Array with a Year-Month-Date-Hour in each row, and Precipitation and Temperature in columns [6] and
+    :param station: Array with a Year-Month-Date-Hour in each row, and Precipitation and Temperature in columns [6] and
      [7] respectively.
-    :return: Data frame with 3 columns: total precipitation, Rain and Snow. Each row corresponds to a Y-M-D-H
+    :return: Dataframe with 3 columns: total precipitation, Rain and Snow. Each row corresponds to a Y-M-D-H
     combination (in order).
     """
     df_snow = pd.DataFrame([])  # Data frame to save results in each iteration
-    iterations = Station.shape[0]  # Indicates the number of rows, which equals the number of iterations
+    iterations = station.shape[0]  # Indicates the number of rows, which equals the number of iterations
     for i in range(0, iterations):  # For each row (For each date)
-        df_snow.at[i, 'Total Precipitation (mm)'] = Station[i, 6]  # Save the precipitation in column 1
-        if Station[i, 7] < T_snow:  # If temperature is below threshold temperature (it is snow)
-            df_snow.at[i, 'Snow (mm)'] = Station[i, 6]
+        df_snow.at[i, 'Total Precipitation (mm)'] = station[i, 6]  # Save the precipitation in column 1
+        if station[i, 7] < T_snow:  # If temperature is below threshold temperature (it is snow)
+            df_snow.at[i, 'Snow (mm)'] = station[i, 6]
             df_snow.at[i, 'Rain (mm)'] = 0
         else:  # If temperature is above threshold temperature (it is rain)
-            df_snow.at[i, 'Rain (mm)'] = Station[i, 6];
+            df_snow.at[i, 'Rain (mm)'] = station[i, 6]
             df_snow.at[i, 'Snow (mm)'] = 0
-        # print("Value for date: ", Station[i,0], "-",Station[i,1], "-",Station[i,2], "-",Station[i,3], " is: ", df_snow.at[i, 'Snow (mm)'])
     return df_snow
 
 
-def snow_station(Station, snow):
+def snow_station(station, snow):
     """
     Function calculates the total monthly (or for the given month or time period in the input files) precipitation, rain
-    and snow and returns the monthly values in a data frame
+    and snow and returns the monthly values in a dataframe
     :param station: Array with a Year-Month-Date-Hour in each row, and Precipitation and Temperature in columns [6] and
      [7] respectively and cell row and cell column in columns [7] and [8] respectively.
-    :param snow: Data frame with total precipitation, rain, and snow columns. Ech row corresponds to a different time
+    :param snow: Dataframe with total precipitation, rain, and snow columns. Ech row corresponds to a different time
     step
-    :return: Data frame with total precipitation, total rain and total snow within the time period in "Station"
+    :return: Dataframe with total precipitation, total rain and total snow within the time period in "station"
     input file
     """
-    snow_station = pd.DataFrame([])  # create empty data frame in which to save the results
-    celly = Station[1, 8]  # Get cell row (from row 1, though any row would work)
-    cellx = Station[1, 9]  # Get cell column (from row 1, though any row would work)
+    snow_station = pd.DataFrame([])  # create empty dataframe in which to save the results
+    celly = station[1, 8]  # Get cell row (from row 1, though any row would work)
+    cellx = station[1, 9]  # Get cell column (from row 1, though any row would work)
 
     # Save the cell row and column
     snow_station.at[1, 'Cellx'] = cellx  # Save cell row in column [0] called "Cellx"
@@ -114,11 +111,11 @@ def generate_rain_snow_rasters(path):
     columns = int(config_input.ascii_data[0])
 
     # Create lists for cell location (column and row), Precipitation, Rain and Snow
-    Cellx = []
-    Celly = []
-    Prec = []
-    Rain = []
-    Snow = []
+    cellx = []
+    celly = []
+    prec = []
+    rain = []
+    snowfall = []
 
     # --------------------------------------------------------------------------------------------------------------- #
     # --Loop through each cell (each .csv file) in the input folder-------------------------------------------------- #
@@ -128,22 +125,19 @@ def generate_rain_snow_rasters(path):
         # Save data from each .csv file into a Numpy Array (assumes input file has a header row, which must be ignored)
         station_file = np.array(pd.read_csv(file, delimiter=','))
 
-        name = os.path.basename(file)  # Get name of the file, including file extension
-        # print("File: ", name)
-
         # Calculate whether there is rain or snow in each hour (or each time step)
         snow = snow_ident(station_file, T_snow)
         # print("Results from snow: \n", snow)
 
         # Calculate snow and rain per period and station
-        SnowperStation = snow_station(station_file, snow)
+        snowperstation = snow_station(station_file, snow)
 
         # Append cell specific values to list (much faster than df.append)
-        Cellx.append(SnowperStation['Cellx'].values)
-        Celly.append(SnowperStation['Celly'].values)
-        Prec.append(SnowperStation['Total Prec (mm)'].values)
-        Rain.append(SnowperStation['Rain (mm)'].values)
-        Snow.append(SnowperStation['Snow (mm)'].values)
+        cellx.append(snowperstation['Cellx'].values)
+        celly.append(snowperstation['Celly'].values)
+        prec.append(snowperstation['Total Prec (mm)'].values)
+        rain.append(snowperstation['Rain (mm)'].values)
+        snowfall.append(snowperstation['Snow (mm)'].values)
 
     # |-----------------------------------------------------------|
     print("Time to generate data: ", time.time() - start_time)  # |
@@ -153,7 +147,7 @@ def generate_rain_snow_rasters(path):
 
     # Create df containing all information from lists
     cell_result = pd.DataFrame(
-        {'Cellx': Cellx, 'Celly': Celly, 'Total Precipitation (mm)': Prec, 'Rain (mm)': Rain, 'Snow (mm)': Snow})
+        {'Cellx': cellx, 'Celly': celly, 'Total Precipitation (mm)': prec, 'Rain (mm)': rain, 'Snow (mm)': snowfall})
     np.savetxt('CellResult', cell_result, fmt='%s')
 
     # print("Results: \n", cell_result)
@@ -164,11 +158,7 @@ def generate_rain_snow_rasters(path):
     result_array_snow = np.full((rows, columns), no_data)  # Array for snow
     result_array_rain = np.full((rows, columns), no_data)  # Array for rain
 
-    # -------------------------|
-    loop_time = time.time()  # |
-    # -------------------------|
-
-    # --Loop through each cell (each row in cell_result data frame) in the input folder------------------------------ #
+    # --Loop through each cell (each row in cell_result dataframe) in the input folder------------------------------ #
     for m in range(0, rows):  # Each row, or 'y' value
         for k in range(0, columns):  # Each column or 'x' value
             if m in cell_result['Celly'].values and k in cell_result['Cellx'].values:
@@ -217,8 +207,8 @@ def generate_rain_snow_rasters(path):
     resampled_snow_name = snow_raster_path + "\\Snow_" + str(date) + ".tif"
     resampled_rain_name = rain_raster_path + "\\Rain_" + str(date) + ".tif"
 
-    Resampling.main(original_snow_name, snapraster_path, shape_path, resampled_snow_name)
-    Resampling.main(original_rain_name, snapraster_path, shape_path, resampled_rain_name)
+    resampling.main(original_snow_name, snapraster_path, shape_path, resampled_snow_name)
+    resampling.main(original_rain_name, snapraster_path, shape_path, resampled_rain_name)
 
     # # |---------------------------------------------------------------------|
     # print("Time to resample raster data: ", time.time() - resample_time)  # |
@@ -235,6 +225,3 @@ if __name__ == '__main__':
     main()
 else:
     pass
-
-
-

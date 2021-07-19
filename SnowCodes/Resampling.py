@@ -17,6 +17,7 @@ Code resamples an input raster to the extent and cell resolution of (snap) raste
 
 start_time = time.time()
 
+
 # ----------------Save FUNCTIONS----------------------------------------------------------------------------- #
 
 def SaveCSV(points, save_name):
@@ -51,19 +52,20 @@ def get_raster_points(array, GT):
     # print(coord.shape)
 
     # 2. Initialize an array with the same number of rows as non-zero cell values and 3 columns (X, Y, Z values)
-    points = np.zeros((int(coord.shape[0])-1, 3))
+    points = np.zeros((int(coord.shape[0]) - 1, 3))
 
     # 3. Get upper left corner coordinates from Geotransform (Top left corner X, cell size, 0, Top left corner Y, 0, -cell size)
-    upper_left_x = GT[0]  # X coordinate of upper left corner. From this point, all cells go towards the right (positive)
+    upper_left_x = GT[
+        0]  # X coordinate of upper left corner. From this point, all cells go towards the right (positive)
     upper_left_y = GT[3]  # Y coordinate of upper left corner. From this point all points go south (negative)
     size = GT[1]  # Cell resolution
 
     # print("GT: ", GT)
     # print("Upper Left X: ", upper_left_x, "\nUpper Left Y: ", upper_left_y, "\nSize: ", size)
 
-    for i in range (0, int(coord.shape[0])-1): # go through all cells in coord array
+    for i in range(0, int(coord.shape[0]) - 1):  # go through all cells in coord array
         # 1.Fill in x coordinate in row 0
-        points[i][0] = upper_left_x + coord[i][1]*size + (size/2)
+        points[i][0] = upper_left_x + coord[i][1] * size + (size / 2)
 
         # 2.Fill in x coordinate in row 1
         points[i][1] = upper_left_y - coord[i][0] * size - (size / 2)
@@ -95,7 +97,7 @@ def tif_to_xyz(raster_path, output_path):
     save_name = output_path + "\\PrecipitationXYZ_1000.xyz"  # Set a .xyz raster file name
 
     ds = gdal.Open(raster_path)  # Open the .tif raster
-    xyz =gdal.Translate(save_name, ds)  # using gdal translate, save it as a .xyz raster (same information)
+    xyz = gdal.Translate(save_name, ds)  # using gdal translate, save it as a .xyz raster (same information)
     xyz = None  # Close the .xyz raster in order to use it and read it
 
     # Open .xyz file and save it to a numpy array
@@ -150,8 +152,8 @@ def generate_vrt_file(csv_file):
 
 # Function is to check results (user). Converts input rasters to masked array
 def snap_to_raster(snap_raster, resampled_raster, non_clipped):
-    snap_array= rc.raster_to_array(snap_raster, mask=True)  # Get masked array from snap raster
-    resampled_array=rc.raster_to_array(resampled_raster, mask=True)  # Get masked array from resampled raster
+    snap_array = rc.raster_to_array(snap_raster, mask=True)  # Get masked array from snap raster
+    resampled_array = rc.raster_to_array(resampled_raster, mask=True)  # Get masked array from resampled raster
     non_clipped_array = rc.raster_to_array(non_clipped, mask=True)
 
     print("First cell Snap: ", snap_array[0][0])
@@ -186,8 +188,8 @@ def interpolate_points(vrt_file, folder, snap_data, cell_size):
         os.remove(raster_name)
 
     # 3.Get the number of columns and rows that the resampled raster must have. Same as the size of the snap raster
-    columns = str(int((snap_data[2]-snap_data[0])/cell_size))  # Get No. of columns in snap raster (as as string)
-    rows = str(int((snap_data[1]-snap_data[3])/cell_size))  # Get No. of rows in snap raster (as a string)
+    columns = str(int((snap_data[2] - snap_data[0]) / cell_size))  # Get No. of columns in snap raster (as as string)
+    rows = str(int((snap_data[1] - snap_data[3]) / cell_size))  # Get No. of rows in snap raster (as a string)
 
     # print("Columns: ", columns, "\nrows: ", rows)
 
@@ -199,7 +201,8 @@ def interpolate_points(vrt_file, folder, snap_data, cell_size):
     # ---- outsize: columns rows, of: output file format
     # ---- a_srs: coordinate system, ot: out type (float)
     os.system(
-        "gdal_grid -a invdistnn:power=2.0:smoothing=0:max_points=12:radius=5000 -txe " + str(snap_data[0]) + " " + str(snap_data[2]) +
+        "gdal_grid -a invdistnn:power=2.0:smoothing=0:max_points=12:radius=5000 -txe " + str(snap_data[0]) + " " + str(
+            snap_data[2]) +
         " -tye " + str(snap_data[3]) + " " + str(
             snap_data[1]) + " -outsize " + columns + " " + rows + " -of GTiff -a_srs EPSG:32634 " +
         "-ot Float32 " + vrt_file + " " + raster_name)
@@ -231,14 +234,14 @@ def main(original_raster, snap_raster, snap_boundary, save_name):
     original_array = np.where(original_array == -9999.0, np.nan, original_array)
 
     # 4. Get the GT (geotransform) information from the original raster file
-    GT_original, proj_original = rc.get_raster_data(original_raster)  #Get GT information from the ASCII file
+    GT_original, proj_original = rc.get_raster_data(original_raster)  # Get GT information from the ASCII file
 
     # 5. Get the coordinates of the center of all the cells WITH VALUES and save data the XYZ coordinates for each point
     # to an array
     XYZ_array = get_raster_points(original_array, GT_original)  # Path with the .csv file with coordinates
 
     # 6. Save the XYZ coordinate data to a .csv file
-    XYZ_CSV =  "file.csv"
+    XYZ_CSV = "file.csv"
     SaveCSV(XYZ_array, XYZ_CSV)  # Save array to .csv file
 
     # 7. Create a .vrt file from the .csv in order to be read by the gdal grid command
@@ -263,4 +266,3 @@ def main(original_raster, snap_raster, snap_boundary, save_name):
     # --10.3 Erase .csv file with points
     if os.path.exists(XYZ_CSV):
         os.remove(XYZ_CSV)
-

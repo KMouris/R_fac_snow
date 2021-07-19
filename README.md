@@ -54,7 +54,7 @@ Each input .txt file corresponds to the data for the given year-month-day-hour (
 
 ### rain_snow_rasters.py
 - determines if precipitation is snow or rain
-- generates a rain and snow raster resampled and snapped to a desired raster format (based on an example raster (snapraster, e.g. DEM used in RUSLE, or manually defined by the user).
+- generates a rain and snow raster resampled and snapped to a desired raster format based on an example raster (snapraster, e.g. DEM used in RUSLE) or manually defined by the user.
 
 | Input argument | Type | Description |
 |-----------------|------|-------------|

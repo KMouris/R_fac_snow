@@ -54,7 +54,7 @@ def fill_3d(date, value_arrays, tdm, row):
     Function fills the corresponding row value in each array (layer) in the 3D array with the year, month, day, hour,
      minute, second precipitation, temperature, row and column data. Each row corresponds to the given date being looped
      through and each array corresponds to a different cell in the original array
-    :param date: date of file being looped hrough (in datetime format)
+    :param date: date of file being looped through (in datetime format)
     :param value_arrays: array obtained from "Get_Values" with Precipitation value, Temperature value, row, column
            values, respectively
     :param tdm: 3D array being filled
