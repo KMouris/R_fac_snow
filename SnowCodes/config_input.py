@@ -144,7 +144,7 @@ image_list = ['B02', 'B03', 'B11', 'TCI']
 image_location_folder_name = "IMG_DATA"
 
 # Thresholds for snow detection
-NDSI_min = 0.2
+NDSI_min = 0.4
 blue_min = 1800
 
 """

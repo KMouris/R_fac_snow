@@ -30,16 +30,16 @@ The following input data has to be provided to run the whole code:
 |`shape_path`| STRING |  Path (name.shp) of the shapefile to which to clip the resampled rasters|
 |`precipitation_path`| STRING | Folder of precipitation rasters |
 |`temperature_path`| STRING | Folder of temperature rasters|
-|`SI_folder_path`| STRING | Folder of satellite images |
+|`si_folder_path`| STRING | Folder of satellite images |
 |`fEL_path`| STRING | Path to raster file expressing the influence of site elevation and latitude on the rainfall erosivity|
 |`results_path`| STRING |Path of the main result folder|
 
 
-## Modules (not complete)
+## Modules
 Overview of the main modules without detailed explanation of each function.
 ### pt_raster_manipulation.py
 - reads precipitation and temperature values from .txt ASCII raster files (in either monthly, daily or hourly time 
-intervals)
+intervals).
 - saves the data for each raster cell in .csv files with the following information: 
 year-month-day-hour-minute-second-Precipitation-Temperature-Row-Column
 
@@ -50,10 +50,10 @@ year-month-day-hour-minute-second-Precipitation-Temperature-Row-Column
 
 Each input .txt file corresponds to the data for the given year-month-day-hour (format: YYYYMMDD_0HH.txt).
 
-**Result folder:** `PT_CSV_per_cell` contains .csv files for every cell  (format: row_columns.csv)
+**Result folder:** `PT_CSV_per_cell` contains .csv files for every cell  (format: row_columns.csv).
 
 ### rain_snow_rasters.py
-- determines if precipitation is snow or rain
+- determines if precipitation is snow or rain.
 - generates a rain and snow raster resampled (Inverse distance weighting) and snapped to a desired raster format based on an example raster (snapraster, e.g. DEM used in RUSLE) or manually defined by the user. 
 
 | Input argument | Type | Description |
@@ -65,41 +65,67 @@ Each input .txt file corresponds to the data for the given year-month-day-hour (
 
 **Result folder:** 
 
-`rain_per_month` contains monthly rain raster files (.tif) snapped and clipped to target raster format
-  `snow_per_month` contains monthly snow raster files (.tif) snapped and clipped to target raster format
+`rain_per_month` contains monthly rain raster files (.tif) snapped and clipped to target raster format.
+  `snow_per_month` contains monthly snow raster files (.tif) snapped and clipped to target raster format.
   
 ### si_merge_clip.py
-- reads input Sentinel 2 satellite images
-- merges the B02, B03, B04 and B11 raster bands from different locations
-(e.g. TDL and TDK) 
-- clips the merged raster to the boundary shapefile
-- resamples merged rasters to the desired cell resolution
+- reads input Sentinel 2 satellite images.
+- merges raster bands from different locations
+(e.g. TDL and TDK).
+- clips the merged raster to the boundary shapefile.
+- resamples merged rasters to the desired cell resolution.
 
 | Input argument | Type | Description |
 |-----------------|------|-------------|
-|`SI_folder_path`| STRING | Folder of satellite images |
+|`si_folder_path`| STRING | Folder of satellite images |
 |`image_list`| LIST | Name (STR) of bands to merge, clip and resample|
 |`image_location_folder_name`| STRING | Name of the folder in which the satellite images are directly located|
 |`shape_path`| STRING |  Path (name.shp) of the shapefile to which to clip the resampled rasters|
 
-**Result folder:** `snow_cover\SatelliteImages` contains post-processed satellite data raster files in target raster format
+**Result folder:** `SatelliteImages` contains post-processed satellite data raster files in target raster format.
 
 ### snow_cover.py
-- reads the band data from each resampled raster band to arrays and determines which areas correspond to snow
-- generates a binary raster, where 1 means there is snow presence, and 0 means there is none
+- reads the band data from each resampled raster band to arrays and determines which areas correspond to snow.
+- generates a binary raster, where 1 means there is snow presence, and 0 means there is none.
 
 | Input argument | Type | Description |
 |-----------------|------|-------------|
-|`SI_folder_path`| STRING | Folder of satellite images|
+|`si_folder_path`| STRING | Folder of satellite images|
 |`NDSI_min`| FLOAT |NDSI threshold|
-|`blue_red_min`| FLOAT | Blue to red band ratio threshold|
 |`blue_min`| FLOAT | Blue band threshold|
 
 **Result folder:** `snow_cover` contains binary raster for each date (SnowCover_YYYY_MM.tif)
 
 ### snow_melt
+- calculates monthly snow cover dynamics
+- identifies monthly snowmelt
+
+| Input argument | Type | Description |
+|-----------------|------|-------------|
+|`snow_raster_input`| STRING | Folder of monthly snowfall|
+|`snowcover_raster_input`| STRING |Folder of monthly snowcover|
+
+**Result folder:** 
+`Snowmelt` contains snowmelt (mm) raster for each date (snowmeltYY_MM.tif).
+`Snow_end_month` contains accumulated snow (SWE in mm) raster for each date (snow_end_month_YY_MM.tif).
 
 ### Rfactor_REM_db
+- calculates the RUSLE R factor (in this case: Rainfall erosivity model for complex terrains).
+| Input argument | Type | Description |
+|-----------------|------|-------------|
+|`rain_raster_input`| STRING | Folder of monthly rainfall|
+|`fEL_path`| STRING |Path to raster file expressing the influence of site elevation and latitude on the rainfall erosivity|
+
+**Result folder:** 
+`R_factor_REM_db` contains R factor raster files based on the rainfall erosivity for each date (RFactor_REM_db_YYYYMM.tif).
 
 ### total_R_factor.py
-- includes calculation of snow erosivity
+- calculates a total R factor based on the erosive forces of snowmelt and precipitation.
+
+| Input argument | Type | Description |
+|-----------------|------|-------------|
+|`r_factor_input`| STRING | Folder of monthly rainfall erosivity|
+|`snow_factor`| INT |Factor which accounts for snowmelt erosivity|
+
+**Result folder:** 
+`R_factor_Total` contains total R factor raster files for each date (RFactor_total_YYYYMM.tif).
