@@ -24,8 +24,9 @@ def save_csv(points, save_name):
     """
     Function receives an array with X, Y, Z point coordinates and converts it to a dataframe, with the corresponding
     column names and then saves the data frame as a .txt file
-    :param points: array with (X,Y,Z) coordinates of cell centers
-    :param save_name: file name with which to save input point array to .txt format
+
+    :param points: np.array with (X,Y,Z) coordinates of cell centers
+    :param save_name: file path name with which to save input point array to .txt format
     :return:
     """
     columns = ["x", "y", "z"]  # Set column names
@@ -42,9 +43,10 @@ def get_raster_points(array, gt):
     """
     Function gets the coordinates (X, Y, Z) of the center of all cells that have values and returns an array with the
     coordinate point data
-    :param array: original raster array
-    :param gt: original raster geotransform data
-    :return: array where the coordinate and values of the value cell centers are saved
+
+    :param array: npp.array with original raster data
+    :param gt: tuple with original raster geotransform data
+    :return: np.array where the coordinate and values of the value cell centers are saved
     """
 
     # 1. Get [y,x] [rows, columns] coordinates of all cells where there are values (non np.nan)
@@ -86,39 +88,12 @@ def get_raster_points(array, gt):
     return points  # Return XYZ.csv file path
 
 
-def tif_to_xyz(raster_path, output_path):
-    """
-    Function converts a .tif raster into a ASCII raster with .xyz format. Then it opens the xyz format, saves info to
-    array (coordinates of the center of each cell)  The difference with GetRasterPOints is that this one gets all
-    points, whether there are no data values or not. The No-Data values have a "nan" value in the Z column
-    :param raster_path: .tif raster file with the original raster data
-    :param output_path: path in which to save the resulting .xyz file (temporarily)
-    :return: array with point coordinates)
-    """
-    save_name = output_path + "\\PrecipitationXYZ_1000.xyz"  # Set a .xyz raster file name
-
-    ds = gdal.Open(raster_path)  # Open the .tif raster
-    xyz = gdal.Translate(save_name, ds)  # using gdal translate, save it as a .xyz raster (same information)
-    xyz = None  # Close the .xyz raster in order to use it and read it
-
-    # Open .xyz file and save it to a numpy array
-    points = np.array(pd.read_csv(save_name, delimiter=' ', header=None))
-    # print(points)
-    # print(points.shape)
-
-    # points_path = output_path + "\\XYZPoints_all.csv"  # .csv file name (name has "all" since all points are read.
-    # points_path = "file.csv"
-    # SaveCSV(points, points_path)  # Save array to .csv file
-    #
-    return points
-
-
 def generate_vrt_file(csv_file):
     """
-    Function receives a .csv file path, which was created in the "GetRasterPoints"  or "Tif_to_XYZ functions, and is
-    then copied to a vrt file. The .csv file MUST BE named "file", since that name is automatically called in the vrt
-    file creation.
-    :param csv_file: .csv file with point coordinates (x,y,z) generated in "GetRasterPoints" function
+    Function receives a .csv file path, which was created in the "GetRasterPoints" and is then copied to a vrt file.
+    The .csv file MUST BE named "file", since that name is automatically called in the vrt file creation.
+
+    :param csv_file: .csv file path with point coordinates (x,y,z) generated in "GetRasterPoints" function
     :return: .vrt file path
     """
     # Create a .vrt file with the same name as .csv by changing the extension to .vrt (virtual). .vrt file will be
@@ -151,33 +126,15 @@ def generate_vrt_file(csv_file):
     return vrt_name
 
 
-# Function is to check results (user). Converts input rasters to masked array
-def snap_to_raster(snap_raster, resampled_raster, non_clipped):
-    snap_array = rc.raster_to_array(snap_raster, mask=True)  # Get masked array from snap raster
-    resampled_array = rc.raster_to_array(resampled_raster, mask=True)  # Get masked array from resampled raster
-    non_clipped_array = rc.raster_to_array(non_clipped, mask=True)
-
-    print("First cell Snap: ", snap_array[0][0])
-    print("First cell Resampled: ", resampled_array[0][0])
-    print("First cell Non-Clipped: ", non_clipped_array[0][0])
-
-    print("First Value cell Resampled: ", resampled_array[0][660])
-    print("First Value cell Non-Clipped: ", non_clipped_array[0][660])
-
-    # In order to get the same extent, assing a no data value to cells where the snap raster has no data values
-    clipped_array = np.where(snap_array.mask == True, np.nan, resampled_array)
-
-    return clipped_array
-
-
 def interpolate_points(vrt_file, folder, snap_data, cell_size):
     """
     Function receives the path of the .vrt file, which contains the XYZ points and uses these points to interpolate
     values for a new raster resolution (cell size)
-    :param vrt_file: .vrt virtual file which contains the original raster cell center coordinates
-    :param folder: folder in which to temporarily save the interpolated raster file
-    :param snap_data: array with snap raster extension [Xmin, Ymax, Xmax, Ymin] or [ulX ulY lrX lrY]
-    :param cell_size: cell size of the resulting raster (same as snap raster's)
+
+    :param vrt_file: .vrt virtual file path which contains the original raster cell center coordinates
+    :param folder: folder path in which to temporarily save the interpolated raster file
+    :param snap_data: np.array with snap raster extension [Xmin, Ymax, Xmax, Ymin] or [ulX ulY lrX lrY]
+    :param cell_size: float with cell size of the resulting raster (same as snap raster's)
     :return: path for the interpolated raster file
     """
     # 1.Set raster name: This file will later be eliminated, so name does not matter
@@ -192,8 +149,6 @@ def interpolate_points(vrt_file, folder, snap_data, cell_size):
     columns = str(int((snap_data[2] - snap_data[0]) / cell_size))  # Get No. of columns in snap raster (as as string)
     rows = str(int((snap_data[1] - snap_data[3]) / cell_size))  # Get No. of rows in snap raster (as a string)
 
-    # print("Columns: ", columns, "\nrows: ", rows)
-
     # 4.Use gdal grid to interpolate:
     # ---- a:interpolation method (Inv distance with nearest neighbor, with smoothing of 0, using a max number of 12
     # ----- points, searching in a 5000 m radius for those max. 12 points)
@@ -207,7 +162,6 @@ def interpolate_points(vrt_file, folder, snap_data, cell_size):
         " -tye " + str(snap_data[3]) + " " + str(
             snap_data[1]) + " -outsize " + columns + " " + rows + " -of gtiff -a_srs EPSG:32634 " +
         "-ot Float32 " + vrt_file + " " + raster_name)
-
     return raster_name
 
 
@@ -215,11 +169,12 @@ def main(original_raster, snap_raster, snap_boundary, save_name):
     """
     Function is the main code, which calls all other resampling functions in order to resample an input raster to a
     different cell resolution and raster extent
-    :param original_raster: path for the original raster 8in .tif format), to be resampled to a smaller/larger
-    resolution
-    :param snap_raster: raster from which to get gt and projection in order to resample original raster
-    :param snap_boundary: exact extent to which clip the resampled raster
-    :param save_name: name.ext + path with which to save resampled raster
+
+    :param original_raster: path for the original raster (in .tif format), to be resampled to a smaller/larger
+        resolution
+    :param snap_raster: path of raster from which to get gt and projection in order to resample original raster
+    :param snap_boundary: path to shape file with which to clip the resampled raster (.shp)
+    :param save_name: file path (with name.ext) with which to save resampled raster
     :return: ---
     """
     print("Running Resampling program")
