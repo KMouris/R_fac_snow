@@ -13,11 +13,6 @@ region using limited data. (https://doi.org/10.1016/j.jhydrol.2007.08.008)
 
 It receives input monthly precipitation rasters, in .tif format, and calculates the monthly RFactor corresponding to 
 each input file. The resulting file is in .tif format with th same raster properties as the input files.
-
-MISSING: (still Missing?)
-- Add function to clip input raster path list to analyze only the input data range 
-- Change how the program reads the file date (get_Date())
-
 """
 
 
@@ -28,7 +23,7 @@ def monthly_factor(m):
     """
     Function receives the month and calculates the monthly factor for the REM(DB) rainfall erosivity model for complex
     terrain from Diodato & Bellocchi (2007).
-    :param m: month, in numbers
+    :param m: month, in numbers (float)
     :return: fm (monthly factor)
     """
     fm = 0.3696 * (1 - 1.0888 * math.cos(2 * math.pi * m / (2.9048 + m)))  # Formula with cos(x), with x in radians

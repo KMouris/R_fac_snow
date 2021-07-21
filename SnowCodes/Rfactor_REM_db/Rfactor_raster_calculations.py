@@ -18,7 +18,8 @@ def check_input_rasters(raster1, raster2):
     rows and columns. It also checks that the extension is similar (not more than 2 cells difference) and if the
     projections are the same. An error is generated if there are significant differences between the rasters. For the
     projection, it gives the user a chance to continue with the raster without the same projection (since they have
-     the same extent) or to stop the program in order to manually modify and  check the input rasters
+    the same extent) or to stop the program in order to manually modify and  check the input rasters
+
     :param raster1: raster path (in .tif format)
     :param raster2: raster path (in .tif format)
     :return: ---
@@ -74,6 +75,7 @@ def check_input_rasters(raster1, raster2):
 def get_raster_data(raster_path):
     """
     Function extracts only the geotransform and projection from a raster file
+
     :param raster_path: raster file path
     :return: geotransform and projection
     """
@@ -89,8 +91,9 @@ def create_masked_array(array, no_data):
     """
         Function masks al no_data values in an input array, which contains the data values from a raster file so no
         calculations are done with said values
-        :param array: array to mask
-        :param no_data: data values to mask in array
+
+        :param array: np.array to mask
+        :param no_data: float with data values to mask in array
         :return: masked array
         """
     mskd_array = np.ma.array(array, mask=(array == no_data))  # Mask all NODATA values from the array
@@ -100,11 +103,12 @@ def create_masked_array(array, no_data):
 def raster_to_array(raster_path, mask=True):
     """
         Function extracts raster data from input raster file and returns an array with the raster value data. If the
-         mask variable is True, it calls the masked_array function and masks all no_data and returns a masked array. If
-         the mask variable it returns the unmasked array
+        mask variable is True, it calls the masked_array function and masks all no_data and returns a masked array. If
+        the mask variable it returns the unmasked array
+
         :param raster_path: path for .tif raster file
         :param mask: boolean which is True when user wants to mask the array and False when you want the original array
-        :return: Masked array (masking no data values) or non-masked array, with raster value data
+        :return: masked array (masking no data values) or non-masked array, with raster value data
         """
     raster = gdal.Open(raster_path)  # Read raster file
     band = raster.GetRasterBand(1)  # Get raster band (the 1st one, since the inputs have only 1)
@@ -123,13 +127,13 @@ def raster_to_array(raster_path, mask=True):
 def save_raster(array, output_path, gt, proj):
     """
         Function saves an array into a .tif raster file.
-        :param array: raster data to save to array
+
+        :param array: np.array with raster data to save to raster
         :param output_path: file name (with path and extension) with which to save raster array
         :param gt: geotransform of resulting raster
         :param proj: projection for resulting raster
         :return: ---
         """
-
     # Step 1: Get drivers in order to save outputs as raster .tif files
     driver = gdal.GetDriverByName("GTiff")  # Get Driver and save it to variable
     driver.Register()  # Register driver variable
