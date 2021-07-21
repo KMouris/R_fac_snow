@@ -9,6 +9,14 @@ Functions related to input file/folders, file names, dates and reading/saving .t
 
 
 def check_folder(path, v_name):
+    """ Function checks if a given folder exists
+    Args:
+        path: folder path
+        v_name: string corresponding to the type of information that should be found in the input folder
+
+    Returns: Error if file does not exist.
+
+    """
     if not os.path.exists(path):
         message = "ERROR: The input folder for '{}' does not exist. Check input '{}'".format(v_name, path)
         sys.exit(message)
@@ -17,6 +25,7 @@ def check_folder(path, v_name):
 def create_folder(path):
     """
     Function checks if the folder path "path" exists, and if it doesn't it creates it
+
     :param path: folder location
     :return: ---
     """
@@ -29,10 +38,10 @@ def create_folder(path):
 
 
 def has_number(string):
-    """
-    Function determines if an input string contains numbers/digits
+    """ Function determines if an input string contains numbers/digits
+
     :param string: string to analyze
-    :return: True if string has numbers
+    :return: boolean as True if string has numbers
     """
     return any(i.isdigit() for i in string)
 
@@ -40,7 +49,8 @@ def has_number(string):
 def get_PT_datefiles(paths, date):
     """
     Function receives a list with file paths and saves, to another list, those files whose dates are within the input
-   "date"'s month. It also checks if the list is empty, in which case it returns an error.
+    "date"'s month. It also checks if the list is empty, in which case it returns an error.
+
     :param paths: list with file paths
     :param date: start date (in datetime format)
     :return: list with file paths which correspond to dates within the input date's month
@@ -68,10 +78,11 @@ def get_date(file_path, end=False):
     """
     Function extracts the date from the input file/folder name. The date should be in YYYYMM, YYYYMMDD, or YYYYMMDD0HH
     format
+
     :param file_path: file or folder path
     :param day: boolean which is True if the file name contains the day and false if it doesnt contain the day
     :param hour: boolean which is True if the file name contains the hours and false it it doesn't
-    :param end: Boolean that is True if the date is needed at the end of the month. It is "False" by default
+    :param end: boolean that is True if the date is needed at the end of the month. It is "False" by default
     :return: file date in datetime format
     """
     file_name = os.path.basename(file_path)  # Get file name (which should contain the date)
@@ -126,6 +137,7 @@ def get_date(file_path, end=False):
 def get_date_list(date1, date2):
     """
     Function generates a list with each month between 2 dates
+
     :param date1: start date (in datetime format)
     :param date2: end date (in datetime format)
     :return: list with months, in datetime format
@@ -140,7 +152,7 @@ def filter_raster_lists(raster_list, date1, date2, file_name):
     """
     Function filters input list to only include dates in between 2 dates (date1-date2) (analysis range). If there are
     no files for the given date range (new_list is empty) or any month is missing, function throws an error.
-    [Author: María Fernanda Morales]
+
     :param raster_list: list with file paths, whose names contain the date in either YYYYMM or YYMM format
     :param date1: analysis start date (in datetime format)
     :param date2: analysis end date (in datetime format)
@@ -172,12 +184,13 @@ def filter_raster_lists(raster_list, date1, date2, file_name):
 
 def compare_dates(list1, list2, name1, name2):
     """
-    Function checks if the files in 2 different input folders  have the same number of files corresponding to the given
-    time interval, and if said rasters are in the same order
+    Function checks if the files in 2 different input folders have the same number of files corresponding to the given
+    time interval, and if said rasters are in the same order. If not, function throws an error and exists program.
+
     :param list1: list with file paths from folder 1
     :param list2: list with file paths from folder 2
-    :param name1: name of rasters from folder 1
-    :param name2: name of rasters from folder 2
+    :param name1: string with name of raster type from folder 1 (e.g. Precipitation, Temperature)
+    :param name2: string with name of raster type from folder 2 (e.g. Precipitation, Temperature)
     :return: ---
     """
 
@@ -207,6 +220,7 @@ def generate_satellite_image_date_list(folders, date_list):
     must be in YYYYMMDD format (otherwise function will erase said folder from the list). Then, for each analysis date
     (in date_list), the function determines which satellite image sensing date is closest to the end of each analysis
     month
+
     :param folders: list with folder names
     :param date_list: list with analysis date (in datetime format)
     :return: cropped folder list containing the satellite images to analyze
@@ -241,6 +255,7 @@ def generate_satellite_image_date_list(folders, date_list):
 def check_input_si_dates(folders, date_list, si_image_dates):
     """
     Function is called if the user sets which satellite image dates to use. There are 2 possibilities:
+
         1. User sets ALL the satellite image sensing dates, in which case the length of the input si dates will be the
         same as the amount of months to analyze (date_list). The function checks that all folders (sensing dates) exist,
         then checks if they are in order and if each input corresponds to the end of the month (less than 15 days from
@@ -250,6 +265,7 @@ def check_input_si_dates(folders, date_list, si_image_dates):
         list of the sensing dates that correspond to the END of the month of each analysis date. Then it compares the
         input SI dates with the folders corresponding to the end of the month. If the input date corresponds to the same
         month as one of the "end of the month" dates, then it substitutes it with the input date.
+
     :param folders: list of available sensing dates
     :param date_list: list with the dates to analyze (in datetime format)
     :param si_image_dates: the user input variable with the sensing dates to use

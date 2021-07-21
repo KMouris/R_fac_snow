@@ -59,7 +59,7 @@ if __name__ == '__main__':
         print("Finished rain and snow raster generation")
 # ------------------------------------------------------------------------------------------------------------------- #
 
-# --- RUN snow_detection -------------------------------------------------------------------------------------------- #
+# --- RUN snow_cover ------------------------------------------------------------------------------------------------ #
     # Generate a binary snow detection raster, to determine cells with snow ----------------------------------------- #
     if run_snow_cover:
         si_list = os.listdir(si_folder_path)  # list with satellite image folders

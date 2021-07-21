@@ -24,14 +24,14 @@ NOTES:
 
 
 def get_values(P_array, T_array, no_data, cells):
-    """
-    Function reads the data cells in the original input rasters and returns an array with the extracted P and T data
+    """Function reads the data cells in the original input rasters and returns an array with the extracted P and T data
     from each cell
-    :param P_array: precipitation data array
-    :param T_array: temperature data array
-    :param no_data: no data value from the original input rasters
-    :param cells: number of data cells in the arrays (should be the same for both)
-    :return: an array with the precipitation value, temperature value, cell row index, cell column index
+
+    :param P_array: np.array with precipitation data
+    :param T_array: np.array with temperature data
+    :param no_data: float with no data value from the original input rasters
+    :param cells: float with number of data cells in the arrays (should be the same for both)
+    :return: np.array with the precipitation value, temperature value, cell row index, cell column index
     """
     # Generate an array in which to save the P value, T value, row and column of each cell ( 4 rows)
     value_array = np.zeros((int(cells), 4))
@@ -51,15 +51,15 @@ def get_values(P_array, T_array, no_data, cells):
 
 
 def fill_3d(date, value_arrays, tdm, row):
-    """
-    Function fills the corresponding row value in each array (layer) in the 3D array with the year, month, day, hour,
+    """Function fills the corresponding row value in each array (layer) in the 3D array with the year, month, day, hour,
      minute, second precipitation, temperature, row and column data. Each row corresponds to the given date being looped
      through and each array corresponds to a different cell in the original array
+
     :param date: date of file being looped through (in datetime format)
-    :param value_arrays: array obtained from "Get_Values" with Precipitation value, Temperature value, row, column
-           values, respectively
-    :param tdm: 3D array being filled
-    :param row: row in each array (layer) in the 3D array being filled ("i" in main loop)
+    :param value_arrays: array obtained from "get_values" with precipitation value, temperature value, row, column
+        values, respectively
+    :param tdm: 3D np.array being filled
+    :param row: int with row to fill in each array (layer) in the 3D array being filled ("i" in main loop)
     :return: the 3D array filled with the data for the given date, in row "i", in each array
     """
     for k in range(0, tdm.shape[0]):  # Loop through each layer or array in the 3D array
@@ -74,11 +74,11 @@ def fill_3d(date, value_arrays, tdm, row):
 
 
 def save_csv_per_cell(tdm, path):
-    """
-    Function saves each array in the 3D array (corresponding to each cell in the input rasters) to .csv files.
+    """Function saves each array in the 3D array (corresponding to each cell in the input rasters) to .csv files.
     Generates a .csv file for each cell, and the name of each file corresponds to the cell row_column location
-    :param tdm: 3D matrix with the data for each cell saved to each layer (each array) to save to .csv files
-    :param path: path in which to save the .csv result files
+
+    :param tdm: 3D np.array with the data for each cell saved to each layer (each array) to save to .csv files
+    :param path: folder path in which to save the .csv result files
     :return: ---
     """
     for k in range(0, tdm.shape[0]):  # For each "station" or cell
@@ -98,6 +98,17 @@ def save_csv_per_cell(tdm, path):
 
 
 def generate_csv(date):
+    """
+    Function generates the .csv files from input temperature and precipitation rasters corresponding to a given input
+    date. The function filters the raster files in the 'precipitation_path' and 'temperature_path' from the config_input
+    file to extract those corresponding to the given input date's month.
+
+    Args:
+        date: date (in datetime format) corresponding to the month being analyzed
+
+    Returns: ---
+
+    """
     start_time = time.time()
     print("Analyzing date: {}.".format(str(date.strftime('%Y%m'))))
 

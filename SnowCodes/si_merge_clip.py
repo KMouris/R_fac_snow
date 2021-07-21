@@ -27,12 +27,12 @@ the satellite image name (DO NOT CHANGE)
 
 
 def find_image_path(suffix, path):
-    """
-    Function loops through each file in the folder "path" and looks for the file whose last 3 digits correspond to
+    """Function loops through each file in the folder "path" and looks for the file whose last 3 digits correspond to
      "suffix" and return the given file's path. If the file does not exist, and it should correspond to a band (02, 03,
      04, or 11) it generates an error. If it corresponds to "TCI", it is not necessary for calculation purposes so it
      returns a "0" in order to break the loop.
-    :param suffix: Last 3 digits in the image name to merge in the given loop
+
+    :param suffix: string with last 3 digits in the image name to merge in the given loop
     :param path: folder path in which the satellite images are located, and which should be looped to find the image
      with the given suffix
     :return: the complete image path, if the file with suffix "suffix" exists. If it doesn't, and the suffix is "TCI"
@@ -55,6 +55,14 @@ def find_image_path(suffix, path):
 
 
 def sat_image_merge_clip(folder):
+    """
+    Function to merge and clip different bands from satellite images from 2 or more different satellites.
+    Args:
+        folder: folder path for a give sensing date. It must contain sub-folders, one for each satellite.
+
+    Returns: list with the paths for each of the merged and clipped satellite band images (in .tif format) needed for
+        snow_cover.py
+    """
     sat_time = time.time()
 
     # Get satellite image date -------------------------------------------------------------------------------------- #
@@ -138,6 +146,10 @@ def sat_image_merge_clip(folder):
 
 
 def main():
+    """
+    Main function to run code independently of the main_snow_codes.py file
+    Returns:
+    """
     # Same code as in main_snow_codes.py
     # Generate a list with all the dates to run through and include in the analysis
     date_list = file_management.get_date_list(start_date, end_date)

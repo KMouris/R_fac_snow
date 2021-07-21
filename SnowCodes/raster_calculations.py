@@ -9,10 +9,11 @@ File contains direct raster calculation functions (raster paths as input).
 
 def get_snap_raster_data(raster_path):
     """
-    Function extracts the raster and gets the basic information such as: GeoTransform, Projection, Extension (As an
-    array with ulx, uly, lrx, lry) and cell resolution
+    Function extracts the raster from input file and gets the basic information such as: GeoTransform, Projection,
+    Extension (as an array with ulx, uly, lrx, lry) and cell resolution
+
     :param raster_path: path where the snap raster is located (including name and .tif extension)
-    :return: returns geotransform, projection, snap raster extension, cell size
+    :return: tuples with geotransform, tuple with projection, list with snap raster extension, float with cell size
     """
     raster = gdal.Open(raster_path)  # Extract raster from path
     gt = raster.GetGeoTransform()  # Get Geotransform Data: (Top left corner X, cell size, 0, Top left corner Y, 0,
@@ -36,8 +37,9 @@ def get_snap_raster_data(raster_path):
 def get_raster_data(raster_path):
     """
     Function extracts only the geotransform and projection from a raster file
+
     :param raster_path: raster file path
-    :return: geotransform and projection
+    :return: tuples with geotransform and projection
     """
     raster = gdal.Open(raster_path)  # Extract raster from path
     gt = raster.GetGeoTransform()  # Get Geotransform Data: (Top left corner X, cell size, 0, Top left corner Y, 0,
@@ -50,9 +52,10 @@ def get_raster_data(raster_path):
 def create_masked_array(array, no_data):
     """
     Function maskes the no_data values in an input array, which contains the data values from a raster file
-    :param array: array to mask
-    :param no_data: data values to mask in array
-    :return: masked array
+
+    :param array: np.array to mask
+    :param no_data: float with value to mask in array
+    :return: masked np.array
     """
     mskd_array = np.ma.array(array, mask=(array == no_data))  # Mask all NODATA values from the array
     if math.isnan(no_data):  # if no data value is 'nan'
@@ -63,9 +66,10 @@ def create_masked_array(array, no_data):
 def raster_to_array(raster_path, mask):
     """
     Function extracts raster data from input raster file and returns a non-masked array
+
     :param raster_path: path for .tif raster file
     :param mask: boolean which is True when user wants to mask the array and False when you want the original array
-    :return: Masked array (masking no data values)
+    :return: np.array or masked np.array (masking no data values)
     """
     raster = gdal.Open(raster_path)  # Read raster file
     band = raster.GetRasterBand(1)  # Get raster band (the 1st one, since the inputs have only 1)
@@ -85,9 +89,10 @@ def raster_to_array(raster_path, mask):
 def clip(shape_path, save_path, original_raster):
     """
     Function clips the raster to the same extents as the snap raster (same NODATA cells).
+
     :param shape_path: path where the .shp file, with which to clip input raster
-    :param save_path: file name (including extension and path) where to save the clipped raster
-    :param original_raster: raster to clip to shape extent (interpolated raster)
+    :param save_path: file path (including extension and name) where to save the clipped raster
+    :param original_raster: path of raster to clip to shape extent (interpolated raster)
     :return: ---
     """
 
@@ -104,8 +109,9 @@ def merge(raster_list, merge_name):
     """
     Function merges all rasters in the input 'raster list' into one single .tif raster. At intersecting points, the
     merge function gets the highest value (does not average)
+
     :param raster_list: list or array with the path of every raster to merge
-    :param merge_name: file name + extension with which to save the resulting merged raster file
+    :param merge_name: path with file name + extension with which to save the resulting merged raster file
     :return: ---
     """
     # Save array with raster paths to a list
@@ -118,6 +124,7 @@ def merge(raster_list, merge_name):
 def warp_resample(output_raster, input_raster, resolution):
     """
     Function resamples the input raster to a given resolution, using nearest neighbors and the gdal warp function
+
     :param output_raster: path of output, resampled raster path plus name (must include extension .tif)
     :param input_raster: path of raster to resample (including name.extension)
     :param resolution: cell resolution of the resulting raster
@@ -131,7 +138,9 @@ def warp_resample(output_raster, input_raster, resolution):
 
 def compare_extents(raster_path1, raster_path2):
     """
-    Function compares the number of rows and columns of 2 input rasters. If they differ, do something.
+    Function compares the number of rows and columns of 2 input rasters. If they differ, function generates an error
+    and exits program.
+
     :param raster_path1: raster path (path and file name.extension)
     :param raster_path2: (path and file name.extension)
     :return: ---
@@ -153,7 +162,8 @@ def compare_extents(raster_path1, raster_path2):
 
 def get_resolution(raster):
     """
-    Function gets the raster resolution (cell size) from the raster GT
+    Function gets the raster resolution (cell size) from the raster geo-transform
+
     :param raster: raster path
     :return: cell resolution of input raster
     """
@@ -165,8 +175,9 @@ def get_resolution(raster):
 def save_raster(array, output_path, gt, proj, nodata):
     """
     Function saves an array into a .tif raster file.
-    :param array: raster data to save to array
-    :param output_path: file name (with path and extension) with which to save raster array
+
+    :param array: np.array with raster data to save
+    :param output_path: file path (with nam and extension) with which to save raster array
     :param gt: geotransform of resulting raster
     :param proj: projection for resulting raster
     :param nodata: no data value with which to save the raster
@@ -203,8 +214,9 @@ def get_ascii_gt(info_array):
     """
     Function receives the header of a .txt ASCII raster file and rearranges/transforms the data and generates a tuple
     geoTransform variable.
-    :param info_array: header of a .txt ASCII raster file, which corresponds to the ASCII format data, including
-     [ncols, nrows, xllcorner, yllcorner, cellsize, nodata_value].
+
+    :param info_array: np.array with header information of a .txt ASCII raster file, which corresponds to the ASCII
+    format data, including [ncols, nrows, xllcorner, yllcorner, cellsize, nodata_value].
     :return: the GT information, obtained from the header information in the format Top left corner X, cell size, 0,
     Top left corner Y, 0, -cell size
     """
@@ -222,11 +234,11 @@ def get_ascii_gt(info_array):
 
 def get_ascii_data(path):
     """
-       Function extracts the information from the ASCII file in order to save the ASCII file header
-       and extract the information needed to create a GEOTransform file (to later save the raster as a
-       .tif file).
+       Function extracts the information from the ASCII file in order to save the ASCII file headerband extracts the
+       information needed to create a GEOTransform file (to later save the raster as a.tif file).
+
        :param path: path where a .txt ASCII raster file is located
-       :return: the GEOtransform raster information and the ASCII file header (to later save the results)
+       :return: the GEOTransform raster information and the ASCII file header (to later save the results)
        """
     # Save the ASCII raster information into a pandas data frame. It will have the following order:
     # ncols, nrows, xllcorner, yllcorner, cellsize, nodata_value
@@ -242,7 +254,8 @@ def get_ascii_data(path):
 
 def ascii_to_array(path):
     """
-    FUnction reads a .txt ASCII raster and returns the array (ignoring the first 6 lines)
+    Function reads a .txt ASCII raster and returns the array (ignoring the first 6 lines)
+
     :param path: path of .txt file (including file name and extension)
     :return: numpy array with raster data
     """

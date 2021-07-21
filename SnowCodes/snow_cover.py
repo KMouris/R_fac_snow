@@ -37,10 +37,11 @@ the satellite image name (DO NOT CHANGE)
 
 def calculate_snow_cover(folder, date):
     """
-    Main function to calculate the snow cover.
-    :param folder: Folder where satellite images to use are located. The file name should have the sensing date in the
-     name in format "YYYYMMDD"
-    :param date: analysis date being looped through or being analyzed
+    Main function to calculate the snow cover for a given month, based on a Sentinel 2 satellite image.
+
+    :param folder: Folder path where satellite images to use are located. The file name should have the sensing date in
+     the name in format "YYYYMMDD"
+    :param date: analysis date (in datetime format) being looped through or being analyzed
     :return: ---
     """
     # --------------------------------- Read Satellite Images to list ---------------------------------------------- #
@@ -100,15 +101,5 @@ def calculate_snow_cover(folder, date):
     gu.create_raster(snow_raster, snow, epsg=32634, nan_val=-9999, rdtype=gdal.GDT_UInt32, geo_info=blue_geotransform)
 
 
-def main():
-    """
-    QUESTION: IF RUNNING FILE INDIVIDUALLY, DO I ALLOW IT TO BE ONLY FOR 1 MONTH OR TO I PUT HERE THE SAME LOOP AS IN
-    THE MAIN CODE?
-    :return:
-    """
-    calculate_snow_cover(SI_folder_path, start_date)
-
-
 if __name__ == '__main__':
-    print("Running code directly")
-    main()
+    pass

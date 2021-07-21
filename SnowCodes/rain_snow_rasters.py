@@ -1,6 +1,6 @@
 import config_input
 from config_input import *
-import resampling
+import Resampling
 import raster_calculations as rc
 import file_management
 
@@ -42,9 +42,10 @@ def snow_ident(station, T_snow):
     """
     Function determines if the precipitation in each time step is in rain or snow form. It is considered snow if
      T < T_threshold
-    :param station: Array with a Year-Month-Date-Hour in each row, and Precipitation and Temperature in columns [6] and
-     [7] respectively.
-    :return: Dataframe with 3 columns: total precipitation, Rain and Snow. Each row corresponds to a Y-M-D-H
+
+    :param station: np.array with a Year-Month-Date-Hour in each row, and Precipitation and Temperature in columns [6]
+    and[7] respectively.
+    :return: Data-frame with 3 columns: total precipitation, Rain and Snow. Each row corresponds to a Y-M-D-H
     combination (in order).
     """
     df_snow = pd.DataFrame([])  # Data frame to save results in each iteration
@@ -64,11 +65,12 @@ def snow_station(station, snow):
     """
     Function calculates the total monthly (or for the given month or time period in the input files) precipitation, rain
     and snow and returns the monthly values in a dataframe
-    :param station: Array with a Year-Month-Date-Hour in each row, and Precipitation and Temperature in columns [6] and
+
+    :param station: np.array with a Year-Month-Date-Hour in each row, and Precipitation and Temperature in columns [6] and
      [7] respectively and cell row and cell column in columns [7] and [8] respectively.
-    :param snow: Dataframe with total precipitation, rain, and snow columns. Ech row corresponds to a different time
+    :param snow: data-frame with total precipitation, rain, and snow columns. Ech row corresponds to a different time
     step
-    :return: Dataframe with total precipitation, total rain and total snow within the time period in "station"
+    :return: data-frame with total precipitation, total rain and total snow within the time period in "station"
     input file
     """
     snow_station = pd.DataFrame([])  # create empty dataframe in which to save the results
@@ -88,6 +90,15 @@ def snow_station(station, snow):
 
 
 def generate_rain_snow_rasters(path):
+    """Function reads .csv files with precipitation and temperature rasters and generates a snow and rain raster for the
+    time frame in .csv file (which should be 1 month)
+
+    Args:
+        path: folder path where .csv files (one for each cell in the original rasters) are located
+
+    Returns: ---
+
+    """
     print("Running rain and snow raster generation.\n Reading data from: ", path)
     start_time = time.time()
 
@@ -207,8 +218,8 @@ def generate_rain_snow_rasters(path):
     resampled_snow_name = snow_raster_path + "\\Snow_" + str(date) + ".tif"
     resampled_rain_name = rain_raster_path + "\\Rain_" + str(date) + ".tif"
 
-    resampling.main(original_snow_name, snapraster_path, shape_path, resampled_snow_name)
-    resampling.main(original_rain_name, snapraster_path, shape_path, resampled_rain_name)
+    Resampling.main(original_snow_name, snapraster_path, shape_path, resampled_snow_name)
+    Resampling.main(original_rain_name, snapraster_path, shape_path, resampled_rain_name)
 
     # # |---------------------------------------------------------------------|
     # print("Time to resample raster data: ", time.time() - resample_time)  # |
