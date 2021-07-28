@@ -51,6 +51,7 @@ def get_PT_datefiles(paths, date):
     Function receives a list with file paths and saves, to another list, those files whose dates are within the input
     "date"'s month. It also checks if the list is empty, in which case it returns an error.
 
+    Args:
     :param paths: list with file paths
     :param date: start date (in datetime format)
     :return: list with file paths which correspond to dates within the input date's month
@@ -62,7 +63,8 @@ def get_PT_datefiles(paths, date):
         if f_date.year == date.year and f_date.month == date.month:
             filenames.append(text)
     if len(filenames) == 0:
-        message = "The input precipitation and/or temperature files do not contain files for ", str(date.strftime('%Y%m'))
+        message = "The input precipitation and/or temperature files do not contain files for ", str(
+            date.strftime('%Y%m'))
         sys.exit(message)
     else:
         # Check if month is incomplete by calculating all possibilities: input files are monthly, daily or hourly
@@ -79,9 +81,8 @@ def get_date(file_path, end=False):
     Function extracts the date from the input file/folder name. The date should be in YYYYMM, YYYYMMDD, or YYYYMMDD0HH
     format
 
+    Args:
     :param file_path: file or folder path
-    :param day: boolean which is True if the file name contains the day and false if it doesnt contain the day
-    :param hour: boolean which is True if the file name contains the hours and false it it doesn't
     :param end: boolean that is True if the date is needed at the end of the month. It is "False" by default
     :return: file date in datetime format
     """
@@ -138,12 +139,12 @@ def get_date_list(date1, date2):
     """
     Function generates a list with each month between 2 dates
 
+    Args:
     :param date1: start date (in datetime format)
     :param date2: end date (in datetime format)
     :return: list with months, in datetime format
     """
-    date_list = pd.to_datetime(pd.date_range(date1, date2,
-                  freq='MS').strftime("%Y%m").tolist(), format="%Y%m")
+    date_list = pd.to_datetime(pd.date_range(date1, date2, freq='MS').strftime("%Y%m").tolist(), format="%Y%m")
 
     return date_list
 
@@ -153,10 +154,12 @@ def filter_raster_lists(raster_list, date1, date2, file_name):
     Function filters input list to only include dates in between 2 dates (date1-date2) (analysis range). If there are
     no files for the given date range (new_list is empty) or any month is missing, function throws an error.
 
+    Args:
     :param raster_list: list with file paths, whose names contain the date in either YYYYMM or YYMM format
     :param date1: analysis start date (in datetime format)
     :param date2: analysis end date (in datetime format)
     :param file_name: string with the name of the input raster file type generating the error
+
     :return: filtered list, without the files that are not within the analysis date range.
     """
     new_list = []
@@ -166,7 +169,8 @@ def filter_raster_lists(raster_list, date1, date2, file_name):
             new_list.append(elem)
 
     if len(new_list) == 0:
-        message = "ERROR: There are no {} input raster files corresponding to the input date range. Check input.".format(file_name)
+        message = "ERROR: There are no {} input raster files corresponding to input date range. Check input.".format(
+            file_name)
         sys.exit(message)
 
     # Check if there is one input file per month to analyze
@@ -187,23 +191,25 @@ def compare_dates(list1, list2, name1, name2):
     Function checks if the files in 2 different input folders have the same number of files corresponding to the given
     time interval, and if said rasters are in the same order. If not, function throws an error and exists program.
 
+    Args:
     :param list1: list with file paths from folder 1
     :param list2: list with file paths from folder 2
     :param name1: string with name of raster type from folder 1 (e.g. Precipitation, Temperature)
     :param name2: string with name of raster type from folder 2 (e.g. Precipitation, Temperature)
+
     :return: ---
     """
 
     # Check if there are files in both lists:
     if not list1 or not list2:
-        message = "There are no {} and/or {} raster files corresponding to the input date range. Check input folder or " \
-                  "input data range"
+        message = "There are no {} and/or {} raster files corresponding to the input date range." + \
+                  "Check input folder or input data range"
         sys.exit(message)
 
     # Check if lists have the same number of files
     if not len(list1) == len(list2):
-        message = "There are a different number of {} and {} raster files. Check that both file folders have the same " \
-                  "time discretization and number of files for the given date range.".format(name1, name2)
+        message = "There are a different number of {} and {} raster files. Check that both file folders have the " \
+                  "same time discretization and number of files for the given date range.".format(name1, name2)
         sys.exit(message)
 
     # If they do have the same number of files: check that the files are in the same order
@@ -221,8 +227,10 @@ def generate_satellite_image_date_list(folders, date_list):
     (in date_list), the function determines which satellite image sensing date is closest to the end of each analysis
     month
 
-    :param folders: list with folder names
+    Args:
+    :param folders: list with folder names (string format)
     :param date_list: list with analysis date (in datetime format)
+
     :return: cropped folder list containing the satellite images to analyze
     """
     folder_date_list = []  # list to save the folder names as dates
@@ -266,15 +274,18 @@ def check_input_si_dates(folders, date_list, si_image_dates):
         input SI dates with the folders corresponding to the end of the month. If the input date corresponds to the same
         month as one of the "end of the month" dates, then it substitutes it with the input date.
 
+    Args:
     :param folders: list of available sensing dates
     :param date_list: list with the dates to analyze (in datetime format)
     :param si_image_dates: the user input variable with the sensing dates to use
+
     :return: list of satellite image sensing dates to analyze.
     """
     # Step 1: # Check if the input dates exist in the input satellite image folder:
     for s_date in si_image_dates:
         if str(s_date) not in folders:
-            message = "There is no satellite image for {} in input satellite image folder. Check user input".format(str(s_date))
+            message = "There is no satellite image for {} in input satellite image folder. Check user input".format(
+                str(s_date))
             sys.exit(message)
     # Get list of available satellite images for each date in analysis range, calculated automatically
     last_of_month_list = generate_satellite_image_date_list(folders, date_list)
@@ -369,6 +380,3 @@ else:
         check_folder(config_input.snow_melt_path, 'snow_melt_path')
 
 # ------------------------------------------------------------------------------------------------------------------- #
-
-
-
