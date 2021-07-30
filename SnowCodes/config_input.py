@@ -48,13 +48,13 @@ except ModuleNotFoundError as e:
     - run_r_factor: 'True' to run the python program to calculate the R(ain) factor for the RUSLE model, from the rain 
         rasters.
     - run_total_factor: 'True' to calculate the total precipitation factor (rain + snow) """
-run_pt_manipulation = False
-run_rain_snow_rasters = False
-run_snow_cover = False
-run_satellite_image_clip_merge = False
+run_pt_manipulation = True
+run_rain_snow_rasters = True
+run_snow_cover = True
+run_satellite_image_clip_merge = True
 run_snow_melt = True
 run_r_factor = True
-run_total_factor = False
+run_total_factor = True
 
 """ Files needed regardless of which codes to run: 
     - snapraster_path: path (including name.ext) of raster with which to snap (obtain projection, extension and raster 
@@ -68,7 +68,7 @@ snapraster_path = r'' + os.path.abspath('..\Input\DEM\\fildemBanja.tif')
 shape_path = r'' + os.path.abspath('..\Input\Shapes\\totalboundary.shp')
 results_path = r'' + os.path.abspath('../Results')
 
-start_date = '201703'
+start_date = '201605'
 end_date = '201804'
 
 path_geo_utils = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\geo-utils/'
@@ -82,6 +82,8 @@ path_geo_utils = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\geo-utils/'
     the date in the format YYYYMMDD_0HH."""
 precipitation_path = r'' + os.path.abspath('../Input/Precipitation_Data/Precip_Banja_hourly_noCorr')
 temperature_path = r'' + os.path.abspath('../Input/Temperature_Data')
+# precipitation_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Input\Precipitation_Data\Precip_Banja_hourly_noCorr'
+# temperature_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Input\Temperature_Data'
 
 """If run_pt_manipulation = 'False' (AND run_rain_snow_rasters = True)
 - PT_path: folder path with precipitation and Temperature data. There must be a folder each month in the analysis 
@@ -106,7 +108,6 @@ T_snow = 0
 """ If run_rain_snow_rasters = False: (AND run_snow_melt is True OR run_r_factor is True) 
 - snow_raster: Folder path where .tif snow rasters are located (needed for snow_melt calculation)
 - rain_raster: Folder path where .tif rain rasters are located (needed for R factor calculation)"""
-# snow_raster_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\snow_per_month'
 snow_raster_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\snow_per_month'
 rain_raster_input = r'\\LWW-027\Data\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Results\rain_per_month'
 
@@ -128,10 +129,10 @@ rain_raster_input = r'\\LWW-027\Data\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modific
         
 - NDSI_min: float with NDSI threshold for snow detection.
 - blue_min: float with Blue band threshold for snow detection."""
-# si_folder_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Satellite_data\Downloaded_MF'
-si_folder_path = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\SatelliteImages'
+si_folder_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Satellite_data\Downloaded_MF'
+# si_folder_path = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\SatelliteImages'
 
-input_si_dates = True
+input_si_dates = False
 si_image_dates = [20161223]
 
 image_list = ['B02', 'B03', 'B11', 'TCI']
@@ -154,7 +155,7 @@ snowcover_raster_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_
 'sum', 'coverage') """
 # Input for statistics
 # Disable (False) or enable (True) plot
-plot_statistic = False
+plot_statistic = True
 # Location of shapefile used for zonal statistics (different from clipping shape)
 shape_zone = r'' + os.path.abspath('../Input/Shapes/catchment_kokel.shp')
 # Definition of statistical parameter to be plotted ('min', 'mean', 'max', 'range', 'sum', 'coverage')
@@ -166,7 +167,7 @@ plot_result = results_path + '\\Plots'
 """If run_snow_melt = False (AND run_total_factor = True)
 - snow_melt_input: folder path where .tif snow melt rasters are located (each file name must contain the date) """
 # snow_melt_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\Snowmelt'
-snow_melt_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\Results\Snowmelt'
+snow_melt_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Git_codes\R_fac_snow\Results\Snowmelt'
 
 """If run_Rfactor = True: 
 - fEl_path: Path where the f(E,EL) raster is, including raster name and extension (must be .tif).
