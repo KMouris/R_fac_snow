@@ -4,6 +4,7 @@ import raster_calculations
 
 
 def main():
+    print("Calculating total R factor")
     # 1. Get lists with Rfactor and snow melt rasters
     filenames_r_factor = sorted(glob.glob(r_factor_path + "\*.tif"))
     filenames_snow_melt = sorted(glob.glob(snow_melt_path + "\*.tif"))
@@ -44,7 +45,7 @@ def main():
 
         # 6.6 Save rasters:
         output_name = total_factor_path + "\\RFactor_total_" + str(date.strftime('%Y%m')) + ".tif"
-        raster_calculations.save_raster(total_factor, output_name, gt, proj, nodata=np.nan)
+        raster_calculations.save_raster(total_factor, output_name, gt, proj, no_data=np.nan)
 
 
 if __name__ == '__main__':
