@@ -17,7 +17,10 @@ Depending on your input data some pre-processing steps might not be necessary.
 
 ## Libraries
 
-Will be added as soon as code is released.
+*Python* libraries: *geo_utils*, *gdal*, *matplotlib.pyplot*, *numpy*, *pandas*, *rasterstats*, *scipy*, *tqdm*
+> The geo_utils package can be downloaded [here](https://geo-utils.readthedocs.io/en/latest/) and/or the path where the package is saved can be defined in the config.py file.
+
+*Standard* libraries: *calendar*, *datetime*, *glob*, *logging*, *math*, *re*, *os*, *sys*, *time*
 
 ## Input Data
 The following input data has to be provided to run the whole code:

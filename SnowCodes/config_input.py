@@ -7,6 +7,7 @@ calculation) and the handling of packages.
 try:
     import glob
     import logging
+    import math
     import os
     import sys
     import time
@@ -14,7 +15,8 @@ try:
     import calendar
     import re
 except ModuleNotFoundError as b:
-    print('ModuleNotFoundError: Missing basic libraries (required: glob, logging, os, sys, time, datetime, calendar, re')
+    print('ModuleNotFoundError: Missing basic libraries (required: glob, logging, math, os, sys, time, datetime, '
+          'calendar, re')
     print(b)
 
 # import additional python libraries
@@ -24,12 +26,11 @@ try:
     import numpy as np
     import pandas as pd
     import rasterstats as rs
-    import math
     import scipy
     from tqdm import tqdm
 except ModuleNotFoundError as e:
     print('ModuleNotFoundError: Missing fundamental packages (required: gdal, maptlotlib.pyplot, numpy, '
-          'pandas, rasterstats, math, scipy, tqdm')
+          'pandas, rasterstats, scipy, tqdm')
     print(e)
 
 
