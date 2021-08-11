@@ -114,6 +114,7 @@ Each input .txt file corresponds to the data for the given year-month-day-hour (
 
 ### Rfactor_REM_db
 - calculates the RUSLE R factor (in this case: Rainfall erosivity model for complex terrains).
+
 | Input argument | Type | Description |
 |-----------------|------|-------------|
 |`rain_raster_input`| STRING | Folder of monthly rainfall|
