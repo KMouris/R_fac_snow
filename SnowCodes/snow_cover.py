@@ -16,7 +16,7 @@ NOTES:
 - Main function "calculate_snow_cover" does all the calculations for one sensing date at a time. 
 - Program can be run individually or through "main_snow_codes"
 - Program generates a binary raster, where 1 means there is snow presence, and 0 means there is none. 
-- An error is generates if any of the needed bands (02, 03, 11) are not available. If the TCI rasters are not 
+- An error is generated if any of the needed bands (02, 03, 11) are not available. If the TCI rasters are not 
 available, the program will skip this step, since it is not necessary for the calculations. 
 
 Input files/data: [In Input_configuration]
@@ -33,6 +33,43 @@ the satellite image name (DO NOT CHANGE)
 2. image_location_folder_name: Name of the folder in which the satellite images are directly located (IMG_DATA)
 3. shape_path: path (location in folder + name.shp) of the shapefile with which to clip the resampled rastersshape file:
 """
+
+
+def get_band_paths(folder):
+    """
+    Function extracts the pre-processed raster band paths for band from an input folder.
+
+    Args:
+        folder: path where pre-processed raster paths are located
+
+    Returns: list with the file path for each raster band.
+
+    """
+    band_results = []
+    raster_list = glob.glob(folder + "\*.tif")
+    if len(raster_list) == 0:  # if there are no .tif files in input folder
+        message = "There are no pre-processed rasters available in '{}' folder path. Check user input satellite " \
+                  "image folder.".format(folder)
+        sys.exit(message)
+    for band in image_list:  # Loop through each band name
+        if band != "TCI":  # Ignore TCI rasters
+            # Check if any file contains the band name, and has a '_r' in the name, identifying it as resampled from
+            # the si_merge_clip.py file
+            match = [f for f in raster_list if (band in f and "_r" in f)]
+            if len(match) == 0:  # If there are no files for the given band: give error
+                s_date = file_management.get_date(folder)
+                message = "ERROR: There is no resampled raster corresponding to band [{}] and sampling date {}. " \
+                          "Check input ".format(band, s_date.strftime('%Y%m%d')) + \
+                          "\nNOTE: Resampled rasters must be identified by a '_r' in the file name. "
+                sys.exit(message)
+            elif len(match) > 1:  # If there is more than one available raster for the given band
+                s_date = file_management.get_date(folder)
+                message = "There is more than 1 available resampled raster file for band [{}] and sampling date {}." \
+                          " Check input.".format(band, s_date.strftime('%Y%m%d'))
+                sys.exit(message)
+            else:
+                band_results.append(match[0])
+    return band_results
 
 
 def calculate_snow_cover(folder, date):
@@ -52,37 +89,15 @@ def calculate_snow_cover(folder, date):
         band_results = satellite_images.sat_image_merge_clip(folder)
     else:  # Read pre-processed rasters (clipped and merged) form input folder.
         print("     Reading pre-processed input satellite images")
-        band_results = []
-        raster_list = glob.glob(folder + "\*.tif")
-        if len(raster_list) == 0:  # if there are no .tif files in input folder
-            message = "There are no pre-processed rasters available in '{}' folder path. Check user input satellite " \
-                      "image folder.".format(folder)
-            sys.exit(message)
-        for band in image_list:  # Loop through each band name
-            if band != "TCI":  # Ignore TCI rasters
-                # Check if any file contains the band name, and has a '_r' in the name, identifying it as resampled from
-                # the si_merge_clip.py file
-                match = [f for f in raster_list if (band in f and "_r" in f)]
-                if len(match) == 0:  # If there are no files for the given band: give error
-                    s_date = file_management.get_date(folder)
-                    message = "ERROR: There is no resampled raster corresponding to band [{}] and sampling date {}. " \
-                              "Check input ".format(
-                        band, s_date.strftime('%Y%m%d')) + \
-                              "\nNOTE: Resampled rasters must be identified by a '_r' in the file name. "
-                    sys.exit(message)
-                elif len(match) > 1:  # If there is more than one available raster for the given band
-                    s_date = file_management.get_date(folder)
-                    message = "There is more than 1 available resampled raster file for band [{}] and sampling date {}. Check input.".format(
-                        band, s_date.strftime('%Y%m%d'))
-                    sys.exit(message)
-                else:
-                    band_results.append(match[0])
+        band_results = get_band_paths(folder)
 
     # --------------------------------- Snow Detection Calculation -------------------------------------------------- #
 
     band2 = band_results[0]  # B02 raster
     band3 = band_results[1]  # B03 raster
     band11 = band_results[2]  # B11 raster
+
+    # band2 = band_results[np.asscalar(np.flatnonzero(np.core.defchararray.find(band_results, 'B02')!=-1))]
 
     # Extract raster, raster data as array, raster geotransform
     blue_dataset, blue_array, blue_geotransform = gu.raster2array(band2)
