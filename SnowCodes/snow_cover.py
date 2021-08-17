@@ -31,7 +31,7 @@ if run_satellite_image_merge_clip:
 1. image_list: Name of bands to merge, clip and resample. The name in the list must correspond to the final suffix of 
 the satellite image name (DO NOT CHANGE)
 2. image_location_folder_name: Name of the folder in which the satellite images are directly located (IMG_DATA)
-3. shape_path: path (location in folder + name.shp) of the shapefile with which to clip the resampled rastersshape file:
+3. shape_path: path (location in folder + name.shp) of the shapefile with which to clip the resampled rasters 
 """
 
 
