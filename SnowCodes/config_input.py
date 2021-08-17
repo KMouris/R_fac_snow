@@ -126,7 +126,9 @@ rain_raster_input = r'\\LWW-027\Data\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modific
 - image_list: LIST with Name of bands to merge, clip and resample. The name in the list must correspond to the final 
     suffix of the satellite image name. They must be in the following order: band02, band03, band04, band11, TCI.
 - image_location_folder_name: String with name of the folder in which the raw satellite images are directly located.
-    Only needed if 'run_satellite_image_clip_merge' = 'True'
+    *Only needed if 'run_satellite_image_clip_merge' = 'True'
+    *Note that if using L2A images, if 'IMG_DATA' is set as folder name, the module will use R10 images, when available, 
+    and R20 for the rest. If 'R20m' is set as the folder name, all bands with a resolution of 20 will be used. 
         
 - NDSI_min: float with NDSI threshold for snow detection.
 - blue_min: float with Blue band threshold for snow detection."""
