@@ -5,8 +5,8 @@ import raster_calculations as rc
 """
 @author: María Fernanda Morales Oreamuno 
 
-File reads input Sentinel 2 satellite images and first merges the B02, B03, B04 and B11 raster bands from 2 locations
-(TDL and TDK) and then clips the merged raster to the boundary shapefile and then resamples them to a 25x25 cell
+File reads input Sentinel 2 satellite images and first merges the input raster bands from different satellites
+(e.g. TDL and TDK) and then clips the merged raster to the boundary shapefile and then resamples them to a 25x25 cell
 resolution .tif raster (to match other input raster files).
 
 Receives one folder at a time, corresponding to 1 sensing date, and reads Sentinel 2 satellite images for the given, 
@@ -27,20 +27,36 @@ the satellite image name (DO NOT CHANGE)
 
 
 def find_image_path(suffix, path):
-    """Function loops through each file in the folder "path" and looks for the file whose last 3 digits correspond to
-     "suffix" and return the given file's path. If the file does not exist, and it should correspond to a band (02, 03,
-     04, or 11) it generates an error. If it corresponds to "TCI", it is not necessary for calculation purposes so it
-     returns a "0" in order to break the loop.
+    """Function loops through each file in the folder "path" and looks for the file whose name contains "suffix" and
+    returns the given file's path.
 
-    :param suffix: string with last 3 digits in the image name to merge in the given loop
+    Args
+    -------------------------------------
+    :param suffix: string with name of the band being read and that should be contained in the image name to merge in
+    the given loop
     :param path: folder path in which the satellite images are located, and which should be looped to find the image
      with the given suffix
+
     :return: the complete image path, if the file with suffix "suffix" exists. If it doesn't, and the suffix is "TCI"
     then it returns a value of "0", and the loop is broken in the main loop.
+
+     Notes
+     *If the file does not exist, and it should correspond to a band (e.g. 02, 03, 04, or 11) it generates an error.
+     *If it corresponds to "TCI", it returns a "0" in order to break the loop, since it is not necessary for calculation
+     purposes
+     *If the images are L2A images, and 'IMG_DATA' is set as the 'path', then functions uses R10 files (when available)
+     and R20 for the rest (B11)
     """
+
+    if not glob.glob(path + "\*.jp2") and determine_image_level(path) == 'L2A':
+        if "B11" in suffix:
+            path = path + "\\R20m"
+        else:
+            path = path + "\\R10m"
+
     for file in os.listdir(path):
         name = os.path.splitext(os.path.basename(file))[0]
-        if name[-3:] == suffix:
+        if suffix in name:
             file_name = file
             break
     try:
@@ -52,6 +68,25 @@ def find_image_path(suffix, path):
         else:
             message = "There is no {} band in satellite image input. Check input files."
             sys.exit(message)
+
+
+def determine_image_level(path):
+    """ Function determines if input satellite images correspond to level L1C or L2A, to name the folders respectively
+
+    Args:
+        path: path of folder where files are located
+
+    Returns: string with the name of the satellite image level
+
+    """
+    for root, dirs, files in os.walk(path):
+        if any('MSIL2A' in string for string in dirs) or ('MSIL2A' in root):
+            level = 'L2A'
+            break
+        elif any('MSIL1C' in string for string in dirs) or ('MSIL1C' in  root):
+            level = "L1C"
+            break
+    return level
 
 
 def sat_image_merge_clip(folder):
@@ -67,10 +102,11 @@ def sat_image_merge_clip(folder):
 
     # Get satellite image date -------------------------------------------------------------------------------------- #
     si_date = file_management.get_date(folder)
+    level = determine_image_level(folder)
 
     # Generate folder in which to save the results from the satellite clip and merge for the given date ------------- #
     # ---- Generate a folder to save the Satellite Clipping and Merging
-    si_results = results_path + "\\" + "SatelliteImages"
+    si_results = results_path + "\\" + "SatelliteImages_" + level
     file_management.create_folder(si_results)
     # ---- Generate a folder to save the resulting rasters for the given date CHANGE NAME IF A SPECIFIC FORMAT IS NEEDED
     si_results = si_results + "\\" + str(si_date.strftime("%Y%m%d"))
@@ -88,6 +124,9 @@ def sat_image_merge_clip(folder):
             if os.path.basename(root) == image_location_folder_name:
                 location_images[i] = root
                 break
+    if np.all(location_images == ""):
+        message = "The folder with name '{}' does not exist. Check input files".format(image_location_folder_name)
+        sys.exit(message)
 
     # --- LOOP: through each suffix or band name to merge and clip -------------------------------------------------- #
     band_results = []
