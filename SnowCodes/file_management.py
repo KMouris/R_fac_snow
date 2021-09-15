@@ -164,9 +164,12 @@ def filter_raster_lists(raster_list, date1, date2, file_name):
     """
     new_list = []
     for elem in raster_list:
-        date = get_date(elem)
-        if date1 <= date <= date2:
-            new_list.append(elem)
+        if not has_number(elem) or sum(c.isdigit() for c in elem) < 4:
+            continue
+        else:
+            date = get_date(elem)
+            if date1 <= date <= date2:
+                new_list.append(elem)
 
     if len(new_list) == 0:
         message = "ERROR: There are no {} input raster files corresponding to input date range. Check input.".format(
