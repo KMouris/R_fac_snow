@@ -133,3 +133,12 @@ Each input .txt file corresponds to the data for the given year-month-day-hour (
 
 **Result folder:** 
 `R_factor_Total` contains total R factor raster files for each date (RFactor_total_YYYYMM.tif).
+
+# Code diagrams 
+![R_fac_snow_diagram](https://user-images.githubusercontent.com/65073126/134778560-534a8ebd-f428-43c2-bcc6-0a90281f08b9.jpg)
+
+## snow_melt
+![snow_melt_diagram](https://user-images.githubusercontent.com/65073126/134778556-fdaf66b8-f8d1-4442-864b-55181e7e5989.jpg)
+
+## Rfactor_REM_db
+![Rfactor_diagram](https://user-images.githubusercontent.com/65073126/134778584-3b4eee05-09ce-4f70-86de-eab7978c5c79.jpg)
