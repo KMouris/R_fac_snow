@@ -1,26 +1,24 @@
+"""
+Code reads precipitation and temperature values from .txt ASCII raster files (in either monthly, daily or hourly time
+intervals) and saves the data for each raster cell in .csv files with the following data:
+     year-month-day-hour-minute-second-Precipitation-Temperature-Row-Column
+
+Input files needed:
+    - precipitation_path: folder path with .txt ASCII raster files with precipitation values
+    - temperature_path: folder path with .txt ASCII raster files with temperature values
+
+     For both folders, each .txt file corresponds to the data for the given year-month-day-hour (The file name
+     corresponds to the date in the format YYYYMMDD_0HH)
+
+NOTES:
+    - The program assumes and checks that the temperature and precipitation rasters have the same extent and same number
+      of value cells.
+"""
+
 import file_management
 import config_input
 from config_input import *
 import raster_calculations as rc
-
-"""
-Author: Maria Fernanda Morales Oreamuno 
-
-Code reads precipitation and temperature values from .txt ASCII raster files (in either monthly, daily or hourly time 
-intervals) and saves the data for each raster cell in .csv files with the following data: 
-     year-month-day-hour-minute-second-Precipitation-Temperature-Row-Column
-
-Input files needed: 
-    - precipitation_path: folder path with .txt ASCII raster files with precipitation values
-    - temperature_path: folder path with .txt ASCII raster files with temperature values
-
-     For both folders, each .txt file corresponds to the data for the given year-month-day-hour (The file name 
-     corresponds to the date in the format YYYYMMDD_0HH)
-
-NOTES: 
-    - The program assumes and checks that the temperature and precipitation rasters have the same extent and same number
-      of value cells. 
-"""
 
 
 def get_values(P_array, T_array, no_data, cells):

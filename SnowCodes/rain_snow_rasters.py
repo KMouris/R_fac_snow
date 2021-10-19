@@ -1,38 +1,35 @@
-import config_input
-from config_input import *
-import Resampling
-import raster_calculations as rc
-import file_management
-
 """
-Code authors: Kilian Mouris & Maria Fernanda Morales Oreamuno (resampling)
+Program determines if precipitation is snow or rain, from input files, and generates a rain and snow raster,
+resampled to 25x25 cell resolution 
 
-Program determines if precipitation is snow or rain, from input files, and generates a rain and snow raster, 
-resampled to 25x25 cell resolution
-
-
-NOTES: 
-- Program runs for one month at a time. Therefore, the folder path it receives must contain .csv files for a given 
-    month. The program will not differentiate between months within a given .csv file. 
-- If multiple dates are to be analyzed, input a folder with multiple subfolders, one for each month and whose folder 
+NOTES:
+- Program runs for one month at a time. Therefore, the folder path it receives must contain .csv files for a given
+    month. The program will not differentiate between months within a given .csv file.
+- If multiple dates are to be analyzed, input a folder with multiple subfolders, one for each month and whose folder
     name corresponds to the date. The main_snow_codes file will loop through each folder and run rain_snow_rasters
-    for each. 
-- Program can be run individually or through "SnowCode_Main" and will run if input folder contains the .csv files for 
+    for each.
+- Program can be run individually or through "SnowCode_Main" and will run if input folder contains the .csv files for
 a given month
 - Code calls program "Resampling" in order to resample the rasters to the given cell resolution of 25x25
 
-Input files: 
-1. Path: Folder with .csv file with precipitation and temperature values per cell. Each file must correspond to a cell 
+Input files:
+1. Path: Folder with .csv file with precipitation and temperature values per cell. Each file must correspond to a cell
 in the original raster  and must contain the following information: year-month-day-hour-minute-second-Precipitation...
 ...Temperature-Row-Column (these .csv files are the result from the pt_raster_manipulation python program)
 2. T_snow: Temperature threshold
 3. Original raster information (original_columns, original_rows, xllcorner, yllcorner, cellsize, nodata values)
-    This can be inputted automatically in config_input or obtained from the input rasters read from 
+    This can be inputted automatically in config_input or obtained from the input rasters read from
     pt_raster_manipulation
 4. snapraster_path: path (including name and .tif extension) of the raster to which to snap the resulting resampled
  rasters
 5. shape_path: path (location in folder + name.shp) of the shapefile with which to clip the resampled rasters
 """
+
+import config_input
+from config_input import *
+import Resampling
+import raster_calculations as rc
+import file_management
 
 
 def generate_rain_snow_rasters(path):

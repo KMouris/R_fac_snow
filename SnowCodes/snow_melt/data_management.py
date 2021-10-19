@@ -6,7 +6,6 @@ from log import *
 
 class DataManagement:
     """
-    Class author: Kilian
     Class with useful and robust methods for managing output folders, extracting information from raster files and
     writing raster files using the previously extracted information.
 

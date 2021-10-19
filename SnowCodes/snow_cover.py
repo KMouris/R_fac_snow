@@ -3,8 +3,6 @@ from config_input import *
 import si_merge_clip as satellite_images
 
 """
-Authors: Kilian Mouris and María Fernanda Morales Oreamuno 
-
 2 step program: 
     1. If 'run_satellite_image_merge_clip' is True', it reads input Sentinel 2 satellite images and first merges the 
         B02, B03 and B11 raster bands from 2 satellites (TDL and TDK) and then clips the merged raster to the 

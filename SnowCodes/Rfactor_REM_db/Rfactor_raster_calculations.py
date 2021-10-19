@@ -1,15 +1,12 @@
+"""
+This program calls functions needed in the "RFactor_main" python program, located in the same folder. The functions
+deal directly with gdal commands, such as reading, extracting data and saving gdal raster files.
+"""
+
 import gdal
 import numpy as np
 import os
 import sys
-
-"""
-@author Maria Fernanda Morales Oreamuno 
-
-This program calls functions needed in the "RFactor_main" python program, located in the same folder. The functions
-deal directly with gdal commands, such as reading, extracting data and saving gdal raster files.
-
-"""
 
 
 def check_input_rasters(raster1, raster2):

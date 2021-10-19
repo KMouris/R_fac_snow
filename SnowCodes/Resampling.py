@@ -1,19 +1,16 @@
-from config_input import *
+"""
+Code resamples an input raster to the extent and cell resolution of (snap) raster. It follows the following steps:
+    1. Saves input (original) raster to an array and extracts the coordinates and data value from each cell center
+    2. Saves the XYZ coordinates to a .csv file and then into a .vrt file
+    3. Gets the coordinates of the output raster cells (from the snap raster's resolution and extent) and interpolates
+     the value at these new points, using the XYZ data from the original raster.
+        3.1 The code uses an "Inverse Distance Weighted with Nearest Neighbor" interpolation algorithm from gdal_warp
+    4. Clips the resampled raster to the snap raster extent, or to the extent of the input shape boundary.
+"""
 
-from scipy.interpolate import griddata
+from config_input import *
 import raster_calculations as rc
 
-"""
-Author: María Fernanda Morales Oreamuno 
-
-Code resamples an input raster to the extent and cell resolution of (snap) raster. It follows the following steps: 
-    1. Saves input (original) raster to an array and extracts the coordinates and data value from each cell center
-    2. Saves the XYZ coordinates to a .csv file and then into a .vrt file 
-    3. Gets the coordinates of the output raster cells (from the snap raster's resolution and extent) and interpolates
-     the value at these new points, using the XYZ data from the original raster. 
-        3.1 The code uses an "Inverse Distance Weighted with Nearest Neighbor" interpolation algorithm from gdal_warp
-    4. Clips the resampled raster to the snap raster extent, or to the extent of the input shape boundary. 
-"""
 
 start_time = time.time()
 

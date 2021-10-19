@@ -1,19 +1,17 @@
+"""
+Function calculates the R factor (Rain factor) for the RUSLE method for calculating soil loss and sediment yield
+using the REM(DB) rainfall erosivity model for complex terrains. The equations for the R factor are obtained from the
+following manuscript: Diodato, N. & Bellochi, G. (2007). Estimating monthly (R)USLE climate input in a Mediterranean
+region using limited data. (https://doi.org/10.1016/j.jhydrol.2007.08.008)
+
+
+It receives input monthly precipitation rasters, in .tif format, and calculates the monthly RFactor corresponding to
+each input file. The resulting file is in .tif format with th same raster properties as the input files.
+"""
+
 from config_input import *
 from Rfactor_REM_db import Rfactor_raster_calculations as raster_calc
 from Rfactor_REM_db import Rfactor_data_management as data_management
-
-"""
-Author: María Fernanda Morales Oreamuno 
-
-Function calculates the R factor (Rain factor) for the RUSLE method for calculating soil loss and sediment yield 
-using the REM(DB) rainfall erosivity model for complex terrains. The equations for the R factor are obtained from the 
-following manuscript: Diodato, N. & Bellochi, G. (2007). Estimating monthly (R)USLE climate input in a Mediterranean 
-region using limited data. (https://doi.org/10.1016/j.jhydrol.2007.08.008) 
- 
-
-It receives input monthly precipitation rasters, in .tif format, and calculates the monthly RFactor corresponding to 
-each input file. The resulting file is in .tif format with th same raster properties as the input files.
-"""
 
 
 # ----------------------------------- FUNCTIONS ---------------------------------------------------------------------#

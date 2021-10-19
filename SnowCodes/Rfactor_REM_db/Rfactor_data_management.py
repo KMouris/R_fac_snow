@@ -1,12 +1,9 @@
-from config_input import *
-
 """
-@author Maria Fernanda Morales Oreamuno 
-
 This program calls functions needed in the "RFactor_main" python program, located in the same folder. The functions
 deal directly with input files/folders.
-
 """
+
+from config_input import *
 
 
 def filter_raster_lists(raster_list, s_date, e_date):

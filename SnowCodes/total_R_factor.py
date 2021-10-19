@@ -1,3 +1,11 @@
+"""
+Module calculates the total R factor, to be used in the RUSLE method.
+
+The module first calculates the R factor due to snow melt, as a factor of the snow melt values. It then calculates the
+total R factor as the sum of the R factors due to snow melt and precipitation. Lastly, it generates a .tif raster with
+the R factor values for each cell, for each month being analyzed.
+"""
+
 from config_input import *
 import file_management
 import raster_calculations

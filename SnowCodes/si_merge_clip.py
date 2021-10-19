@@ -1,29 +1,27 @@
-import file_management
-from config_input import *
-import raster_calculations as rc
-
 """
-@author: María Fernanda Morales Oreamuno 
-
 File reads input Sentinel 2 satellite images and first merges the input raster bands from different satellites
 (e.g. TDL and TDK) and then clips the merged raster to the boundary shapefile and then resamples them to a 25x25 cell
 resolution .tif raster (to match other input raster files).
 
-Receives one folder at a time, corresponding to 1 sensing date, and reads Sentinel 2 satellite images for the given, 
-sensing dates. Images corresponding to different locations (e.g. TDL and TDK) must be in different folders within the 
-main sensing date folder, and the satellite images must be in a folder, whose name is a user input under the variable 
-'image_location_folder_name'. 
+Receives one folder at a time, corresponding to 1 sensing date, and reads Sentinel 2 satellite images for the given,
+sensing dates. Images corresponding to different locations (e.g. TDL and TDK) must be in different folders within the
+main sensing date folder, and the satellite images must be in a folder, whose name is a user input under the variable
+'image_location_folder_name'.
 
-File can be called individually or through the main.py file. 
+File can be called individually or through the main.py file.
 
 Needed input files: [in config_input]
-1. si_folder_path: Folder with satellite images for a given date: folder must have a subfolder for each location 
+1. si_folder_path: Folder with satellite images for a given date: folder must have a subfolder for each location
 (e.g. one for TDL and one for TDK)
-2. image_list: Name of bands to merge, clip and resample. The name in the list must correspond to the final suffix of 
+2. image_list: Name of bands to merge, clip and resample. The name in the list must correspond to the final suffix of
 the satellite image name (DO NOT CHANGE)
 3. image_location_folder_name: Name of the folder in which the satellite images are directly located (IMG_DATA)
 4. shape_path: path (location in folder + name.shp) of the shapefile with which to clip the resampled rastershape file
 """
+
+import file_management
+from config_input import *
+import raster_calculations as rc
 
 
 def find_image_path(suffix, path):

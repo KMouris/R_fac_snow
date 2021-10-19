@@ -5,7 +5,6 @@ from config_input import *  # CHANGE: calls all folders input file "config_input
 
 class ZonStatistics:
     """
-    Class author: Kilian
     Class with useful methods to calculate and plot zonal statistics, including a custom.
     statistic to calculate the (snow) coverage of a zone in an raster array.
 

@@ -83,8 +83,7 @@ path_geo_utils = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\geo-utils/'
     the date in the format YYYYMMDD_0HH."""
 precipitation_path = r'' + os.path.abspath('../Input/Precipitation_Data/Precip_Banja_hourly_noCorr')
 temperature_path = r'' + os.path.abspath('../Input/Temperature_Data')
-# precipitation_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Input\Precipitation_Data\Precip_Banja_hourly_noCorr'
-# temperature_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Input\Temperature_Data'
+
 
 """If run_pt_manipulation = 'False' (AND run_rain_snow_rasters = True)
 - PT_path: folder path with precipitation and Temperature data. There must be a folder each month in the analysis 

@@ -3,8 +3,7 @@ from log import *
 
 class ArrayCalculations:
     """
-    Class author: Theresa
-    CLass for mathematical operations on arrays to calculate snow depths.
+    Class for mathematical operations on arrays to calculate snow depths.
 
     Attributes:
         snow_start_of_period: ARRAY of snow depth at start of period

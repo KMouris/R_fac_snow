@@ -4,10 +4,8 @@ from config_input import *  # CHANGE: calls all folders input file "config_input
 #                             imports all needed modules
 
 
-
 class CompareData:
     """
-    Class author: Theresa
     Class for comparing different properties of arrays, objects and rasters.
 
     Attributes:

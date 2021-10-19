@@ -1,8 +1,6 @@
 from config_input import *
 
 """
-Author: María Fernanda Morales 
-
 File contains direct raster calculation functions, including .tif files (using gdal) and ASCII .txt files. 
 """
 
