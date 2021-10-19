@@ -14,6 +14,10 @@ the erosivity due to snowmelt are calculated and combined into a total R-factor.
 Note: It is possible to execute individual modules of the code separately. It can be easily adjusted and defined in the config.py file.
 Depending on your input data some pre-processing steps might not be necessary. 
 
+## Authors
+- Kilian Mouris
+- Maria Fernanda Morales Oreamuno
+- Sebastian Schwindt
 
 ## Libraries
 
@@ -133,11 +137,6 @@ Each input .txt file corresponds to the data for the given year-month-day-hour (
 
 **Result folder:** 
 `R_factor_Total` contains total R factor raster files for each date (RFactor_total_YYYYMM.tif).
-
-# Authors
-- Kilian Mouris
-- Maria Fernanda Morales Oreamuno
-- Sebastian Schwindt
 
 # Code diagrams 
 ![R_fac_snow_diagram](https://user-images.githubusercontent.com/65073126/134778560-534a8ebd-f428-43c2-bcc6-0a90281f08b9.jpg)
