@@ -1,3 +1,19 @@
+"""
+Main code which the different .py programs to calculate the total R factor for month or group of months, for the RUSLE
+method.
+
+It calls the following files in the following order:
+ *pt_raster_manipulation.py: generates .csv files with temperature and precipitation data for each date in the
+ analysis period.
+ *rain_snow_rasters.py:  generates monthly snow and rain rasters from input precipitation and temperature data.
+ *snow_cover.py: Detects areas of snow from input satellite (Sentinel2) data and returns a binary data raster,
+  where 1 equals an area of snow and 0 no snow
+ *snow_melt_main.py: generates rasters with monthly snow melt data for each month being analyzed
+ *Rfactor_main.py: generates rasters with the precipitation R factor, using the equation by Diodato, N. & Bellochi, G.
+ (2007)
+ *total_R_factor.py: calculates the snow melt R factor and generates rasters with the total R factor values, per month,
+ as a the sum of the precipitation and snow melt R factor. 
+"""
 
 import file_management
 import snow_cover
@@ -9,18 +25,6 @@ from config_input import *
 from snow_melt import snow_melt_main
 from Rfactor_REM_db import Rfactor_main
 import total_R_factor
-
-
-"""
-Main code author: Maria Fernanda Morales Oreamuno
-Main code in order to call the rain and snow raster generation and Snow Detection programs for a given month or group 
-of months 
-    - rain_snow_rasters: generates monthly snow and rain rasters from input precipitation and temperature data. 
-    - Snow_Detection: Detects areas of snow from input satellite (Sentinel2) data and returns a binary data raster, 
-      where 1 equals an area of snow and 0 no snow
-
-Notes: 
-"""
 
 if __name__ == '__main__':
 
