@@ -1,6 +1,6 @@
 """
-Program determines if precipitation is snow or rain, from input files, and generates a rain and snow raster,
-resampled to 25x25 cell resolution 
+Program determines if precipitation is snow or rain, from input files, and generates a rain and snow raster, resampled
+to 25x25 cell resolution
 
 NOTES:
 - Program runs for one month at a time. Therefore, the folder path it receives must contain .csv files for a given
