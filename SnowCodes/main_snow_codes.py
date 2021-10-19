@@ -12,7 +12,7 @@ It calls the following files in the following order:
  *Rfactor_main.py: generates rasters with the precipitation R factor, using the equation by Diodato, N. & Bellochi, G.
  (2007)
  *total_R_factor.py: calculates the snow melt R factor and generates rasters with the total R factor values, per month,
- as a the sum of the precipitation and snow melt R factor. 
+ as a the sum of the precipitation and snow melt R factor.
 """
 
 import file_management
