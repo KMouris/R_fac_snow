@@ -146,7 +146,6 @@ def get_date_list(date1, date2):
     :return: list with months, in datetime format
     """
     date_list = pd.to_datetime(pd.date_range(date1, date2, freq='MS').strftime("%Y%m").tolist(), format="%Y%m")
-    print(date_list)
     return date_list
 
 
