@@ -70,7 +70,8 @@ def get_PT_datefiles(paths, date):
         # Check if month is incomplete by calculating all possibilities: input files are monthly, daily or hourly
         num_days = int(calendar.monthrange(date.year, date.month)[1])
         num_hours = num_days*24
-        if len(filenames) != num_days and len(filenames) != num_hours:
+        num_3hours = (num_hours/3)
+        if len(filenames) != num_days and len(filenames) != num_hours and len(filenames) != num_3hours:
             message = "Data for the month of{} is incomplete.".format(str(date.strftime('%Y%m')))
             sys.exit(message)
     return filenames
@@ -145,7 +146,7 @@ def get_date_list(date1, date2):
     :return: list with months, in datetime format
     """
     date_list = pd.to_datetime(pd.date_range(date1, date2, freq='MS').strftime("%Y%m").tolist(), format="%Y%m")
-
+    print(date_list)
     return date_list
 
 
