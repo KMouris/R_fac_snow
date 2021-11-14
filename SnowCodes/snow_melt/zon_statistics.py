@@ -84,7 +84,7 @@ class ZonStatistics:
         ax.set_ylabel("Snow Coverage [%]")
         plt_name = self.parameter
         # save figure
-        plt.savefig(plot_result + r'//' + plt_name, dpi=300, bbox_inches='tight')
+        plt.savefig(os.path.join(plot_result, plt_name), dpi=300, bbox_inches='tight')
         # show plot
         plt.show()
 

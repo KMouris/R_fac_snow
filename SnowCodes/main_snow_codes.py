@@ -59,7 +59,8 @@ if __name__ == '__main__':
             # clip csv_list to include only dates within input range
             csv_list = file_management.filter_raster_lists(csv_list, start_date, end_date, "rain_snow_rasters.py")
             for date in csv_list:  # Run code for each folder (date) at a time
-                rain_snow_rasters.generate_rain_snow_rasters(PT_path + "\\" + date)
+                path = os.path.join(PT_path, date)
+                rain_snow_rasters.generate_rain_snow_rasters(path)
         print("Finished rain and snow raster generation")
 # ------------------------------------------------------------------------------------------------------------------- #
 
@@ -76,7 +77,7 @@ if __name__ == '__main__':
             si_list = file_management.generate_satellite_image_date_list(si_list, date_list)
         print("Folders to loop through:, ", si_list)
         for f, d in zip(si_list, date_list):
-            path = si_folder_path + "\\" + str(f)
+            path = os.path.join(si_folder_path, str(f))
             snow_cover.calculate_snow_cover(path, d)
 # ------------------------------------------------------------------------------------------------------------------- #
 

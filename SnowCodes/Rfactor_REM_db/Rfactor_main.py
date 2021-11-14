@@ -54,7 +54,7 @@ def main():
     # ------------------------- Initial Procedure ------------------------------------------------------------------ #
 
     # 1. Save all monthly precipitation rasters, with .tif extension, in a list, to iterate over them
-    filenames = glob.glob(rain_raster_path + "\*.tif")
+    filenames = glob.glob(rain_raster_path + "/*.tif")
 
     # 2. Filter precipitation raster list to only include rasters corresponding to the analysis date range
     filenames = data_management.filter_raster_lists(filenames, start_date, end_date)
@@ -88,7 +88,7 @@ def main():
         r_factor_array = rfactor(month, precip_array, f_el_array)
 
         # 5. Save RFactor array to a .tif raster
-        output_name = r_factor_path + "\\RFactor_REM_db_" + str(date.strftime('%Y%m')) + ".tif"
+        output_name = os.path.join(r_factor_path, f"RFactor_REM_db_{str(date.strftime('%Y%m'))}.tif")
         raster_calc.save_raster(r_factor_array, output_name, gt, proj)
 
 

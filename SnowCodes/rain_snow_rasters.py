@@ -41,18 +41,12 @@ def generate_rain_snow_rasters(path):
     """
 
     # Get all the .csv files in the input folder, and save the names in a list, to iterate through them
-    filenames = glob.glob(path + "\*.csv")
+    filenames = glob.glob(path + "/*.csv")
 
     # Check inputs:
     if len(filenames) == 0:
         message = "ERROR: Input folder '{}' has no .csv files.".format(path)
         sys.exit(message)
-
-    # Generate folder to save original rasters:
-    save_original_snow = snow_raster_path + "\\Originals"
-    file_management.create_folder(save_original_snow)
-    save_original_rain = rain_raster_path + "\\Originals"
-    file_management.create_folder(save_original_rain)
 
     # Extract data from input raster if pt_raster_manipulation has been run before:
     no_data = config_input.ascii_data[5]
@@ -91,15 +85,15 @@ def generate_rain_snow_rasters(path):
     gt_snap, proj = rc.get_raster_data(snapraster_path)
 
     # -- Save rasters with original cell resolution ----------------------------------------------------------------- #
-    original_snow_name = save_original_snow + "\\OriginalSnow_" + str(date) + ".tif"
-    original_rain_name = save_original_rain + "\\OriginalRain_" + str(date) + ".tif"
+    original_snow_name = os.path.join(snow_raster_path, f'OriginalSnow_{str(date)}.tif')
+    original_rain_name = os.path.join(rain_raster_path, f'OriginalRain_{str(date)}.tif')
 
     rc.save_raster(result_array_snow, original_snow_name, gt_original, proj, nodata)
     rc.save_raster(result_array_rain, original_rain_name, gt_original, proj, nodata)
 
     # -- Resample rasters to sample raster resolution and save: ----------------------------------------------------- #
-    resampled_snow_name = snow_raster_path + "\\Snow_" + str(date) + ".tif"
-    resampled_rain_name = rain_raster_path + "\\Rain_" + str(date) + ".tif"
+    resampled_snow_name = os.path.join(snow_raster_path, f'Snow_{str(date)}.tif')
+    resampled_rain_name = os.path.join(rain_raster_path, f'Rain_{str(date)}.tif')
 
     Resampling.main(original_snow_name, snapraster_path, shape_path, resampled_snow_name)
     Resampling.main(original_rain_name, snapraster_path, shape_path, resampled_rain_name)
@@ -110,6 +104,7 @@ def generate_rain_snow_rasters(path):
 
     if os.path.exists(original_rain_name):
         os.remove(original_rain_name)
+
 
 
 def main():

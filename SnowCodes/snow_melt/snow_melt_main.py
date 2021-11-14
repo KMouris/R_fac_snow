@@ -112,8 +112,8 @@ def main():
 
     # Get all file paths into a list: All raster files must be .tif format
     #   CHANGE: input file names
-    snow_mm_paths = sorted(glob.glob(snow_raster_path + "\\*.tif"))
-    snow_cover_paths = sorted(glob.glob(snow_cover_path + "\\*.tif"))
+    snow_mm_paths = sorted(glob.glob(snow_raster_path + "/*.tif"))
+    snow_cover_paths = sorted(glob.glob(snow_cover_path + "/*.tif"))
 
     # Filter file lists to include only files corresponding to the analysis date range: CHANGE
     snow_mm_paths = filter_raster_lists(snow_mm_paths)
@@ -148,15 +148,15 @@ def main():
     k = 0
     for entry in snow_melt:
         # save_path = r'' + os.path.abspath('../Results/Snow_end_month') + "/snow_end_month" + str(date[k][0]) + ".tif"
-        save_path = results_path +'\\Snow_end_month' + "\\snow_end_month_" + str(date[k][0]) + ".tif"
+        save_path = os.path.join(results_path, 'Snow_end_month', f'snow_end_month_{str(date[k][0])}.tif')
         DataManagement.save_raster(save_path, snow_end_month[k], gt, proj)
-        # save_path = r'' + os.path.abspath('../Results/Snowmelt') + "/snowmelt" + str(date[k][0]) + ".tif"
-        save_path = results_path + '\\Snowmelt\snowmelt' + str(date[k][0]) + ".tif"
+
+        save_path = os.path.join(results_path, 'Snowmelt', f'snowmelt_{str(date[k][0])}.tif')
         DataManagement.save_raster(save_path, snow_melt[k], gt, proj)
         k += 1
 
     # Path to calculated results to be used for statistical calculations
-    snow_result_paths = sorted(glob.glob(results_path + '\\Snow_end_month' + "\\*.tif"))
+    snow_result_paths = sorted(glob.glob(results_path + '/Snow_end_month' + "/*.tif"))
     snow_result_paths = filter_raster_lists(snow_result_paths)
     # Calculate and plot zonal statistics
     zonal_statistics = ZonStatistics(path_raster=snow_result_paths, shape=shape_zone, datelist=date,

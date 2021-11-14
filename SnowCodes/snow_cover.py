@@ -44,7 +44,7 @@ def get_band_paths(folder):
 
     """
     band_results = []
-    raster_list = glob.glob(folder + "\*.tif")
+    raster_list = glob.glob(folder + "/*.tif")
     if len(raster_list) == 0:  # if there are no .tif files in input folder
         message = "There are no pre-processed rasters available in '{}' folder path. Check user input satellite " \
                   "image folder.".format(folder)
@@ -109,7 +109,7 @@ def calculate_snow_cover(folder, date):
     snow = np.where(np.logical_and(NDSI > NDSI_min, blue_array > blue_min), 1, 0)
 
     # Save resulting snow Raster
-    snow_raster = snow_cover_path + "\\SnowCover_" + date.strftime("%Y%m") + ".tif"
+    snow_raster = os.path.join(snow_cover_path, f'SnowCover_{date.strftime("%Y%m")}.tif')
     np.savetxt('Snow', snow, fmt='%s')
     gu.create_raster(snow_raster, snow, epsg=32634, nan_val=-9999, rdtype=gdal.GDT_UInt32, geo_info=blue_geotransform)
 

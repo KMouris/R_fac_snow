@@ -135,7 +135,7 @@ def interpolate_points(vrt_file, folder, snap_data, cell_size):
     :return: path for the interpolated raster file
     """
     # 1.Set raster name: This file will later be eliminated, so name does not matter
-    raster_name = folder + "\\InterpolatedRaster.tif"
+    raster_name = os.path.join(folder, "InterpolatedRaster.tif")
     # print("Raster name: ", raster_name)
 
     # 2.Check if raster exists, and if it does, erase if:

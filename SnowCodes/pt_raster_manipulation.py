@@ -76,12 +76,12 @@ def save_csv_per_cell(tdm, path):
     Generates a .csv file for each cell, and the name of each file corresponds to the cell row_column location
 
     :param tdm: 3D np.array with the data for each cell saved to each layer (each array) to save to .csv files
-    :param path: folder path in which to save the .csv result files
+    :param path: (string or Path) of folder in which to save the .csv result files
     :return: ---
     """
     for k in range(0, tdm.shape[0]):  # For each "station" or cell
         # Generate name of .csv, which corresponds to row_column location
-        name = path + "\\" + str(tdm[k, 0, 8]) + "_" + str(tdm[k, 0, 9]) + ".csv"
+        name = os.path.join(path, f'{str(tdm[k, 0, 8])}_{str(tdm[k, 0, 9])}.csv')
 
         # Save array "k" in 3D array corresponding to a given cell) to a 2D array
         m = tdm[k, :, :]  # Save current array "k" as a 3D array with 1 layer
@@ -112,12 +112,12 @@ def generate_csv(date):
 
     # -- Create a folder in which to save the results for the given date -------------------------------------------- #
 
-    save_folder = PT_path + "\\" + str(date.strftime('%Y%m'))
+    save_folder = os.path.join(PT_path, str(date.strftime('%Y%m')))
     file_management.create_folder(save_folder)
 
     # -- Get all txt files in the path directory, and save them in a list ------------------------------------------- #
-    filenames_precip = glob.glob(precipitation_path + "\*.txt")
-    filenames_temp = glob.glob(temperature_path + "\*.txt")
+    filenames_precip = glob.glob(precipitation_path + "/*.txt")
+    filenames_temp = glob.glob(temperature_path + "/*.txt")
 
     # -- Extract from the input folder the files that correspond to the analysis date ------------------------------- #
     filenames_precip = file_management.get_PT_datefiles(filenames_precip, date)
@@ -142,7 +142,8 @@ def generate_csv(date):
 
     # -- MAIN LOOP -------------------------------------------------------------------------------------------------- #
 
-    for i in range(0, len(filenames_precip)):
+    for i in tqdm(range(0, len(filenames_precip)),
+                  desc=f"Reading through precipitation files for {date.strftime('%Y%m')}"):
         date = file_management.get_date(filenames_precip[i])
         # print("Date: ", date)
 
