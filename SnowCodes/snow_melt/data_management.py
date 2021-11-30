@@ -142,7 +142,7 @@ class DataManagement:
         # Get date: in datetime format:
         date = self.get_date_format()
         # create date string (Format: YY/mm)
-        datestring = (str(date.strftime('%y')) + '_' + str(date.strftime('%m')))
+        datestring = str(date.strftime('%Y%m'))
 
         return datestring
 
