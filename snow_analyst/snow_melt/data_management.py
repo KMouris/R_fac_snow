@@ -1,5 +1,6 @@
 # from config import *
-from config_input import *    # CHANGE: calls all folders input file "config_input", which contains all variables and
+# CHANGE: calls all folders input file "config_input", which contains all variables and
+from config_input import *
 #                             imports all needed modules
 from log import *
 
@@ -22,6 +23,7 @@ class DataManagement:
                                                 existing array using a defined projection.
 
     """
+
     def __init__(self, path, filename):
         """
         Assign values to class attributes when a new instance is initiated.
@@ -42,13 +44,16 @@ class DataManagement:
                 logger.info("Creating folder: %s " % self.path)
                 os.makedirs(self.path)
             if not os.path.exists(os.path.join(self.path, "Snowmelt")):
-                logger.info("Creating folder: %s " % os.path.join(self.path, "Snowmelt"))
+                logger.info("Creating folder: %s " %
+                            os.path.join(self.path, "Snowmelt"))
                 os.makedirs(os.path.join(self.path, "Snowmelt"))
             if not os.path.exists(os.path.join(self.path, "Snow_end_month")):
-                logger.info("Creating folder: %s " % os.path.join(self.path, "Snow_end_month"))
+                logger.info("Creating folder: %s " %
+                            os.path.join(self.path, "Snow_end_month"))
                 os.makedirs(os.path.join(self.path, "Snow_end_month"))
             if not os.path.exists(os.path.join(self.path, "Plots")):
-                logger.info("Creating folder: %s " % os.path.join(self.path, "Plots"))
+                logger.info("Creating folder: %s " %
+                            os.path.join(self.path, "Plots"))
                 os.makedirs(os.path.join(self.path, "Plots"))
             else:
                 logger.info("The folder already exists and is not created")
@@ -84,8 +89,10 @@ class DataManagement:
             :param end: Boolean that is True if the date is needed at the end of the month. It is "False" by default
             :return: file date in datetime format
             """
-        file_name = os.path.basename( self.filename)  # Get file name (which should contain the date)
-        digits = ''.join(re.findall(r'\d+', file_name))  # Combine all digits to a string (removes any integer)
+        file_name = os.path.basename(
+            self.filename)  # Get file name (which should contain the date)
+        # Combine all digits to a string (removes any integer)
+        digits = ''.join(re.findall(r'\d+', file_name))
 
         if len(digits) == 6:  # Either MMYYYY or YYYYMM
             if int(digits[0:2]) > 12:  # YYYYMM format
@@ -105,27 +112,32 @@ class DataManagement:
             try:
                 date = datetime.datetime.strptime(digits, '%y%m')
             except ValueError:
-                sys.exit("Wrong input date format in input file {}.".format(self.filename))
+                sys.exit(
+                    "Wrong input date format in input file {}.".format(self.filename))
         elif len(digits) == 8:  # YYYYMMDD format:
             # print("Date format in YYYYMMDD")
             try:
                 date = datetime.datetime.strptime(digits, '%Y%m%d')
             except ValueError:
-                sys.exit("Wrong input date format in input file {}.".format(self.filename))
+                sys.exit(
+                    "Wrong input date format in input file {}.".format(self.filename))
         elif len(digits) == 10:  # YYYYMMDDHH
             # print("Date format in YYYYMMDD_HH")
             try:
                 date = datetime.datetime.strptime(digits, '%Y%m%d%H')
             except ValueError:
-                sys.exit("Wrong input date format in input file {}.".format(self.filename))
+                sys.exit(
+                    "Wrong input date format in input file {}.".format(self.filename))
         elif len(digits) == 11:  # YYYYMMDD0HH
             # print("Date format in YYYYMMDD_0HH")
             try:
                 date = datetime.datetime.strptime(digits, '%Y%m%d0%H')
             except ValueError:
-                sys.exit("Wrong input date format in input file {}.".format(self.filename))
+                sys.exit(
+                    "Wrong input date format in input file {}.".format(self.filename))
         else:
-            sys.exit("Check input date format. It must be in either YYYYMM, MMYYYY or YYMM.")
+            sys.exit(
+                "Check input date format. It must be in either YYYYMM, MMYYYY or YYMM.")
 
         return date
 
@@ -177,15 +189,18 @@ class DataManagement:
         driver.Register()
 
         # Instantiate the raster files to save, providing all needed information
-        outrs = driver.Create(res_path, xsize=array.shape[1], ysize=array.shape[0], bands=1, eType=gdal.GDT_Float32)
+        outrs = driver.Create(
+            res_path, xsize=array.shape[1], ysize=array.shape[0], bands=1, eType=gdal.GDT_Float32)
 
         # Assign raster data and assign the array to the raster
         outrs.SetGeoTransform(gt)  # Set geo transform data
         outrs.SetProjection(proj)  # Set projection
-        outband = outrs.GetRasterBand(1)  # Create a band in which the array will be written
+        # Create a band in which the array will be written
+        outband = outrs.GetRasterBand(1)
         outband.WriteArray(array)  # Write array into band
         outband.SetNoDataValue(np.nan)  # Set no data value as np.nan
-        outband.ComputeStatistics(0)  # Compute and include standard raster statistics
+        # Compute and include standard raster statistics
+        outband.ComputeStatistics(0)
 
         # Release raster band
         outband.FlushCache()

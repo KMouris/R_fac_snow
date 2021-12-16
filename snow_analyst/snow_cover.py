@@ -58,7 +58,8 @@ def get_band_paths(folder):
             elif len(match) > 1:  # If there is more than one available raster for the given band
                 s_date = file_management.get_date(folder)
                 message = "There is more than 1 available resampled raster file for band [{}] and sampling date {}." \
-                          " Check input.".format(band, s_date.strftime('%Y%m%d'))
+                          " Check input.".format(
+                              band, s_date.strftime('%Y%m%d'))
                 sys.exit(message)
             else:
                 band_results.append(match[0])
@@ -84,7 +85,7 @@ def calculate_snow_cover(folder, date):
         print("     Reading pre-processed input satellite images")
         band_results = get_band_paths(folder)
 
-    #  Snow Detection Calculation 
+    #  Snow Detection Calculation
     band2 = band_results[0]  # B02 raster
     band3 = band_results[1]  # B03 raster
     band11 = band_results[2]  # B11 raster
@@ -100,12 +101,15 @@ def calculate_snow_cover(folder, date):
     NDSI = (green_array - SWIR_array) / (green_array + SWIR_array)
 
     # Calculate Snow Array
-    snow = np.where(np.logical_and(NDSI > NDSI_min, blue_array > blue_min), 1, 0)
+    snow = np.where(np.logical_and(
+        NDSI > NDSI_min, blue_array > blue_min), 1, 0)
 
     # Save resulting snow Raster
-    snow_raster = os.path.join(snow_cover_path, f'SnowCover_{date.strftime("%Y%m")}.tif')
+    snow_raster = os.path.join(
+        snow_cover_path, f'SnowCover_{date.strftime("%Y%m")}.tif')
     np.savetxt('Snow', snow, fmt='%s')
-    gu.create_raster(snow_raster, snow, epsg=32634, nan_val=-9999, rdtype=gdal.GDT_UInt32, geo_info=blue_geotransform)
+    gu.create_raster(snow_raster, snow, epsg=32634, nan_val=- \
+                     9999, rdtype=gdal.GDT_UInt32, geo_info=blue_geotransform)
 
 
 if __name__ == '__main__':

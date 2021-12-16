@@ -137,7 +137,8 @@ def main():
     date, snow_mm, snow_cover = raster2list(snow_mm_paths, snow_cover_paths)
 
     # get projection and geotransformation of input raster
-    gt, proj = data_management # das Script main_snow_codes.py enhält Aufrufe von main() Funktionen, die nicht existieren(gibt das keine Fehler?), in Line 93 (Rfactor_main.main())r.get_proj_data()
+    # das Script main_snow_codes.py enhält Aufrufe von main() Funktionen, die nicht existieren(gibt das keine Fehler?), in Line 93 (Rfactor_main.main())r.get_proj_data()
+    gt, proj = data_manager.get_proj_data()
 
     # Check input data
     j = 0
