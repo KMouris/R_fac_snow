@@ -15,30 +15,26 @@ import raster_calculations as rc
 start_time = time.time()
 
 
-# ----------------Save FUNCTIONS----------------------------------------------------------------------------- #
-
 def save_csv(points, save_name):
-    """
-    Function receives an array with X, Y, Z point coordinates and converts it to a dataframe, with the corresponding
-    column names and then saves the data frame as a .txt file
+    """Receives an array with X, Y, Z point coordinates and converts it to a
+    dataframe, with the corresponding column names and then saves the data
+    frame as a .txt file
 
     :param points: np.array with (X,Y,Z) coordinates of cell centers
     :param save_name: file path name with which to save input point array to .txt format
     :return:
     """
     columns = ["x", "y", "z"]  # Set column names
-    df = pd.DataFrame(data=points, index=None, columns=columns)  # Save points array to a pandas data frame
+    # Save points array to a pandas data frame
+    df = pd.DataFrame(data=points, index=None, columns=columns)
     # print(df)
 
     # Save table to .txt format
     df.to_csv(save_name, index=False, sep=',', na_rep="", decimal='.')
 
 
-# ----------------Calculation FUNCTIONS----------------------------------------------------------------------------- #
-
 def get_raster_points(array, gt):
-    """
-    Function gets the coordinates (X, Y, Z) of the center of all cells that have values and returns an array with the
+    """Gets the coordinates (X, Y, Z) of the center of all cells that have values and returns an array with the
     coordinate point data
 
     :param array: npp.array with original raster data
@@ -57,13 +53,15 @@ def get_raster_points(array, gt):
     # -cell size)
     upper_left_x = gt[
         0]  # X coordinate of upper left corner. From this point, all cells go towards the right (positive)
-    upper_left_y = gt[3]  # Y coordinate of upper left corner. From this point all points go south (negative)
+    # Y coordinate of upper left corner. From this point all points go south (negative)
+    upper_left_y = gt[3]
     size = gt[1]  # Cell resolution
 
     # print("gt: ", gt)
     # print("Upper Left X: ", upper_left_x, "\nUpper Left Y: ", upper_left_y, "\nSize: ", size)
 
-    for i in range(0, int(coord.shape[0]) - 1):  # go through all cells in coord array
+    # go through all cells in coord array
+    for i in range(0, int(coord.shape[0]) - 1):
         # 1.Fill in x coordinate in row 0
         points[i][0] = upper_left_x + coord[i][1] * size + (size / 2)
 
@@ -124,9 +122,8 @@ def generate_vrt_file(csv_file):
 
 
 def interpolate_points(vrt_file, folder, snap_data, cell_size):
-    """
-    Function receives the path of the .vrt file, which contains the XYZ points and uses these points to interpolate
-    values for a new raster resolution (cell size)
+    """Receives the path of a .vrt file, which contains the XYZ points and uses
+    these points to interpolate values for a new raster resolution (cell size)
 
     :param vrt_file: .vrt virtual file path which contains the original raster cell center coordinates
     :param folder: folder path in which to temporarily save the interpolated raster file
@@ -143,8 +140,10 @@ def interpolate_points(vrt_file, folder, snap_data, cell_size):
         os.remove(raster_name)
 
     # 3.Get the number of columns and rows that the resampled raster must have. Same as the size of the snap raster
-    columns = str(int((snap_data[2] - snap_data[0]) / cell_size))  # Get No. of columns in snap raster (as as string)
-    rows = str(int((snap_data[1] - snap_data[3]) / cell_size))  # Get No. of rows in snap raster (as a string)
+    # Get No. of columns in snap raster (as as string)
+    columns = str(int((snap_data[2] - snap_data[0]) / cell_size))
+    # Get No. of rows in snap raster (as a string)
+    rows = str(int((snap_data[1] - snap_data[3]) / cell_size))
 
     # 4.Use gdal grid to interpolate:
     # ---- a:interpolation method (Inv distance with nearest neighbor, with smoothing of 0, using a max number of 12
@@ -155,8 +154,8 @@ def interpolate_points(vrt_file, folder, snap_data, cell_size):
     # ---- a_srs: coordinate system, ot: out type (float)
     os.system(
         "gdal_grid -a invdistnn:power=2.0:smoothing=0:max_points=12:radius=5000 -txe " + str(snap_data[0]) + " " + str(
-            snap_data[2]) +
-        " -tye " + str(snap_data[3]) + " " + str(
+            snap_data[2])
+        + " -tye " + str(snap_data[3]) + " " + str(
             snap_data[1]) + " -outsize " + columns + " " + rows + " -of gtiff -a_srs EPSG:32634 " +
         "-ot Float32 " + vrt_file + " " + raster_name)
     return raster_name
@@ -164,7 +163,7 @@ def interpolate_points(vrt_file, folder, snap_data, cell_size):
 
 def main(original_raster, snap_raster, snap_boundary, save_name):
     """
-    Function is the main code, which calls all other resampling functions in order to resample an input raster to a
+    Main function calls all other resampling functions in order to resample an input raster to a
     different cell resolution and raster extent
 
     :param original_raster: path for the original raster (in .tif format), to be resampled to a smaller/larger
@@ -185,14 +184,17 @@ def main(original_raster, snap_raster, snap_boundary, save_name):
     # 3. Save the raster data to an array
     original_array = rc.raster_to_array(original_raster, mask=False)
     # --3.1: Convert all -9999 No data cells into numpy nan values
-    original_array = np.where(original_array == -9999.0, np.nan, original_array)
+    original_array = np.where(
+        original_array == -9999.0, np.nan, original_array)
 
     # 4. Get the gt (geotransform) information from the original raster file
-    gt_original, proj_original = rc.get_raster_data(original_raster)  # Get gt information from the ASCII file
+    gt_original, proj_original = rc.get_raster_data(
+        original_raster)  # Get gt information from the ASCII file
 
     # 5. Get the coordinates of the center of all the cells WITH VALUES and save data the XYZ coordinates for each point
     # to an array
-    xyz_array = get_raster_points(original_array, gt_original)  # Path with the .csv file with coordinates
+    # Path with the .csv file with coordinates
+    xyz_array = get_raster_points(original_array, gt_original)
 
     # 6. Save the XYZ coordinate data to a .csv file
     XYZ_CSV = "file.csv"
@@ -203,7 +205,8 @@ def main(original_raster, snap_raster, snap_boundary, save_name):
 
     # 8. Interpolate points and save the resampled Monthly precipitation raster in the results folder
     # --7.1 Using GDAL_Grid interpolation
-    interpolated_path = interpolate_points(vrt_file, results_folder, snap_data, cell_resolution)
+    interpolated_path = interpolate_points(
+        vrt_file, results_folder, snap_data, cell_resolution)
 
     # 9. Final Step. Clip the resampled raster to the extent of the snap raster
     rc.clip(snap_boundary, save_name, interpolated_path)

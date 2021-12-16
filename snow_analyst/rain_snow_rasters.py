@@ -1,5 +1,4 @@
-"""
-Program determines if precipitation is snow or rain, from input files, and generates a rain and snow raster, resampled
+"""Determines if precipitation is snow or rain, from input files, and generates a rain and snow raster, resampled
 to 25x25 cell resolution
 
 NOTES:
@@ -25,19 +24,17 @@ in the original raster  and must contain the following information: year-month-d
 5. shape_path: path (location in folder + name.shp) of the shapefile with which to clip the resampled rasters
 """
 
-import config_input
 from config_input import *
-import Resampling
+import resampling
 import raster_calculations as rc
 import file_management
 
 
 def generate_rain_snow_rasters(path):
-    """Function reads .csv files with precipitation and temperature rasters and generates a snow and rain raster for the
+    """Reads .csv files with precipitation and temperature rasters and generates a snow and rain raster for the
     time frame in .csv file (which should be 1 month)
 
-    Args:
-        path: folder path where .csv files (one for each cell in the original rasters) are located
+    :param path: folder path where .csv files (one for each cell in the original rasters) are located
     """
 
     # Get all the .csv files in the input folder, and save the names in a list, to iterate through them
@@ -49,9 +46,9 @@ def generate_rain_snow_rasters(path):
         sys.exit(message)
 
     # Extract data from input raster if pt_raster_manipulation has been run before:
-    no_data = config_input.ascii_data[5]
-    rows = int(config_input.ascii_data[1])
-    columns = int(config_input.ascii_data[0])
+    no_data = ascii_data[5]
+    rows = int(ascii_data[1])
+    columns = int(ascii_data[0])
 
     # ------------------------------------------ Generate rasters -------------------------------------------------- #
     result_array_snow = np.full((rows, columns), no_data)  # Array for snow
@@ -61,16 +58,17 @@ def generate_rain_snow_rasters(path):
         file = filenames[f]
         station_file = np.array(pd.read_csv(file, delimiter=','))
 
-        rn = np.sum(np.where(station_file[:, 7] > T_snow, station_file[:, 6], 0))  # rain
-        sn = np.sum(np.where(station_file[:, 7] < T_snow, station_file[:, 6], 0))  # snow
+        rn = np.sum(
+            np.where(station_file[:, 7] > T_snow, station_file[:, 6], 0))  # rain
+        sn = np.sum(
+            np.where(station_file[:, 7] < T_snow, station_file[:, 6], 0))  # snow
         rw = int(station_file[0, 8])  # row
         cl = int(station_file[0, 9])  # column
 
         result_array_snow[rw, cl] = sn
         result_array_rain[rw, cl] = rn
-    # --------------------------------------------------------------------------------------------------------------- #
 
-    # ---- Resample snow and rain rasters to the same cell resolution as the snap raster: --------------------------- #
+    # ---- Resample snow and rain rasters to the same cell resolution as the snap raster:
     # Get year and month from any of the .csv input files
     month = int(station_file[1, 1])
     if month < 10:
@@ -79,24 +77,32 @@ def generate_rain_snow_rasters(path):
     # print("Date: ", date)
 
     # Get original raster (coarse) data:
-    gt_original = rc.get_ascii_gt(config_input.ascii_data)
+    gt_original = rc.get_ascii_gt(ascii_data)
 
-    # -- Get result rasters projection from the snap raster: -------------------------------------------------------- #
+    # -- Get result rasters projection from the snap raster:
     gt_snap, proj = rc.get_raster_data(snapraster_path)
 
-    # -- Save rasters with original cell resolution ----------------------------------------------------------------- #
-    original_snow_name = os.path.join(snow_raster_path, f'OriginalSnow_{str(date)}.tif')
-    original_rain_name = os.path.join(rain_raster_path, f'OriginalRain_{str(date)}.tif')
+    # -- Save rasters with original cell resolution
+    original_snow_name = os.path.join(
+        snow_raster_path, f'OriginalSnow_{str(date)}.tif')
+    original_rain_name = os.path.join(
+        rain_raster_path, f'OriginalRain_{str(date)}.tif')
 
-    rc.save_raster(result_array_snow, original_snow_name, gt_original, proj, nodata)
-    rc.save_raster(result_array_rain, original_rain_name, gt_original, proj, nodata)
+    rc.save_raster(result_array_snow, original_snow_name,
+                   gt_original, proj, nodata)
+    rc.save_raster(result_array_rain, original_rain_name,
+                   gt_original, proj, nodata)
 
-    # -- Resample rasters to sample raster resolution and save: ----------------------------------------------------- #
-    resampled_snow_name = os.path.join(snow_raster_path, f'Snow_{str(date)}.tif')
-    resampled_rain_name = os.path.join(rain_raster_path, f'Rain_{str(date)}.tif')
+    # -- Resample rasters to sample raster resolution and save:
+    resampled_snow_name = os.path.join(
+        snow_raster_path, f'Snow_{str(date)}.tif')
+    resampled_rain_name = os.path.join(
+        rain_raster_path, f'Rain_{str(date)}.tif')
 
-    Resampling.main(original_snow_name, snapraster_path, shape_path, resampled_snow_name)
-    Resampling.main(original_rain_name, snapraster_path, shape_path, resampled_rain_name)
+    resampling.main(original_snow_name, snapraster_path,
+                    shape_path, resampled_snow_name)
+    resampling.main(original_rain_name, snapraster_path,
+                    shape_path, resampled_rain_name)
 
     # Delete the original rasters
     if os.path.exists(original_snow_name):
@@ -106,14 +112,8 @@ def generate_rain_snow_rasters(path):
         os.remove(original_rain_name)
 
 
-
-def main():
-    # Running code directly allows for only one month to be run at a time
-    generate_rain_snow_rasters(PT_path_input)
-
-
 if __name__ == '__main__':
     print("Calling rain_snow_rasters directly")
-    main()
+    generate_rain_snow_rasters(PT_path_input)
 else:
     pass

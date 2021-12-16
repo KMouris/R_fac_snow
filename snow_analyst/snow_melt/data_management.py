@@ -147,8 +147,7 @@ class DataManagement:
         return datestring
 
     def get_proj_data(self):
-        """
-        Method which get the projection and geotransformation from a raster file (osgeo.gdal.Dataset)
+        """Get the projection and geotransformation from a raster file (osgeo.gdal.Dataset)
         :return: gt: TUPLE defining a gdal.DataSet.GetGeoTransform object
                  proj: STR defining a gdal.DataSet.GetProjection object
         """

@@ -1,31 +1,24 @@
 # The Effect of Snow on Soil Erosion - Routines for R-factor Adaptation in the RUSLE
 
-# Introduction
-The overall goal of the project is to extend and improve the Revised Universal Soil Loss Equation RUSLE ([Renard, 1997](https://www.ars.usda.gov/arsuserfiles/64080530/rusle/ah_703.pdf))
-by including the effects of snowfall and snowmelt. For this purpose the calculation of the monthly R-factor is modified.
-The approach was applied and verified to calculate soil erosion in a Mediterranean area with seasonal snow coverage.
+The Python3 algorithms provided with this repository represent an extension and improvement of the Revised Universal Soil Loss Equation RUSLE ([Renard, 1997](https://www.ars.usda.gov/arsuserfiles/64080530/rusle/ah_703.pdf)) by accounting for snowfall and snowmelt. For this purpose, a modified calculation of one of the RUSLE factors, notably the monthly R-factor, is implemented. The approach was tested with a case study of a mountainous Mediterranean region with seasonal snow coverage.
 
-The first step is to distinguish between precipitation in the form of rain (erosive) or snow (non-erosive).
-Additionally, snow-covered areas are detected at the end of each month using freely available satellite data (e.g. Sentinel-2).
-Based on the detected snow cover and the observed snow fall, the code calculates monthly snow pack dynamics and snowmelt.
-In the final step, the erosivity of precipitation (in this case: Rainfall erosivity model for complex terrains ([Diodato, N., Bellocchi, G., 2007](https://www.sciencedirect.com/science/article/pii/S0022169407004477?via%3Dihub)) and
-the erosivity due to snowmelt are calculated and combined into a total R-factor.
+# Approach
+The algorithms take hydro-climatic input data and geo-rasters for distinguishing between precipitation in the form of erosive rain or non-erosive snow. Snow-covered areas are detected at the end of every month based on freely available satellite data (e.g. Sentinel-2). The detected snow cover and the observed snowfall serve for the calculation of monthly snowpack dynamics and snowmelt. Ultimately, the erosivity of precipitation (i.e., rainfall erosivity model for complex terrains according to [Diodato, N., Bellocchi, G., 2007](https://www.sciencedirect.com/science/article/pii/S0022169407004477?via%3Dihub)) and erosion caused by snowmelt is calculated and combined into a revised R-factor.
 
-Note: It is possible to execute individual modules of the code separately. It can be easily adjusted and defined in the config.py file.
-Depending on your input data some pre-processing steps might not be necessary.
+> Note: Individual modules of the provided codes can be run separately as **STANDALONE scripts** and easily adjusted through modifications in the *config.py* file. For instance, depending on the available input data, some of the pre-processing steps might not be necessary.
 
 ## Requirements
 
-The codes are written in Python3 ([get installation instructions](https://hydro-informatics.com/python-basics/pyinstall.html)) and build on the following libraries: *geo_utils*, *gdal*, *matplotlib.pyplot*, *numpy*, *pandas*, *rasterstats*, *scipy*, *tqdm*
-> The geo_utils package can be downloaded [here](https://geo-utils.readthedocs.io/en/latest/) and/or the path where the package is saved can be defined in the config.py file.
+The algorithms are written in Python3 ([get installation instructions](https://hydro-informatics.com/python-basics/pyinstall.html)) and build on the following external libraries: *gdal*, *matplotlib.pyplot*, *numpy*, *pandas*, *rasterstats*, *scipy*, *tqdm*
 
-*Standard* libraries: *calendar*, *datetime*, *glob*, *logging*, *math*, *re*, *os*, *sys*, *time*
+In addition, the following standard Python libraries are used: *calendar*, *datetime*, *glob*, *logging*, *math*, *re*, *os*, *sys*, *time*
 
 ## Input Data
-The following input data has to be provided to run the whole code:
+
+The below-listed input arguments and data have to be provided to run the algorithms. The input arguments are variables that can be set in `ROOT/snow_analyst/config_input.py`.
 
 | Input argument | Type | Description |
-|-----------------|------|-------------|
+|----------------|------|-------------|
 |`start_date`| *string* | Determines time interval for analysis (format: YYYYMM) |
 |`end_date`| *string* | Determines time interval for analysis (format: YYYYMM)  |
 |`snapraster_path`| *string* |Path (name.tif) of the raster to which to snap the resampled rasters|
@@ -37,26 +30,38 @@ The following input data has to be provided to run the whole code:
 |`results_path`| *string* |Path of the main result folder|
 
 
-## Modules
-Overview of the main modules without detailed explanation of each function.
+## Modules of the Algorithm
+
 ### pt_raster_manipulation.py
-- reads precipitation and temperature values from .txt ASCII raster files (in either monthly, daily or hourly time
-intervals).
-- saves the data for each raster cell in .csv files with the following information:
-year-month-day-hour-minute-second-Precipitation-Temperature-Row-Column
 
-| Input argument | Type | Description |
-|-----------------|------|-------------|
-|`precipitation_path`| *string* | Folder of precipitation rasters |
-|`temperature_path`| *string* | Folder of temperature rasters|
+The script contains functions for:
 
-Each input .txt file corresponds to the data for the given year-month-day-hour (format: YYYYMMDD_0HH.txt).
+* reading precipitation and temperature values from .txt ASCII raster files (in either monthly, daily, or hourly time intervals); every .txt file corresponds to the data for a given year-month-day-hour (format: YYYYMMDD_HH.txt).
+* saving modified data for every raster cell in .csv files with the following information:<br>
+`year-month-day-hour-minute-second-Precipitation-Temperature-Row-Column`
 
 **Result folder:** `PT_CSV_per_cell` contains .csv files for every cell  (format: row_columns.csv).
 
+The below table lists input arguments that can be defined in `ROOT/snow_analyst/config_input.py` for setting up data directories for precipitation and temperature rasters.
+
+| Input argument | Type | Description |
+|----------------|------|-------------|
+|`precipitation_path`| *string* | Folder of precipitation rasters |
+|`temperature_path`| *string* | Folder of temperature rasters|
+
+
 ### rain_snow_rasters.py
-- determines if precipitation is snow or rain.
-- generates a rain and snow raster resampled (Inverse distance weighting) and snapped to a desired raster format based on an example raster (snapraster, e.g. DEM used in RUSLE) or manually defined by the user.
+
+The script contains functions for:
+
+* determining if precipitation is snow or rain.
+* generating a rain and snow raster resampled (Inverse distance weighting) and snapped to a desired raster format based on an example raster (snapraster, e.g. DEM used in RUSLE) or manually defined by the user.
+
+**Result folders:**
+  * `rain_per_month` contains monthly rain raster files (.tif) snapped and clipped to a target raster format.
+  * `snow_per_month` contains monthly snow raster files (.tif) snapped and clipped to a target raster format.
+
+The below table lists input arguments that can be defined in `ROOT/snow_analyst/config_input.py` for setting up data directories.
 
 | Input argument | Type | Description |
 |-----------------|------|-------------|
@@ -65,73 +70,92 @@ Each input .txt file corresponds to the data for the given year-month-day-hour (
 |`snapraster_path`| *string* |Path (name.tif) of the raster to which to snap the resampled rasters|
 |`shape_path`| *string* |  Path (name.shp) of the shapefile to which to clip the resampled rasters|
 
-**Result folder:**
-
-`rain_per_month` contains monthly rain raster files (.tif) snapped and clipped to target raster format.
-  `snow_per_month` contains monthly snow raster files (.tif) snapped and clipped to target raster format.
 
 ### si_merge_clip.py
-- reads input Sentinel 2 satellite images.
-- merges raster bands from different locations
-(e.g. TDL and TDK).
-- clips the merged raster to the boundary shapefile.
-- resamples merged rasters to the desired cell resolution.
 
-| Input argument | Type | Description |
-|-----------------|------|-------------|
-|`si_folder_path`| *string* | Folder of satellite images |
-|`image_list`| LIST | Name (STR) of bands to merge, clip and resample|
-|`image_location_folder_name`| *string* | Name of the folder in which the satellite images are directly located|
-|`shape_path`| *string* |  Path (name.shp) of the shapefile to which to clip the resampled rasters|
+The script contains functions for:
+
+* reading input (Sentinel 2) satellite images.
+* merging raster bands from different locations (e.g., TDL and TDK).
+* clipping merged rasters to a boundary shapefile.
+* resampling merged rasters to a (desired) target cell resolution.
 
 **Result folder:** `SatelliteImages` contains post-processed satellite data raster files in target raster format.
 
-### snow_cover.py
-- reads the band data from each resampled raster band to arrays and determines which areas correspond to snow.
-- generates a binary raster, where 1 means there is snow presence, and 0 means there is none.
+The below table lists input arguments that can be defined in `ROOT/snow_analyst/config_input.py` for setting up data directories and file names.
 
 | Input argument | Type | Description |
-|-----------------|------|-------------|
+|----------------|------|-------------|
+|`si_folder_path`| *string* | Folder of satellite images |
+|`image_list`| LIST | Name (STR) of bands to merge, clip, and resample|
+|`image_location_folder_name`| *string* | Name of the folder in which the satellite images are directly located|
+|`shape_path`| *string* |  Path (name.shp) of the shapefile to which to clip the resampled rasters|
+
+
+### snow_cover.py
+
+The script contains functions for:
+
+* reading the band data from every resampled raster band to arrays and determining which areas correspond to snow.
+* generating a binary raster, where `1` indicates snow-presence, and `0` indicates snow-absence.
+
+**Result folder:** `snow_cover` contains binary raster for each date (SnowCover_YYYY_MM.tif)
+
+The below table lists input arguments that can be defined in `ROOT/snow_analyst/config_input.py` for setting up data directories and threshold values for snow detection.
+
+| Input argument | Type | Description |
+|----------------|------|-------------|
 |`si_folder_path`| *string* | Folder of satellite images|
 |`NDSI_min`| FLOAT |NDSI threshold|
 |`blue_min`| FLOAT | Blue band threshold|
 
-**Result folder:** `snow_cover` contains binary raster for each date (SnowCover_YYYY_MM.tif)
 
 ### snow_melt
-- calculates monthly snow cover dynamics
-- identifies monthly snowmelt
+
+The script contains functions for:
+
+* calculating monthly snow cover dynamics,
+* identification of monthly snowmelt.
+
+**Result folders:**
+  * `Snowmelt` contains snowmelt (mm) raster for each date (snowmeltYY_MM.tif).
+  * `Snow_end_month` contains accumulated snow (SWE in mm) raster for each date (snow_end_month_YY_MM.tif).
+
+The below table lists input arguments that can be defined in `ROOT/snow_analyst/config_input.py` for setting up data directories.
 
 | Input argument | Type | Description |
 |-----------------|------|-------------|
 |`snow_raster_input`| *string* | Folder of monthly snowfall|
 |`snowcover_raster_input`| *string* |Folder of monthly snowcover|
 
-**Result folder:**
-`Snowmelt` contains snowmelt (mm) raster for each date (snowmeltYY_MM.tif).
-`Snow_end_month` contains accumulated snow (SWE in mm) raster for each date (snow_end_month_YY_MM.tif).
 
-### Rfactor_REM_db
-- calculates the RUSLE R factor (in this case: Rainfall erosivity model for complex terrains).
+### Rfactor_REM_db.py
+
+The script contains functions for calculating the R-factor of the RUSLE (i.e., here, a rainfall erosivity model for complex terrains).
+
+**Result folder:** `R_factor_REM_db` contains R-factor raster files based on the rainfall erosivity for every date flag (`RFactor_REM_db_YYYYMM.tif`).
+
+The below table lists input arguments that can be defined in `ROOT/snow_analyst/config_input.py` for setting up data directories and file names.
 
 | Input argument | Type | Description |
 |-----------------|------|-------------|
 |`rain_raster_input`| *string* | Folder of monthly rainfall|
 |`fEL_path`| *string* |Path to raster file expressing the influence of site elevation and latitude on the rainfall erosivity|
 
-**Result folder:**
-`R_factor_REM_db` contains R factor raster files based on the rainfall erosivity for each date (RFactor_REM_db_YYYYMM.tif).
 
 ### total_R_factor.py
-- calculates a total R factor based on the erosive forces of snowmelt and precipitation.
+
+The script contains functions for calculating a total R factor based on the erosive forces of snowmelt and precipitation.
+
+**Result folder:** `R_factor_Total` contains total R factor raster files for every date flag (`RFactor_total_YYYYMM.tif`).
+
+The below table lists input arguments that can be defined in `ROOT/snow_analyst/config_input.py` for setting up data directories and a factor driving snowmelt erosivity.
 
 | Input argument | Type | Description |
 |-----------------|------|-------------|
 |`r_factor_input`| *string* | Folder of monthly rainfall erosivity|
-|`snow_factor`| *int* |Factor which accounts for snowmelt erosivity|
+|`snow_factor`| *int* |Factor accounting for snowmelt erosivity|
 
-**Result folder:**
-`R_factor_Total` contains total R factor raster files for each date (RFactor_total_YYYYMM.tif).
 
 # Code diagrams
 ![R_fac_snow_diagram](https://user-images.githubusercontent.com/65073126/134778560-534a8ebd-f428-43c2-bcc6-0a90281f08b9.jpg)

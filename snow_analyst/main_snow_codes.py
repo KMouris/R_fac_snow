@@ -1,5 +1,5 @@
 """
-Main code which the different .py programs to calculate the total R factor for month or group of months, for the RUSLE
+Main aglorithm which the different .py programs to calculate the total R factor for month or group of months, for the RUSLE
 method.
 
 It calls the following files in the following order:
@@ -19,7 +19,6 @@ import file_management
 import snow_cover
 import rain_snow_rasters
 import pt_raster_manipulation
-import config_input
 from config_input import *
 
 from snow_melt import snow_melt_main
@@ -28,7 +27,7 @@ import total_R_factor
 
 if __name__ == '__main__':
 
-    config_input.init()
+    init()  # NEEDS TO BE CHANGED!
 
     # Generate a list with all the dates to run through and include in the analysis
     date_list = file_management.get_date_list(start_date, end_date)
@@ -53,55 +52,46 @@ if __name__ == '__main__':
         # save all contents in the folder to a list
         csv_list = os.listdir(PT_path)
         # Check if more folders or if there are .csv files (to determine if 1 run or multiple)
-        if any(".csv" in string for string in csv_list):  # If any .csv files in folder, loop through 1 folder
-            rain_snow_rasters.generate_rain_snow_rasters(config_input.PT_path)
+        # If any .csv files in folder, loop through 1 folder
+        if any(".csv" in string for string in csv_list):
+            rain_snow_rasters.generate_rain_snow_rasters(PT_path)
         else:  # Loop through each sub-folder
             # clip csv_list to include only dates within input range
-            csv_list = file_management.filter_raster_lists(csv_list, start_date, end_date, "rain_snow_rasters.py")
+            csv_list = file_management.filter_raster_lists(
+                csv_list, start_date, end_date, "rain_snow_rasters.py")
             for date in csv_list:  # Run code for each folder (date) at a time
                 path = os.path.join(PT_path, date)
                 rain_snow_rasters.generate_rain_snow_rasters(path)
         print("Finished rain and snow raster generation")
-# ------------------------------------------------------------------------------------------------------------------- #
 
-# --- RUN snow_cover ------------------------------------------------------------------------------------------------ #
-    # Generate a binary snow detection raster, to determine cells with snow ----------------------------------------- #
+# --- RUN snow_cover
+    # Generate a binary snow detection raster, to determine cells with snow
     if run_snow_cover:
-        si_list = os.listdir(si_folder_path)  # list with satellite image folders
+        # list with satellite image folders
+        si_list = os.listdir(si_folder_path)
         if input_si_dates:  # If user inputs the dates to use:
-            si_list = file_management.check_input_si_dates(si_list, date_list, si_image_dates)
+            si_list = file_management.check_input_si_dates(
+                si_list, date_list, si_image_dates)
         else:  # get images whose sensing date is closest to end of month
             if len(si_list) == 2:  # if only 2 folders, only one sensing date was given
                 si_list = [os.path.basename(si_folder_path)]
             # If no dates to directly use (user input), get the satellite image closest to the end of the month.
-            si_list = file_management.generate_satellite_image_date_list(si_list, date_list)
+            si_list = file_management.generate_satellite_image_date_list(
+                si_list, date_list)
         print("Folders to loop through:, ", si_list)
         for f, d in zip(si_list, date_list):
             path = os.path.join(si_folder_path, str(f))
             snow_cover.calculate_snow_cover(path, d)
-# ------------------------------------------------------------------------------------------------------------------- #
 
-# --- RUN snow_melt ------------------------------------------------------------------------------------------------- #
+# --- RUN snow_melt
     # Generate end of month snow rasters and snow melt rasters
     if run_snow_melt:
         snow_melt_main.main()
-# ------------------------------------------------------------------------------------------------------------------- #
 
-# --- RUN Rfactor_REM_db -------------------------------------------------------------------------------------------- #
+# --- RUN Rfactor_REM_db
     if run_r_factor:
         Rfactor_main.main()
-# ------------------------------------------------------------------------------------------------------------------- #
 
-# --- RUN total_precit_factor --------------------------------------------------------------------------------------- #
+# --- RUN total_precit_factor
     if run_total_factor:
         total_R_factor.main()
-# ------------------------------------------------------------------------------------------------------------------- #
-
-
-
-
-
-
-
-
-

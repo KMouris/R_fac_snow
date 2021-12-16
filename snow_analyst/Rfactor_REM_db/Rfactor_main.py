@@ -14,9 +14,6 @@ from Rfactor_REM_db import Rfactor_raster_calculations as raster_calc
 from Rfactor_REM_db import Rfactor_data_management as data_management
 
 
-# ----------------------------------- FUNCTIONS ---------------------------------------------------------------------#
-
-
 def monthly_factor(m):
     """
     Function receives the month and calculates the monthly factor for the REM(DB) rainfall erosivity model for complex
@@ -24,13 +21,13 @@ def monthly_factor(m):
     :param m: month, in numbers (float)
     :return: fm (monthly factor)
     """
-    fm = 0.3696 * (1 - 1.0888 * math.cos(2 * math.pi * m / (2.9048 + m)))  # Formula with cos(x), with x in radians
+    fm = 0.3696 * (1 - 1.0888 * math.cos(2 * math.pi * m
+                   / (2.9048 + m)))  # Formula with cos(x), with x in radians
     return fm
 
 
 def rfactor(m, p_array, f_el_array):
-    """
-    Function receives the month corresponding to the file (and calculates the monthly factor with the corresponding
+    """Receives the month corresponding to the file (and calculates the monthly factor with the corresponding
     function),the monthly precipitation array and the f(E,L) array and calculates the RFactor using the REM(DB) from
     Diodato & Bellocchi (2007)
     :param f_el_array: f_EL raster data as np.array
@@ -42,22 +39,22 @@ def rfactor(m, p_array, f_el_array):
     fm = monthly_factor(m)
 
     # Calculate the RFactor with the Diodato and Belocchi equation:
-    np.seterr(all='ignore')  # Ignore float-induced errors, to avoid error printing in the command window
+    # Ignore float-induced errors, to avoid error printing in the command window
+    np.seterr(all='ignore')
     r_factor = 0.207 * np.power(p_array * (fm + f_el_array), 1.561)
-    r_factor = np.where(r_factor.mask == True, np.nan, r_factor)  # Convert all masked cells to np.nan values
+    # Convert all masked cells to np.nan values
+    r_factor = np.where(r_factor.mask == True, np.nan, r_factor)
 
     return r_factor
 
 
 def main():
-
-    # ------------------------- Initial Procedure ------------------------------------------------------------------ #
-
     # 1. Save all monthly precipitation rasters, with .tif extension, in a list, to iterate over them
     filenames = glob.glob(rain_raster_path + "/*.tif")
 
     # 2. Filter precipitation raster list to only include rasters corresponding to the analysis date range
-    filenames = data_management.filter_raster_lists(filenames, start_date, end_date)
+    filenames = data_management.filter_raster_lists(
+        filenames, start_date, end_date)
 
     # 3. Compare one of the Monthly precipitation files with the input f(EL) raster to make sure they have the
     # same properties
@@ -88,7 +85,8 @@ def main():
         r_factor_array = rfactor(month, precip_array, f_el_array)
 
         # 5. Save RFactor array to a .tif raster
-        output_name = os.path.join(r_factor_path, f"RFactor_REM_db_{str(date.strftime('%Y%m'))}.tif")
+        output_name = os.path.join(
+            r_factor_path, f"RFactor_REM_db_{str(date.strftime('%Y%m'))}.tif")
         raster_calc.save_raster(r_factor_array, output_name, gt, proj)
 
 

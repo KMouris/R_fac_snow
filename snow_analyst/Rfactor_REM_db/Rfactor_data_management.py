@@ -1,5 +1,5 @@
-"""
-This program calls functions needed in the "RFactor_main" python program, located in the same folder. The functions
+"""Calls functions needed in the "RFactor_main" python program,
+located in the same folder. The functions
 deal directly with input files/folders.
 """
 
@@ -7,9 +7,10 @@ from config_input import *
 
 
 def filter_raster_lists(raster_list, s_date, e_date):
-    """
-    Function filters input list to only include dates in between the start and end date (analysis range). If there are
-    no files for the given date range (new_list is empty), function throws an error.
+    """Filters input list to only include dates in between the start and end
+    date (analysis range). If there are no files for the given date range
+    (new_list is empty), function throws an error.
+
     :param raster_list: list with file paths, whose names contain the date in either YYYYMM or YYMM format
     :param s_date: analysis start date (in datetime format)
     :param e_date: analysis end date (in datetime format)
@@ -26,7 +27,8 @@ def filter_raster_lists(raster_list, s_date, e_date):
         sys.exit(message)
 
     # Check if there is one input file per month to analyze
-    n_months = (e_date.year - s_date.year) * 12 + e_date.month - s_date.month + 1  # months to analyze
+    n_months = (e_date.year - s_date.year) * 12 + e_date.month - \
+        s_date.month + 1  # months to analyze
     if not n_months == len(new_list):
         message = "ERROR: Missing rain (precipitation) rasters in input folder." + \
                   "Check input rasters for missing date or check date range."
@@ -36,14 +38,16 @@ def filter_raster_lists(raster_list, s_date, e_date):
 
 
 def get_date(file_path):
-    """
-    Function extracts the date from the input file/folder name. The date should be in YYYYMM, YYYYMMDD, or YYYYMMDD0HH
-    format
+    """Extracts the date from the input file/folder name. The date should be in
+    YYYYMM, YYYYMMDD, or YYYYMMDD0HH format
+
     :param file_path: file or folder path
     :return: file date in datetime format
     """
-    file_name = os.path.basename(file_path)  # Get file name (which should contain the date)
-    digits = ''.join(re.findall(r'\d+', file_name))  # Combine all digits to a string (removes any integer)
+    file_name = os.path.basename(
+        file_path)  # Get file name (which should contain the date)
+    # Combine all digits to a string (removes any integer)
+    digits = ''.join(re.findall(r'\d+', file_name))
 
     if len(digits) == 6:  # Either MMYYYY or YYYYMM
         if int(digits[0:2]) > 12:  # YYYYMM format
@@ -83,6 +87,7 @@ def get_date(file_path):
         except ValueError:
             sys.exit("Wrong input date format in input file {}.".format(file_path))
     else:
-        sys.exit("Check input date format. It must be in either YYYYMM, MMYYYY or YYMM.")
+        sys.exit(
+            "Check input date format. It must be in either YYYYMM, MMYYYY or YYMM.")
 
     return date

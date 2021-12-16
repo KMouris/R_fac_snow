@@ -1,5 +1,5 @@
 """
-Code reads precipitation and temperature values from .txt ASCII raster files (in either monthly, daily or hourly time
+Reads precipitation and temperature values from .txt ASCII raster files (in either monthly, daily or hourly time
 intervals) and saves the data for each raster cell in .csv files with the following data:
      year-month-day-hour-minute-second-Precipitation-Temperature-Row-Column
 
@@ -22,7 +22,7 @@ import raster_calculations as rc
 
 
 def get_values(P_array, T_array, no_data, cells):
-    """Function reads the data cells in the original input rasters and returns an array with the extracted P and T data
+    """Reads the data cells in the original input rasters and returns an array with the extracted P and T data
     from each cell
 
     :param P_array: np.array with precipitation data
@@ -36,12 +36,15 @@ def get_values(P_array, T_array, no_data, cells):
 
     n = 0  # -counter to fill each row in the new matrix "value", changes value in every "if"
     for i in range(0, P_array.shape[0]):  # -go through every row
-        for j in range(0, P_array.shape[1]):  # -goes through every column in original matrix
+        # -goes through every column in original matrix
+        for j in range(0, P_array.shape[1]):
             if P_array[i, j] != no_data and T_array[i, j] != no_data:
                 value_array[n, 0] = P_array[i, j]  # Save precipitation value
                 value_array[n, 1] = T_array[i, j]  # Save Temperature value
-                value_array[n, 2] = i  # Save in first column the original row value, represented by "i"
-                value_array[n, 3] = j  # Save in second column the original column value, represented by "j"
+                # Save in first column the original row value, represented by "i"
+                value_array[n, 2] = i
+                # Save in second column the original column value, represented by "j"
+                value_array[n, 3] = j
                 # print("Saved value: ",storm_array[i,j] )
                 n += 1  # -increase the counter to fill a new row in each iteration, only when value fits the
                 # criteria in the IF
@@ -49,7 +52,7 @@ def get_values(P_array, T_array, no_data, cells):
 
 
 def fill_3d(date, value_arrays, tdm, row):
-    """Function fills the corresponding row value in each array (layer) in the 3D array with the year, month, day, hour,
+    """Fills the corresponding row value in each array (layer) in the 3D array with the year, month, day, hour,
      minute, second precipitation, temperature, row and column data. Each row corresponds to the given date being looped
      through and each array corresponds to a different cell in the original array
 
@@ -72,7 +75,7 @@ def fill_3d(date, value_arrays, tdm, row):
 
 
 def save_csv_per_cell(tdm, path):
-    """Function saves each array in the 3D array (corresponding to each cell in the input rasters) to .csv files.
+    """Saves every 2d array of the 3D array (corresponding to each cell in the input rasters) to .csv files.
     Generates a .csv file for each cell, and the name of each file corresponds to the cell row_column location
 
     :param tdm: 3D np.array with the data for each cell saved to each layer (each array) to save to .csv files
@@ -81,11 +84,13 @@ def save_csv_per_cell(tdm, path):
     """
     for k in range(0, tdm.shape[0]):  # For each "station" or cell
         # Generate name of .csv, which corresponds to row_column location
-        name = os.path.join(path, f'{str(tdm[k, 0, 8])}_{str(tdm[k, 0, 9])}.csv')
+        name = os.path.join(
+            path, f'{str(tdm[k, 0, 8])}_{str(tdm[k, 0, 9])}.csv')
 
         # Save array "k" in 3D array corresponding to a given cell) to a 2D array
         m = tdm[k, :, :]  # Save current array "k" as a 3D array with 1 layer
-        m = np.reshape(m, (int(tdm.shape[1]), int(tdm.shape[2])))  # reshape to a 2D array
+        # reshape to a 2D array
+        m = np.reshape(m, (int(tdm.shape[1]), int(tdm.shape[2])))
 
         # Save 2D array "k" to a data frame
         df_station = pd.DataFrame(data=m,
@@ -96,8 +101,7 @@ def save_csv_per_cell(tdm, path):
 
 
 def generate_csv(date):
-    """
-    Function generates the .csv files from input temperature and precipitation rasters corresponding to a given input
+    """Generates .csv files from input temperature and precipitation rasters corresponding to a given input
     date. The function filters the raster files in the 'precipitation_path' and 'temperature_path' from the config_input
     file to extract those corresponding to the given input date's month.
 
@@ -119,28 +123,31 @@ def generate_csv(date):
     filenames_precip = glob.glob(precipitation_path + "/*.txt")
     filenames_temp = glob.glob(temperature_path + "/*.txt")
 
-    # -- Extract from the input folder the files that correspond to the analysis date ------------------------------- #
+    # -- Extract from the input folder the files that correspond to the analysis date
     filenames_precip = file_management.get_PT_datefiles(filenames_precip, date)
     filenames_temp = file_management.get_PT_datefiles(filenames_temp, date)
 
-    # -- Check the input files: ------------------------------------------------------------------------------------- #
-    file_management.compare_dates(filenames_precip, filenames_temp, "Precipitation", "Temperature")
+    # -- Check the input files:
+    file_management.compare_dates(
+        filenames_precip, filenames_temp, "Precipitation", "Temperature")
 
-    # -- Get the raster file header from any input raster (Needed for other files) ---------------------------------- #
+    # -- Get the raster file header from any input raster (Needed for other files) #
     ascii_info = rc.get_ascii_data(filenames_precip[0])
     config_input.ascii_data = ascii_info  # Update global variable data
 
-    # -- Get array for any value to get the number of value cells --------------------------------------------------- #
+    # -- Get array for any value to get the number of value cells
     array = rc.ascii_to_array(filenames_precip[0])
     n_cells = np.count_nonzero(array != ascii_info[5])
 
     # -- Create 3D array to save results. Each array corresponds to a raster cell, each row to a different time value -
-    # and each column to a different data value --------------------------------------------------------------------- #
-    n_rows = int(len(filenames_precip))  # number of rows equals number of files in folder
+    # and each column to a different data value
+    # number of rows equals number of files in folder
+    n_rows = int(len(filenames_precip))
     n_cols = 10  # One for: year, month, day, hour, minute, second, rain, temperature, original row, original column
-    tdm = np.empty((n_cells, n_rows, n_cols), dtype=np.dtype('f4'))  # Initiate the 3D matrix, fill it with 0s
+    # Initiate the 3D matrix, fill it with 0s
+    tdm = np.empty((n_cells, n_rows, n_cols), dtype=np.dtype('f4'))
 
-    # -- MAIN LOOP -------------------------------------------------------------------------------------------------- #
+    # MAIN LOOP
 
     for i in tqdm(range(0, len(filenames_precip)),
                   desc=f"Reading through precipitation files for {date.strftime('%Y%m')}"):
@@ -152,19 +159,17 @@ def generate_csv(date):
         t_array = rc.ascii_to_array(filenames_temp[i])
 
         # Save the data for each value cell in an array: row, column, Precipitation, Temperature
-        value_array = get_values(p_array, t_array, no_data=ascii_info[5], cells=n_cells)
+        value_array = get_values(
+            p_array, t_array, no_data=ascii_info[5], cells=n_cells)
         tdm = fill_3d(date, value_array, tdm, i)
 
     print("Saving results as .csv files for {}".format(date.strftime('%Y%m')))
     # save_csv_per_cell(tdm, config_input.PT_path)
     save_csv_per_cell(tdm, save_folder)
 
-    print(" Generation of CSV per cell files took {} seconds to run.".format(time.time() - start_time))
-
-
-def main():
-    generate_csv(start_date)
+    print(" Generation of CSV per cell files took {} seconds to run.".format(
+        time.time() - start_time))
 
 
 if __name__ == '__main__':
-    main()
+    generate_csv(start_date)
