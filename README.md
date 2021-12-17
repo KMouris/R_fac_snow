@@ -138,7 +138,7 @@ The script contains functions for calculating the R-factor of the RUSLE (i.e., h
 The below table lists input arguments that can be defined in `ROOT/snow_analyst/config_input.py` for setting up data directories and file names.
 
 | Input argument | Type | Description |
-|-----------------|------|-------------|
+|----------------|------|-------------|
 |`rain_raster_input`| *string* | Folder of monthly rainfall|
 |`fEL_path`| *string* |Path to raster file expressing the influence of site elevation and latitude on the rainfall erosivity|
 

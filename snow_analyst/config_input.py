@@ -196,7 +196,7 @@ snow_factor = 2
 
 # import geo_utils
 try:
-    sys.path.append(os.path.abspath(__file__))
+    sys.path.append(os.path.abspath(""))
     import geo_utils as gu
 except ModuleNotFoundError:
     print("ModuleNotFoundError: Cannot import geo_utils")
