@@ -172,7 +172,7 @@ No warranty is expressed or implied regarding the usefulness or completeness of 
 
 This web site contains external links to other, external web sites and information provided by third parties. There may be technical inaccuracies, typographical or other errors, programming bugs or computer viruses contained within the web site or its contents. Users may use the information and links at their own risk. The Authors of this web site excludes all warranties whether express, implied, statutory or otherwise, relating in any way to this web site or use of this web site; and liability (including for negligence) to users in respect of any loss or damage (including special, indirect or consequential loss or damage such as loss of revenue, unavailability of systems or loss of data) arising from or in connection with any use of the information on or access through this web site for any reason whatsoever (including negligence).
 
-## Authors
+# Authors
 - Kilian Mouris
 - Maria Fernanda Morales Oreamuno
 - Sebastian Schwindt
