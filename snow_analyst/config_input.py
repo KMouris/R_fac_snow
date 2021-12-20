@@ -1,40 +1,9 @@
+from package_handling import *
 
 """
 config_input.py contains the required user input (e.g. input and output folder paths, settings for the statistical
-calculation) and the handling of packages.
-"""
-# import all needed modules from the python standard library
-try:
-    import glob
-    import logging
-    import math
-    import os
-    import sys
-    import time
-    import datetime
-    import calendar
-    import re
-except ModuleNotFoundError as b:
-    print('ModuleNotFoundError: Missing basic libraries (required: glob, logging, math, os, sys, time, datetime, '
-          'calendar, re')
-    print(b)
-
-# import additional python libraries
-try:
-    import gdal
-    import matplotlib.pyplot as plt
-    import numpy as np
-    import pandas as pd
-    import rasterstats as rs
-    import scipy
-    from tqdm import tqdm
-except ModuleNotFoundError as e:
-    print('ModuleNotFoundError: Missing fundamental packages (required: gdal, maptlotlib.pyplot, numpy, '
-          'pandas, rasterstats, scipy, tqdm')
-    print(e)
-
-
-"""Boolean variables to determine which modules to run and which input parameters to include:
+calculation)
+Boolean variables to determine which modules to run and which input parameters to include:
     - run_pt_manipulation: 'True' to run 'pt_raster_manipulation' code to obtain the .csv files which are used in
         "rain_snow_rasters.py" to determine precipitation and snow rasters. 'False' to directly input the .csv
         files with the temperature and precipitation values for each raster cell.
@@ -191,14 +160,6 @@ r_factor_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\results\R_factor
 """
 snow_factor = 2
 
-# ------------------------------------------------------------------------------------------------------------------- #
-
-# import geo_utils
-try:
-    sys.path.append(os.path.abspath(""))
-    import geo_utils as gu
-except ModuleNotFoundError:
-    print("ModuleNotFoundError: Cannot import geo_utils")
 
 # Import snow_melt codes:
 sys.path.append('./snow_melt')  # Add folder for snow melt

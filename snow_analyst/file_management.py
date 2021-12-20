@@ -1,5 +1,5 @@
 import config_input
-from config_input import *
+from package_handling import *
 
 """ Functions related to input file/folders, file names, dates and reading/saving
 .txt/.csv files """
@@ -324,70 +324,70 @@ if __name__ == '__main__':
     pass
 else:
     # Generate folder to save all results: -------------------------------------------------------------------------- #
-    create_folder(results_path)
+    create_folder(config_input.results_path)
 
     # Convert input dates (start and end date) to date format ------------------------------------------------------- #
-    config_input.start_date  = get_date(start_date)
-    config_input.end_date = get_date(end_date, end=True)
+    config_input.start_date  = get_date(config_input.start_date)
+    config_input.end_date = get_date(config_input.end_date, end=True)
 # ------------------------------------------------------------------------------------------------------------------- #
-    if run_pt_manipulation:
+    if config_input.run_pt_manipulation:
         # Generate folder to save PT_manipulation results (.csv files)
-        config_input.PT_path = os.path.join(results_path, "PT_CSV_per_cell")
+        config_input.PT_path = os.path.join(config_input.results_path, "PT_CSV_per_cell")
         create_folder(config_input.PT_path)
         # check if folders exist:
-        check_folder(precipitation_path, "precipitation_path")
-        check_folder(temperature_path, 'temperature_path')
+        check_folder(config_input.precipitation_path, "precipitation_path")
+        check_folder(config_input.temperature_path, 'temperature_path')
     else:
-        config_input.PT_path = PT_path_input
+        config_input.PT_path = config_input.PT_path_input
 # ------------------------------------------------------------------------------------------------------------------- #
-    if run_rain_snow_rasters:
-        config_input.snow_raster_path = os.path.join(results_path, "snow_per_month")
-        create_folder(config_input.snow_raster_path)
-        config_input.rain_raster_path = os.path.join(results_path, "rain_per_month")
-        create_folder(config_input.rain_raster_path)
+    if config_input.run_rain_snow_rasters:
+        snow_raster_path = os.path.join(config_input.results_path, "snow_per_month")
+        create_folder(snow_raster_path)
+        rain_raster_path = os.path.join(config_input.results_path, "rain_per_month")
+        create_folder(rain_raster_path)
         # Check if needed input folders exist:
         check_folder(config_input.PT_path, "PT_path")     # Folder with .csv files
 
     else:
-        config_input.snow_raster_path = snow_raster_input
-        config_input.rain_raster_path = rain_raster_input
+        snow_raster_path = config_input.snow_raster_input
+        rain_raster_path = config_input.rain_raster_input
 # ------------------------------------------------------------------------------------------------------------------- #
-    if run_snow_cover:
-        config_input.snow_cover_path = os.path.join(results_path, "snow_cover")
-        create_folder(config_input.snow_cover_path)
+    if config_input.run_snow_cover:
+        snow_cover_path = os.path.join(config_input.results_path, "snow_cover")
+        create_folder(snow_cover_path)
         # Check if needed input folders exist:
-        check_folder(si_folder_path, 'SI_folder_path')
+        check_folder(config_input.si_folder_path, 'SI_folder_path')
     else:
-        config_input.snow_cover_path = snowcover_raster_input
+        snow_cover_path = config_input.snowcover_raster_input
 
 # ------------------------------------------------------------------------------------------------------------------- #
-    if run_snow_melt:
-        config_input.snow_melt_path = os.path.join(results_path, "Snowmelt")
-        create_folder(config_input.snow_melt_path)
+    if config_input.run_snow_melt:
+        snow_melt_path = os.path.join(config_input.results_path, "Snowmelt")
+        create_folder(snow_melt_path)
         # check if needed input folders exist:
-        check_folder(config_input.snow_cover_path, 'snow_cover_path')
+        check_folder(snow_cover_path, 'snow_cover_path')
          # snow cover raster
-        check_folder(config_input.snow_raster_path, 'snow_raster_path')
+        check_folder(snow_raster_path, 'snow_raster_path')
         # snow per month raster
     else:
-        config_input.snow_melt_path = snow_melt_input
+        snow_melt_path = config_input.snow_melt_input
 
 # ------------------------------------------------------------------------------------------------------------------- #
-    if run_r_factor:
-        config_input.r_factor_path = os.path.join(results_path, "R_factor_REM_db")
-        create_folder(config_input.r_factor_path)
+    if config_input.run_r_factor:
+        r_factor_path = os.path.join(config_input.results_path, "R_factor_REM_db")
+        create_folder(r_factor_path)
         # Check needed folders:
-        check_folder(config_input.rain_raster_path, 'rain_raster_path')
+        check_folder(rain_raster_path, 'rain_raster_path')
         # folder with .tif rain raster files
     else:
-        config_input.r_factor_path = r_factor_input
+        r_factor_path = config_input.r_factor_input
 
 # ------------------------------------------------------------------------------------------------------------------- #
-    if run_total_factor:
-        config_input.total_factor_path = os.path.join(results_path, "R_factor_Total")
-        create_folder(config_input.total_factor_path)
+    if config_input.run_total_factor:
+        total_factor_path = os.path.join(config_input.results_path, "R_factor_Total")
+        create_folder(total_factor_path)
         # Check needed folders:
-        check_folder(config_input.r_factor_path, 'r_factor_path')
-        check_folder(config_input.snow_melt_path, 'snow_melt_path')
+        check_folder(r_factor_path, 'r_factor_path')
+        check_folder(snow_melt_path, 'snow_melt_path')
 
 # ------------------------------------------------------------------------------------------------------------------- #

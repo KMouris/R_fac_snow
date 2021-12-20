@@ -9,7 +9,9 @@ It receives input monthly precipitation rasters, in .tif format, and calculates 
 each input file. The resulting file is in .tif format with th same raster properties as the input files.
 """
 
-from config_input import *
+import config_input
+import file_management
+from package_handling import *
 from Rfactor_REM_db import Rfactor_raster_calculations as raster_calc
 from Rfactor_REM_db import Rfactor_data_management as data_management
 
@@ -50,22 +52,22 @@ def rfactor(m, p_array, f_el_array):
 
 def main():
     # 1. Save all monthly precipitation rasters, with .tif extension, in a list, to iterate over them
-    filenames = glob.glob(rain_raster_path + "/*.tif")
+    filenames = glob.glob(file_management.rain_raster_path + "/*.tif")
 
     # 2. Filter precipitation raster list to only include rasters corresponding to the analysis date range
     filenames = data_management.filter_raster_lists(
-        filenames, start_date, end_date)
+        filenames, config_input.start_date, config_input.end_date)
 
     # 3. Compare one of the Monthly precipitation files with the input f(EL) raster to make sure they have the
     # same properties
-    raster_calc.check_input_rasters(filenames[0], fEL_path)
+    raster_calc.check_input_rasters(filenames[0], config_input.fEL_path)
 
     # 3. Get the raster data, such as geotransform (gt) and projection (proj) from the first file in the folder,
     # and assume the rest have the same information
     gt, proj = raster_calc.get_raster_data(filenames[0])
 
     # 4. Save the f(E,L) raster to a masked array, since it remains constant for each iteration
-    f_el_array = raster_calc.raster_to_array(fEL_path)
+    f_el_array = raster_calc.raster_to_array(config_input.fEL_path)
 
     # ---------------------------- Main Loop ----------------------------------------------------------------------- #
 
@@ -86,7 +88,7 @@ def main():
 
         # 5. Save RFactor array to a .tif raster
         output_name = os.path.join(
-            r_factor_path, f"RFactor_REM_db_{str(date.strftime('%Y%m'))}.tif")
+            file_management.r_factor_path, f"RFactor_REM_db_{str(date.strftime('%Y%m'))}.tif")
         raster_calc.save_raster(r_factor_array, output_name, gt, proj)
 
 

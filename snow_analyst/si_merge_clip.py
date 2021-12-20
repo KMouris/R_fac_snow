@@ -20,7 +20,7 @@ the satellite image name (DO NOT CHANGE)
 """
 
 import file_management
-from config_input import *
+from package_handling import *
 import raster_calculations as rc
 
 

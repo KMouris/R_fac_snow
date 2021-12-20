@@ -1,5 +1,6 @@
 import file_management
-from config_input import *
+import config_input
+from package_handling import *
 import si_merge_clip as satellite_images
 
 """Two step program:
@@ -44,7 +45,7 @@ def get_band_paths(folder):
         message = "There are no pre-processed rasters available in '{}' folder path. Check user input satellite " \
                   "image folder.".format(folder)
         sys.exit(message)
-    for band in image_list:  # Loop through each band name
+    for band in config_input.image_list:  # Loop through each band name
         if band != "TCI":  # Ignore TCI rasters
             # Check if any file contains the band name, and has a '_r' in the name, identifying it as resampled from
             # the si_merge_clip.py file
@@ -102,7 +103,7 @@ def calculate_snow_cover(folder, date):
 
     # Calculate Snow Array
     snow = np.where(np.logical_and(
-        NDSI > NDSI_min, blue_array > blue_min), 1, 0)
+        NDSI > config_input.NDSI_min, blue_array > config_input.blue_min), 1, 0)
 
     # Save resulting snow Raster
     snow_raster = os.path.join(

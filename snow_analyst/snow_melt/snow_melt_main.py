@@ -1,6 +1,8 @@
 from zon_statistics import *
 from fun import *
-from config_input import *
+from package_handling import *
+import config_input
+import file_management
 
 start_time = time.time()
 
@@ -90,7 +92,7 @@ def filter_raster_lists(list):
         data_manager = DataManagement(
             path=r'' + os.path.abspath('../Results'), filename=elem)
         date = data_manager.get_date_format()
-        if start_date <= date <= end_date:
+        if config_input.start_date <= date <= config_input.end_date:
             new_list.append(elem)
 
     if len(new_list) == 0:
@@ -98,8 +100,8 @@ def filter_raster_lists(list):
         sys.exit(message)
 
     # Check if there is one input file per month to analyze
-    n_months = (end_date.year - start_date.year) * 12 + \
-        end_date.month - start_date.month + 1  # months to analyze
+    n_months = (config_input.end_date.year - config_input.start_date.year) * 12 + \
+        config_input.end_date.month - config_input.start_date.month + 1  # months to analyze
     if not n_months == len(new_list):
         message = "There are fewer rasters than months to analyze. Check input rasters."
         sys.exit(message)
@@ -116,15 +118,15 @@ def main():
 
     # Get all file paths into a list: All raster files must be .tif format
     #   CHANGE: input file names
-    snow_mm_paths = sorted(glob.glob(snow_raster_path + "/*.tif"))
-    snow_cover_paths = sorted(glob.glob(snow_cover_path + "/*.tif"))
+    snow_mm_paths = sorted(glob.glob(file_management.snow_raster_path + "/*.tif"))
+    snow_cover_paths = sorted(glob.glob(file_management.snow_cover_path + "/*.tif"))
 
     # Filter file lists to include only files corresponding to the analysis date range: CHANGE
     snow_mm_paths = filter_raster_lists(snow_mm_paths)
     snow_cover_paths = filter_raster_lists(snow_cover_paths)
 
     # Create folder if it does not already exist
-    data_manager = DataManagement(path=results_path, filename=snow_mm_paths[0])
+    data_manager = DataManagement(path=config_input.results_path, filename=snow_mm_paths[0])
     data_manager.folder_creation()
 
     # Check dates at same index
@@ -156,23 +158,23 @@ def main():
     for entry in snow_melt:
         # save_path = r'' + os.path.abspath('../Results/Snow_end_month') + "/snow_end_month" + str(date[k][0]) + ".tif"
         save_path = os.path.join(
-            results_path, 'Snow_end_month', f'snow_end_month_{str(date[k][0])}.tif')
+            config_input.results_path, 'Snow_end_month', f'snow_end_month_{str(date[k][0])}.tif')
         DataManagement.save_raster(save_path, snow_end_month[k], gt, proj)
 
         save_path = os.path.join(
-            results_path, 'Snowmelt', f'snowmelt_{str(date[k][0])}.tif')
+            config_input.results_path, 'Snowmelt', f'snowmelt_{str(date[k][0])}.tif')
         DataManagement.save_raster(save_path, snow_melt[k], gt, proj)
         k += 1
 
     # Path to calculated results to be used for statistical calculations
     snow_result_paths = sorted(
-        glob.glob(results_path + '/Snow_end_month' + "/*.tif"))
+        glob.glob(config_input.results_path + '/Snow_end_month' + "/*.tif"))
     snow_result_paths = filter_raster_lists(snow_result_paths)
     # Calculate and plot zonal statistics
-    zonal_statistics = ZonStatistics(path_raster=snow_result_paths, shape=shape_zone, datelist=date,
-                                     parameter=statistical_param)
+    zonal_statistics = ZonStatistics(path_raster=snow_result_paths, shape=config_input.shape_zone, datelist=date,
+                                     parameter=config_input.statistical_param)
     zonal_statistics.get_zon_statistic()
-    if plot_statistic:
+    if config_input.plot_statistic:
         logger.info("Plot statistic is enabled")
         zonal_statistics.plot_zon_statistics()
     else:

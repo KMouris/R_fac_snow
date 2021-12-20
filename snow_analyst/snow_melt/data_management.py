@@ -1,7 +1,4 @@
-# from config import *
-# CHANGE: calls all folders input file "config_input", which contains all variables and
-from config_input import *
-#                             imports all needed modules
+from package_handling import *
 from log import *
 
 

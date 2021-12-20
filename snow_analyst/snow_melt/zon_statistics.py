@@ -1,6 +1,5 @@
-# from config import *
-from config_input import *  # CHANGE: calls all folders input file "config_input", which contains all variables and
-#                             imports all needed modules
+import config_input
+from package_handling import *
 
 
 class ZonStatistics:
@@ -84,7 +83,7 @@ class ZonStatistics:
         ax.set_ylabel("Snow Coverage [%]")
         plt_name = self.parameter
         # save figure
-        plt.savefig(os.path.join(plot_result, plt_name), dpi=300, bbox_inches='tight')
+        plt.savefig(os.path.join(config_input.plot_result, plt_name), dpi=300, bbox_inches='tight')
         # show plot
         plt.show()
 

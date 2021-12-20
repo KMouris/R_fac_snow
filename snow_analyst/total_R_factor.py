@@ -6,7 +6,8 @@ total R factor as the sum of the R factors due to snow melt and precipitation. L
 the R factor values for each cell, for each month being analyzed.
 """
 
-from config_input import *
+from package_handling import *
+import config_input
 import file_management
 import raster_calculations
 
@@ -14,13 +15,13 @@ import raster_calculations
 def main():
     print("Calculating total R factor")
     # 1. Get lists with Rfactor and snow melt rasters
-    filenames_r_factor = sorted(glob.glob(r_factor_path + "/*.tif"))
-    filenames_snow_melt = sorted(glob.glob(snow_melt_path + "/*.tif"))
+    filenames_r_factor = sorted(glob.glob(file_management.r_factor_path + "/*.tif"))
+    filenames_snow_melt = sorted(glob.glob(file_management.snow_melt_path + "/*.tif"))
 
     # 2. Filter precipitation raster list to only include rasters corresponding to the analysis date range
-    filenames_r_factor = file_management.filter_raster_lists(filenames_r_factor, start_date, end_date,
+    filenames_r_factor = file_management.filter_raster_lists(filenames_r_factor, config_input.start_date, config_input.end_date,
                                                              "R factor")
-    filenames_snow_melt = file_management.filter_raster_lists(filenames_snow_melt, start_date, end_date,
+    filenames_snow_melt = file_management.filter_raster_lists(filenames_snow_melt, config_input.start_date, config_input.end_date,
                                                               "snow melt")
 
     # 3. Check that files are in order and correspond to the same dates:
@@ -43,7 +44,7 @@ def main():
         r_array = raster_calculations.raster_to_array(R, mask=True)
 
         # 6.3 Multiply snow melt raster by the snow multiplication factor to get snow melt factor
-        s_array = np.multiply(s_array, snow_factor)
+        s_array = np.multiply(s_array, config_input.snow_factor)
 
         # 6.4 Add the R factor and S factor values:
         total_factor = np.add(s_array, r_array)
@@ -52,7 +53,7 @@ def main():
         total_factor = np.where(total_factor.mask, np.nan, total_factor)
 
         # 6.6 Save rasters:
-        output_name = os.path.join(total_factor_path, f"RFactor_total_{str(date.strftime('%Y%m'))}.tif")
+        output_name = os.path.join(file_management.total_factor_path, f"RFactor_total_{str(date.strftime('%Y%m'))}.tif")
         raster_calculations.save_raster(total_factor, output_name, gt, proj, no_data=np.nan)
 
 

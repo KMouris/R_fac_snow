@@ -3,7 +3,7 @@ located in the same folder. The functions
 deal directly with input files/folders.
 """
 
-from config_input import *
+from package_handling import *
 
 
 def filter_raster_lists(raster_list, s_date, e_date):

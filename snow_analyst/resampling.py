@@ -8,7 +8,7 @@ Code resamples an input raster to the extent and cell resolution of (snap) raste
     4. Clips the resampled raster to the snap raster extent, or to the extent of the input shape boundary.
 """
 
-from config_input import *
+from package_handling import *
 import raster_calculations as rc
 
 

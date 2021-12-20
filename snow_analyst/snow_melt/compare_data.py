@@ -1,7 +1,6 @@
 # from config import *
 from log import *
-from config_input import *  # CHANGE: calls all folders input file "config_input", which contains all variables and
-#                             imports all needed modules
+from package_handling import *
 
 
 class CompareData:

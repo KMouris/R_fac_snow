@@ -17,7 +17,7 @@ NOTES:
 
 import file_management
 import config_input
-from config_input import *
+from package_handling import *
 import raster_calculations as rc
 
 
@@ -116,12 +116,12 @@ def generate_csv(date):
 
     # -- Create a folder in which to save the results for the given date -------------------------------------------- #
 
-    save_folder = os.path.join(PT_path, str(date.strftime('%Y%m')))
+    save_folder = os.path.join(config_input.PT_path, str(date.strftime('%Y%m')))
     file_management.create_folder(save_folder)
 
     # -- Get all txt files in the path directory, and save them in a list ------------------------------------------- #
-    filenames_precip = glob.glob(precipitation_path + "/*.txt")
-    filenames_temp = glob.glob(temperature_path + "/*.txt")
+    filenames_precip = glob.glob(config_input.precipitation_path + "/*.txt")
+    filenames_temp = glob.glob(config_input.temperature_path + "/*.txt")
 
     # -- Extract from the input folder the files that correspond to the analysis date
     filenames_precip = file_management.get_PT_datefiles(filenames_precip, date)
@@ -172,4 +172,4 @@ def generate_csv(date):
 
 
 if __name__ == '__main__':
-    generate_csv(start_date)
+    generate_csv(config_input.start_date)

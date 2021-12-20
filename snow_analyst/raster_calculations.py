@@ -1,7 +1,7 @@
-from config_input import *
+from package_handling import *
 
 """
-File contains direct raster calculation functions, including .tif files (using gdal) and ASCII .txt files. 
+File contains direct raster calculation functions, including .tif files (using gdal) and ASCII .txt files.
 """
 
 

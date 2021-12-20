@@ -25,7 +25,7 @@ in the original raster  and must contain the following information: year-month-d
 """
 
 import config_input
-from config_input import *
+from package_handling import *
 import resampling
 import raster_calculations as rc
 import file_management
@@ -60,9 +60,9 @@ def generate_rain_snow_rasters(path):
         station_file = np.array(pd.read_csv(file, delimiter=','))
 
         rn = np.sum(
-            np.where(station_file[:, 7] > T_snow, station_file[:, 6], 0))  # rain
+            np.where(station_file[:, 7] > config_input.T_snow, station_file[:, 6], 0))  # rain
         sn = np.sum(
-            np.where(station_file[:, 7] < T_snow, station_file[:, 6], 0))  # snow
+            np.where(station_file[:, 7] < config_input.T_snow, station_file[:, 6], 0))  # snow
         rw = int(station_file[0, 8])  # row
         cl = int(station_file[0, 9])  # column
 
@@ -81,29 +81,29 @@ def generate_rain_snow_rasters(path):
     gt_original = rc.get_ascii_gt(config_input.ascii_data)
 
     # -- Get result rasters projection from the snap raster:
-    gt_snap, proj = rc.get_raster_data(snapraster_path)
+    gt_snap, proj = rc.get_raster_data(config_input.snapraster_path)
 
     # -- Save rasters with original cell resolution
     original_snow_name = os.path.join(
-        snow_raster_path, f'OriginalSnow_{str(date)}.tif')
+        file_management.snow_raster_path, f'OriginalSnow_{str(date)}.tif')
     original_rain_name = os.path.join(
-        rain_raster_path, f'OriginalRain_{str(date)}.tif')
+        file_management.rain_raster_path, f'OriginalRain_{str(date)}.tif')
 
     rc.save_raster(result_array_snow, original_snow_name,
-                   gt_original, proj, nodata)
+                   gt_original, proj, config_input.nodata)
     rc.save_raster(result_array_rain, original_rain_name,
-                   gt_original, proj, nodata)
+                   gt_original, proj, config_input.nodata)
 
     # -- Resample rasters to sample raster resolution and save:
     resampled_snow_name = os.path.join(
-        snow_raster_path, f'Snow_{str(date)}.tif')
+        file_management.snow_raster_path, f'Snow_{str(date)}.tif')
     resampled_rain_name = os.path.join(
-        rain_raster_path, f'Rain_{str(date)}.tif')
+        file_management.rain_raster_path, f'Rain_{str(date)}.tif')
 
-    resampling.main(original_snow_name, snapraster_path,
-                    shape_path, resampled_snow_name)
-    resampling.main(original_rain_name, snapraster_path,
-                    shape_path, resampled_rain_name)
+    resampling.main(original_snow_name, config_input.snapraster_path,
+                    config_input.shape_path, resampled_snow_name)
+    resampling.main(original_rain_name, config_input.snapraster_path,
+                    config_input.shape_path, resampled_rain_name)
 
     # Delete the original rasters
     if os.path.exists(original_snow_name):
@@ -115,6 +115,6 @@ def generate_rain_snow_rasters(path):
 
 if __name__ == '__main__':
     print("Calling rain_snow_rasters directly")
-    generate_rain_snow_rasters(PT_path_input)
+    generate_rain_snow_rasters(config_input.PT_path_input)
 else:
     pass

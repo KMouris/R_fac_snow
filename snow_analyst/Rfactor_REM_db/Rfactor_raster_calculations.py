@@ -2,10 +2,7 @@
 deal directly with gdal commands, such as reading, extracting data and saving gdal raster files.
 """
 
-import gdal
-import numpy as np
-import os
-import sys
+from package_handling import *
 
 
 def check_input_rasters(raster1, raster2):
