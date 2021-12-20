@@ -20,8 +20,8 @@ Boolean variables to determine which modules to run and which input parameters t
     - run_total_factor: 'True' to calculate the total precipitation factor (rain + snow) """
 run_pt_manipulation = True
 run_rain_snow_rasters = True
-run_snow_cover = True
-run_satellite_image_clip_merge = True
+run_snow_cover = False
+run_satellite_image_clip_merge = False
 run_snow_melt = True
 run_r_factor = True
 run_total_factor = True
