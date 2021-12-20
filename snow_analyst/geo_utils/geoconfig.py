@@ -43,19 +43,6 @@ try:
     from shapely.geometry import Polygon, LineString, Point
 except ImportError as e:
     raise ImportError("Could not import shapely (is it installed?). {0}".format(e))
-try:
-    import fiona
-except ImportError as e:
-    raise ImportError("Could not import fiona (is it installed?). {0}".format(e))
-try:
-    # install pyshp to enable shapefile import
-    import shapefile
-except ImportError as e:
-    raise ImportError("Could not import pyshp (shapefile - is it installed?). {0}".format(e))
-try:
-    import geojson
-except ImportError as e:
-    raise ImportError("Could not import fiona (is it installed?). {0}".format(e))
 
 # Global variables
 cache_folder = os.path.abspath("") + "/__cache__/"

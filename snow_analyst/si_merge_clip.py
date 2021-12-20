@@ -20,6 +20,7 @@ the satellite image name (DO NOT CHANGE)
 """
 
 import file_management
+import config_input
 from package_handling import *
 import raster_calculations as rc
 
@@ -104,7 +105,7 @@ def sat_image_merge_clip(folder):
 
     # Generate folder in which to save the results from the satellite clip and merge for the given date ------------- #
     # ---- Generate a folder to save the Satellite Clipping and Merging
-    si_results = os.path.join(results_path, f'SatelliteImages_{level}')
+    si_results = os.path.join(config_input.results_path, f'SatelliteImages_{level}')
     file_management.create_folder(si_results)
     # ---- Generate a folder to save the resulting rasters for the given date CHANGE NAME IF A SPECIFIC FORMAT IS NEEDED
     si_results = os.path.join(si_results, str(si_date.strftime("%Y%m%d")))
@@ -119,16 +120,16 @@ def sat_image_merge_clip(folder):
         path = os.path.join(folder, satellite_list[i])  # Satellite [i] complete path
         # Search all files and subdirectories for image location folder (input) and save to an array
         for root, dirs, files in os.walk(path):
-            if os.path.basename(root) == image_location_folder_name:
+            if os.path.basename(root) == config_input.image_location_folder_name:
                 location_images[i] = root
                 break
     if np.all(location_images == ""):
-        message = "The folder with name '{}' does not exist. Check input files".format(image_location_folder_name)
+        message = "The folder with name '{}' does not exist. Check input files".format(config_inputimage_location_folder_name)
         sys.exit(message)
 
     # --- LOOP: through each suffix or band name to merge and clip -------------------------------------------------- #
     band_results = []
-    for suffix in image_list:  # Call variable from configuration
+    for suffix in config_input.image_list:  # Call variable from configuration
         print("Suffix: ", suffix)
         images = np.full(location_images.shape, "", dtype=object)
         # -- Search the files for each satellite to find the satellite image corresponding to the given suffix ------ #
@@ -163,7 +164,7 @@ def sat_image_merge_clip(folder):
 
         # -- 3. Clip the merged rasters to shapefile ---------------------------------------------------------------- #
         clip_name = os.path.join(si_results, f"{suffix}_{si_date.strftime('%Y%m%d')}_clip.tif")
-        rc.clip(shape_path, clip_name, merge_name)
+        rc.clip(config_input.shape_path, clip_name, merge_name)
 
         # -- 4. Resample clipped raster ----------------------------------------------------------------------------- #
         if file_management.has_number(suffix):
@@ -189,20 +190,20 @@ def main():
     """
     # Same code as in main_snow_codes.py
     # Generate a list with all the dates to run through and include in the analysis
-    date_list = file_management.get_date_list(start_date, end_date)
+    date_list = file_management.get_date_list(config_input.start_date, config_input.end_date)
 
     if run_snow_cover:
-        si_list = os.listdir(si_folder_path)  # list with satellite image folders
+        si_list = os.listdir(config_input.si_folder_path)  # list with satellite image folders
         if input_si_dates:  # If user inputs the dates to use:
             si_list = file_management.check_input_si_dates(si_list, date_list, si_image_dates)
         else:  # get images whose sensing date is closest to end of month
             if len(si_list) == 2:  # if only 2 folders, only one sensing date was given
-                si_list = [os.path.basename(si_folder_path)]
+                si_list = [os.path.basename(config_input.si_folder_path)]
             # If no dates to directly use (user input), get the satellite image closest to the end of the month.
             si_list = file_management.generate_satellite_image_date_list(si_list, date_list)
         print("Folders to loop through:, ", si_list)
         for f, d in zip(si_list, date_list):
-            path = os.path.join(si_folder_path, str(f))
+            path = os.path.join(config_input.si_folder_path, str(f))
             band_paths = sat_image_merge_clip(path)
             print("Band results: ", band_paths)
 

@@ -20,8 +20,8 @@ Boolean variables to determine which modules to run and which input parameters t
     - run_total_factor: 'True' to calculate the total precipitation factor (rain + snow) """
 run_pt_manipulation = True
 run_rain_snow_rasters = True
-run_snow_cover = False
-run_satellite_image_clip_merge = False
+run_snow_cover = True
+run_satellite_image_clip_merge = True
 run_snow_melt = True
 run_r_factor = True
 run_total_factor = True
@@ -52,7 +52,6 @@ end_date = '201804'
     the date in the format YYYYMMDD_0HH."""
 precipitation_path = r'' + os.path.abspath('../input/Precipitation_Data/Precip_daily_Banja_v2')
 temperature_path = r'' + os.path.abspath('../input/Temperature_daily')
-
 
 """If run_pt_manipulation = 'False' (AND run_rain_snow_rasters = True)
 - PT_path: string, folder path with precipitation and Temperature data. There must be a folder each month in the
@@ -120,7 +119,6 @@ If "run_snow_cover" = False (and run_snow_melt is True)
 
 snowcover_raster_input = r'/home/IWS/mouris/Desktop/Test_snow_codes_seb/R_fac_snow/results/snow_cover'
 
-
 """If "run_snow_melt" is True:
 - plot_statistic: Boolean where if 'True', plots the snow melt statistics for a given input shapefile.
 - shape_zone: string, location of .shp file (can be different that clipping shape) in which to get snow melt statistics.
@@ -160,12 +158,12 @@ r_factor_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\results\R_factor
 """
 snow_factor = 2
 
-
 # Import snow_melt codes:
 sys.path.append('./snow_melt')  # Add folder for snow melt
 
 # import Rfactor_REM codes:
 sys.path.append('./Rfactor_REM_db')  # Add folder for snow melt
+
 
 def initialize_ascii():
     global ascii_data  # Global variable to store the original ASCII raster data
@@ -180,4 +178,4 @@ def initialize_ascii():
             yllcorner,
             cellsize,
             nodata,
-            ]
+        ]

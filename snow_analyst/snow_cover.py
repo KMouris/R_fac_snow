@@ -79,7 +79,7 @@ def calculate_snow_cover(folder, date):
     # --------------------------------- Read Satellite Images to list ---------------------------------------------- #
     print(" Calculating snow cover for date {} with satellite image sensing date: {}".format(date.strftime('%Y%m'),
                                                                                              os.path.split(folder)[1]))
-    if run_satellite_image_clip_merge:
+    if config_input.run_satellite_image_clip_merge:
         print("     Merging and resampling input satellite images")
         band_results = satellite_images.sat_image_merge_clip(folder)
     else:  # Read pre-processed rasters (clipped and merged) form input folder.
@@ -107,7 +107,7 @@ def calculate_snow_cover(folder, date):
 
     # Save resulting snow Raster
     snow_raster = os.path.join(
-        snow_cover_path, f'SnowCover_{date.strftime("%Y%m")}.tif')
+        file_management.snow_cover_path, f'SnowCover_{date.strftime("%Y%m")}.tif')
     np.savetxt('Snow', snow, fmt='%s')
     gu.create_raster(snow_raster, snow, epsg=32634, nan_val=- \
                      9999, rdtype=gdal.GDT_UInt32, geo_info=blue_geotransform)
