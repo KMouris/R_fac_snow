@@ -24,6 +24,7 @@ in the original raster  and must contain the following information: year-month-d
 5. shape_path: path (location in folder + name.shp) of the shapefile with which to clip the resampled rasters
 """
 
+import config_input
 from config_input import *
 import resampling
 import raster_calculations as rc
@@ -46,9 +47,9 @@ def generate_rain_snow_rasters(path):
         sys.exit(message)
 
     # Extract data from input raster if pt_raster_manipulation has been run before:
-    no_data = ascii_data[5]
-    rows = int(ascii_data[1])
-    columns = int(ascii_data[0])
+    no_data = config_input.ascii_data[5]
+    rows = int(config_input.ascii_data[1])
+    columns = int(config_input.ascii_data[0])
 
     # ------------------------------------------ Generate rasters -------------------------------------------------- #
     result_array_snow = np.full((rows, columns), no_data)  # Array for snow
@@ -77,7 +78,7 @@ def generate_rain_snow_rasters(path):
     # print("Date: ", date)
 
     # Get original raster (coarse) data:
-    gt_original = rc.get_ascii_gt(ascii_data)
+    gt_original = rc.get_ascii_gt(config_input.ascii_data)
 
     # -- Get result rasters projection from the snap raster:
     gt_snap, proj = rc.get_raster_data(snapraster_path)

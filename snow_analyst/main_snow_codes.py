@@ -19,6 +19,7 @@ import file_management
 import snow_cover
 import rain_snow_rasters
 import pt_raster_manipulation
+import config_input
 from config_input import *
 
 from snow_melt import snow_melt_main
@@ -27,7 +28,8 @@ import total_R_factor
 
 if __name__ == '__main__':
 
-    init()  # NEEDS TO BE CHANGED!
+    # initialize ascii data
+    initialize_ascii()
 
     # Generate a list with all the dates to run through and include in the analysis
     date_list = file_management.get_date_list(start_date, end_date)

@@ -51,8 +51,8 @@ except ModuleNotFoundError as e:
     - run_total_factor: 'True' to calculate the total precipitation factor (rain + snow) """
 run_pt_manipulation = True
 run_rain_snow_rasters = True
-run_snow_cover = True
-run_satellite_image_clip_merge = True
+run_snow_cover = False
+run_satellite_image_clip_merge = False
 run_snow_melt = True
 run_r_factor = True
 run_total_factor = True
@@ -71,7 +71,7 @@ shape_path = r'' + os.path.abspath('../input/Shapes/totalboundary.shp')
 results_path = r'' + os.path.abspath('../results')
 
 # start_date = '201605'
-start_date = '201803'
+start_date = '201712'
 end_date = '201804'
 
 """If run_pt_manipulation = 'True'
@@ -81,9 +81,8 @@ end_date = '201804'
 - temperature_path: string, folder path which contains .txt ASCII rasters with the temperature data values for each time
      interval. Each .txt file corresponds to the data for the given year-month-day-hour. The file name corresponds to
     the date in the format YYYYMMDD_0HH."""
-precipitation_path = r'' + \
-    os.path.abspath('../input/Precipitation_Data/Precip_Banja_hourly_noCorr')
-temperature_path = r'' + os.path.abspath('../input/Temperature_Data')
+precipitation_path = r'' + os.path.abspath('../input/Precipitation_Data/Precip_daily_Banja_v2')
+temperature_path = r'' + os.path.abspath('../input/Temperature_daily')
 
 
 """If run_pt_manipulation = 'False' (AND run_rain_snow_rasters = True)
@@ -150,7 +149,7 @@ blue_min = 1800
 If "run_snow_cover" = False (and run_snow_melt is True)
 - snowcover_raster_input: string, folder path where .tif binary snow cover rasters are located."""
 
-snowcover_raster_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\results\snow_cover'
+snowcover_raster_input = r'/home/IWS/mouris/Desktop/Test_snow_codes_seb/R_fac_snow/results/snow_cover'
 
 
 """If "run_snow_melt" is True:
@@ -223,7 +222,7 @@ global r_factor_path          # folder path for r factor rasters
 global total_factor_path      # folder to save the total precipitation factor rasters
 
 
-def init():
+def initialize_ascii():
     global ascii_data  # Global variable to store the original ASCII raster data
     # Global variables from pt_raster_manipulation
     if run_pt_manipulation:
