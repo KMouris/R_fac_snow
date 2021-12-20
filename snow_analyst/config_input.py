@@ -109,8 +109,8 @@ T_snow = 0
 """ If run_rain_snow_rasters = False: (AND run_snow_melt is True OR run_r_factor is True)
 - snow_raster: string, folder path where .tif snow rasters are located (needed for snow_melt calculation)
 - rain_raster: string, folder path where .tif rain rasters are located (needed for R factor calculation)"""
-snow_raster_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\results\snow_per_month'
-rain_raster_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\results\rain_per_month'
+snow_raster_input = r'/home/IWS/mouris/Desktop/Test_snow_codes_seb/R_fac_snow/results/snow_per_month/'
+rain_raster_input = r'/home/IWS/mouris/Desktop/Test_snow_codes_seb/R_fac_snow/results/rain_per_month/'
 
 """ If "run_snow_cover" = True:
 - si_folder_path: string, folder path where satellite images are: each folder must correspond to a sensing date,
@@ -205,22 +205,6 @@ sys.path.append('./snow_melt')  # Add folder for snow melt
 
 # import Rfactor_REM codes:
 sys.path.append('./Rfactor_REM_db')  # Add folder for snow melt
-
-# ------------------------------------------------------------------------------------------------------------------- #
-# Global Variables: DO NOT MODIFY
-
-# Global raster to store the path with the per cell .CSV files with precipitation and temp data
-global PT_path
-# folder path for snow raster data (including file name and .tif extension)
-global snow_raster_path
-# folder path for precipitation raster data (including file name and .tif extension)
-global rain_raster_path
-# folder path for snow cover binary raster (1 if satellite image shows snow, 0 if not)
-global snow_cover_path
-global snow_melt_path         # folder path for snow melt rasters
-global r_factor_path          # folder path for r factor rasters
-global total_factor_path      # folder to save the total precipitation factor rasters
-
 
 def initialize_ascii():
     global ascii_data  # Global variable to store the original ASCII raster data
