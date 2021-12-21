@@ -13,15 +13,19 @@ Boolean variables to determine which modules to run and which input parameters t
         areas of snow cover from satellite images.
     - run_satellite_image_clip_merge: 'True' to run si_clip_merge.py and merge and clip the raw input satellite images.
         'False' if user sets previously clipped and merged satellite images.
+    - run_wasim_snow: 'True' to run wasim_snow.py using the snow raster from an external hydrological program.
+        Replaces satellite imagery for future predictions (run_snow_cover must be false). 
     - run_snow_melt: 'True' to run the python programs to calculate the snow at the end of the month and the total snow
         melt from the snow detection and snow rasters.
     - run_r_factor: 'True' to run the python program to calculate the R(ain) factor for the RUSLE model, from the rain
         rasters.
     - run_total_factor: 'True' to calculate the total precipitation factor (rain + snow) """
+
 run_pt_manipulation = True
 run_rain_snow_rasters = True
 run_snow_cover = False
 run_satellite_image_clip_merge = False
+run_wasim_snow = True
 run_snow_melt = True
 run_r_factor = True
 run_total_factor = True
@@ -112,6 +116,11 @@ image_location_folder_name = "IMG_DATA"
 # Thresholds for snow detection
 NDSI_min = 0.4
 blue_min = 1800
+
+""" If "run_wasim_snow" = True:
+- snow_wasim_path: string, folder path where snow storage rasters are stored (YYYYMMDD or YYYYMMDD_0HH format).
+"""
+snow_wasim_path = r'' + os.path.abspath('../input/snow_storage')
 
 """
 If "run_snow_cover" = False (and run_snow_melt is True)

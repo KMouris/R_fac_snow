@@ -166,7 +166,9 @@ def filter_raster_lists(raster_list, date1, date2, file_name):
             continue
         else:
             date = get_date(elem)
-            if date1 <= date <= date2:
+            # timedelta is added because Wasim are from 9 PM
+            date2_end = date2 + datetime.timedelta(hours=23)
+            if date1 <= date <= date2_end:
                 new_list.append(elem)
 
     if len(new_list) == 0:
@@ -359,6 +361,14 @@ else:
         check_folder(config_input.si_folder_path, 'SI_folder_path')
     else:
         snow_cover_path = config_input.snowcover_raster_input
+
+# ------------------------------------------------------------------------------------------------------------------- #
+
+    if config_input.run_wasim_snow:
+        wasim_path = os.path.join(config_input.results_path, "wasim")
+        create_folder(wasim_path)
+        snow_cover_path = os.path.join(config_input.results_path, "snow_cover")
+        create_folder(snow_cover_path)
 
 # ------------------------------------------------------------------------------------------------------------------- #
     if config_input.run_snow_melt:

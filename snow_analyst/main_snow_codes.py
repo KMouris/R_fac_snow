@@ -24,6 +24,7 @@ import pt_raster_manipulation
 
 from snow_melt import snow_melt_main
 from Rfactor_REM_db import Rfactor_main
+import wasim_snow
 import total_R_factor
 
 if __name__ == '__main__':
@@ -84,6 +85,11 @@ if __name__ == '__main__':
         for f, d in zip(si_list, date_list):
             path = os.path.join(config_input.si_folder_path, str(f))
             snow_cover.calculate_snow_cover(path, d)
+
+# --- RUN wasim_snow -------------------------------------------------------------------------------------------------#
+    if config_input.run_wasim_snow:
+        print("Analyze snow raster from hydrological model WaSim")
+        wasim_snow.main()
 
 # --- RUN snow_melt
     # Generate end of month snow rasters and snow melt rasters
