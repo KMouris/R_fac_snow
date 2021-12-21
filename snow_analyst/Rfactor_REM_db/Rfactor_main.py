@@ -11,9 +11,9 @@ each input file. The resulting file is in .tif format with th same raster proper
 
 import config_input
 import file_management
-from package_handling import *
-from Rfactor_REM_db import Rfactor_raster_calculations as raster_calc
 from Rfactor_REM_db import Rfactor_data_management as data_management
+from Rfactor_REM_db import Rfactor_raster_calculations as raster_calc
+from package_handling import *
 
 
 def monthly_factor(m):
@@ -24,7 +24,7 @@ def monthly_factor(m):
     :return: fm (monthly factor)
     """
     fm = 0.3696 * (1 - 1.0888 * math.cos(2 * math.pi * m
-                   / (2.9048 + m)))  # Formula with cos(x), with x in radians
+                                         / (2.9048 + m)))  # Formula with cos(x), with x in radians
     return fm
 
 
@@ -68,8 +68,6 @@ def main():
 
     # 4. Save the f(E,L) raster to a masked array, since it remains constant for each iteration
     f_el_array = raster_calc.raster_to_array(config_input.fEL_path)
-
-    # ---------------------------- Main Loop ----------------------------------------------------------------------- #
 
     for file in filenames:  # Iterate through each monthly precipitation file
         # 1. Get complete name of raster being analyzed (including extension)

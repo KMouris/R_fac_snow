@@ -1,4 +1,5 @@
 from config_input import logging  # CHANGE: calls all folders input file "config_input", which contains all variables
+
 #                                   and imports all needed modules
 
 # define name and location of logfile

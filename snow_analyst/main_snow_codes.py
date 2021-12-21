@@ -1,6 +1,5 @@
-"""
-Main aglorithm which the different .py programs to calculate the total R factor for month or group of months, for the RUSLE
-method.
+"""Main algorithm which the different .py programs to calculate the total R factor for month or group of months,
+for the RUSLE method.
 
 It calls the following files in the following order:
  *pt_raster_manipulation.py: generates .csv files with temperature and precipitation data for each date in the
@@ -15,17 +14,16 @@ It calls the following files in the following order:
  as a the sum of the precipitation and snow melt R factor.
 """
 
-from package_handling import *
 import config_input
 import file_management
-import snow_cover
-import rain_snow_rasters
 import pt_raster_manipulation
-
-from snow_melt import snow_melt_main
-from Rfactor_REM_db import Rfactor_main
-import wasim_snow
+import rain_snow_rasters
+import snow_cover
 import total_R_factor
+import wasim_snow
+from Rfactor_REM_db import Rfactor_main
+from package_handling import *
+from snow_melt import snow_melt_main
 
 if __name__ == '__main__':
 
@@ -35,21 +33,20 @@ if __name__ == '__main__':
     # Generate a list with all the dates to run through and include in the analysis
     date_list = file_management.get_date_list(config_input.start_date, config_input.end_date)
 
-# --- RUN PT_raster_manipulation -------------------------------------------------------------------------------- #
-    # Generate .csv files with daily/hourly precipitation and temperature per input raster cell --------------------- #
+    #  RUN PT_raster_manipulation
+    # Generate .csv files with daily/hourly precipitation and temperature per input raster cell
     if config_input.run_pt_manipulation:
-        print("Generating .csv files from precipitation and temperature data ****************************************")
+        print("Generating .csv files from precipitation and temperature data")
         # Run PT_Manipulation to get .csv files with precipitation and temperature data
         if config_input.start_date.strftime('%Y%m') == config_input.end_date.strftime('%Y%m'):  # If only one date
             pt_raster_manipulation.generate_csv(date=config_input.start_date)
         else:  # if more than one date is being run
             for date in date_list:
                 pt_raster_manipulation.generate_csv(date)
-        print("Finished running PT_raster manipulation. *************************************************************")
-# ------------------------------------------------------------------------------------------------------------------- #
+        print("Finished running PT_raster manipulation.")
 
-# --- RUN rain_snow_rasters ----------------------------------------------------------------------------------------- #
-    # Generate the rain and snow rasters from the precipitation and temperature  in .csv files ---------------------- #
+    # RUN rain_snow_rasters
+    # Generate the rain and snow rasters from the precipitation and temperature  in .csv files
     if config_input.run_rain_snow_rasters:
         print("Generating rain and snow rasters")
         # save all contents in the folder to a list
@@ -67,7 +64,7 @@ if __name__ == '__main__':
                 rain_snow_rasters.generate_rain_snow_rasters(path)
         print("Finished rain and snow raster generation")
 
-# --- RUN snow_cover
+    # RUN snow_cover
     # Generate a binary snow detection raster, to determine cells with snow
     if config_input.run_snow_cover:
         # list with satellite image folders
@@ -86,20 +83,20 @@ if __name__ == '__main__':
             path = os.path.join(config_input.si_folder_path, str(f))
             snow_cover.calculate_snow_cover(path, d)
 
-# --- RUN wasim_snow -------------------------------------------------------------------------------------------------#
+    # RUN wasim_snow
     if config_input.run_wasim_snow:
         print("Analyze snow raster from hydrological model WaSim")
         wasim_snow.main()
 
-# --- RUN snow_melt
+    # RUN snow_melt
     # Generate end of month snow rasters and snow melt rasters
     if config_input.run_snow_melt:
         snow_melt_main.main()
 
-# --- RUN Rfactor_REM_db
+    # RUN Rfactor_REM_db
     if config_input.run_r_factor:
         Rfactor_main.main()
 
-# --- RUN total_precit_factor
+    # RUN total_precit_factor
     if config_input.run_total_factor:
         total_R_factor.main()

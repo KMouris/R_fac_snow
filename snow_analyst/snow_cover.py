@@ -1,7 +1,7 @@
-import file_management
 import config_input
-from package_handling import *
+import file_management
 import si_merge_clip as satellite_images
+from package_handling import *
 
 """Two step program:
     1. If 'run_satellite_image_merge_clip' is True', it reads input Sentinel 2 satellite images and first merges the
@@ -59,8 +59,7 @@ def get_band_paths(folder):
             elif len(match) > 1:  # If there is more than one available raster for the given band
                 s_date = file_management.get_date(folder)
                 message = "There is more than 1 available resampled raster file for band [{}] and sampling date {}." \
-                          " Check input.".format(
-                              band, s_date.strftime('%Y%m%d'))
+                          " Check input.".format(band, s_date.strftime('%Y%m%d'))
                 sys.exit(message)
             else:
                 band_results.append(match[0])
@@ -76,7 +75,6 @@ def calculate_snow_cover(folder, date):
     :param date: analysis date (in datetime format) being looped through or being analyzed
     :return: ---
     """
-    # --------------------------------- Read Satellite Images to list ---------------------------------------------- #
     print(" Calculating snow cover for date {} with satellite image sensing date: {}".format(date.strftime('%Y%m'),
                                                                                              os.path.split(folder)[1]))
     if config_input.run_satellite_image_clip_merge:
@@ -91,26 +89,23 @@ def calculate_snow_cover(folder, date):
     band3 = band_results[1]  # B03 raster
     band11 = band_results[2]  # B11 raster
 
-    # band2 = band_results[np.asscalar(np.flatnonzero(np.core.defchararray.find(band_results, 'B02')!=-1))]
-
     # Extract raster, raster data as array, raster geotransform
     blue_dataset, blue_array, blue_geotransform = gu.raster2array(band2)
     green_dataset, green_array, green_geotransform = gu.raster2array(band3)
-    SWIR_dataset, SWIR_array, SWIR_geotransform = gu.raster2array(band11)
+    swir_dataset, swir_array, swir_geotransform = gu.raster2array(band11)
 
     # NDSI calculation
-    NDSI = (green_array - SWIR_array) / (green_array + SWIR_array)
+    ndsi = (green_array - swir_array) / (green_array + swir_array)
 
     # Calculate Snow Array
     snow = np.where(np.logical_and(
-        NDSI > config_input.NDSI_min, blue_array > config_input.blue_min), 1, 0)
+        ndsi > config_input.NDSI_min, blue_array > config_input.blue_min), 1, 0)
 
     # Save resulting snow Raster
     snow_raster = os.path.join(
         file_management.snow_cover_path, f'SnowCover_{date.strftime("%Y%m")}.tif')
     np.savetxt('Snow', snow, fmt='%s')
-    gu.create_raster(snow_raster, snow, epsg=32634, nan_val=- \
-                     9999, rdtype=gdal.GDT_UInt32, geo_info=blue_geotransform)
+    gu.create_raster(snow_raster, snow, epsg=32634, nan_val=-9999, rdtype=gdal.GDT_UInt32, geo_info=blue_geotransform)
 
 
 if __name__ == '__main__':

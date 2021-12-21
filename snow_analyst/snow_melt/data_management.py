@@ -1,5 +1,5 @@
-from package_handling import *
 from log import *
+from package_handling import *
 
 
 class DataManagement:
@@ -77,13 +77,8 @@ class DataManagement:
 
     def get_date_format(self):
         """
-            Author: Maria Fernanda Morales Oreamuno
             Function extracts the date from the input file/folder name, in datetime format. The date should be in
             YYYYMM, YYYYMMDD, or YYYYMMDD0HH format
-            :param file_path: file or folder path
-            :param day: boolean which is True if the file name contains the day and false if it doesnt contain the day
-            :param hour: boolean which is True if the file name contains the hours and false it it doesn't
-            :param end: Boolean that is True if the date is needed at the end of the month. It is "False" by default
             :return: file date in datetime format
             """
         file_name = os.path.basename(

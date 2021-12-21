@@ -8,9 +8,8 @@ Code resamples an input raster to the extent and cell resolution of (snap) raste
     4. Clips the resampled raster to the snap raster extent, or to the extent of the input shape boundary.
 """
 
-from package_handling import *
 import raster_calculations as rc
-
+from package_handling import *
 
 start_time = time.time()
 
@@ -146,12 +145,12 @@ def interpolate_points(vrt_file, folder, snap_data, cell_size):
     rows = str(int((snap_data[1] - snap_data[3]) / cell_size))
 
     # 4.Use gdal grid to interpolate:
-    # ---- a:interpolation method (Inv distance with nearest neighbor, with smoothing of 0, using a max number of 12
-    # ----- points, searching in a 5000 m radius for those max. 12 points)
-    # ---- txe: Xmin Xmax,
-    # ---- tye: Ymin, Ymax,
-    # ---- outsize: columns rows, of: output file format
-    # ---- a_srs: coordinate system, ot: out type (float)
+    # a:interpolation method (Inv distance with nearest neighbor, with smoothing of 0, using a max number of 12
+    # points, searching in a 5000 m radius for those max. 12 points)
+    # txe: Xmin Xmax,
+    # tye: Ymin, Ymax,
+    # outsize: columns rows, of: output file format
+    # a_srs: coordinate system, ot: out type (float)
     os.system(
         "gdal_grid -a invdistnn:power=2.0:smoothing=0:max_points=12:radius=5000 -txe " + str(snap_data[0]) + " " + str(
             snap_data[2])
@@ -197,14 +196,14 @@ def main(original_raster, snap_raster, snap_boundary, save_name):
     xyz_array = get_raster_points(original_array, gt_original)
 
     # 6. Save the XYZ coordinate data to a .csv file
-    XYZ_CSV = "file.csv"
-    save_csv(xyz_array, XYZ_CSV)  # Save array to .csv file
+    xyz_csv = "file.csv"
+    save_csv(xyz_array, xyz_csv)  # Save array to .csv file
 
     # 7. Create a .vrt file from the .csv in order to be read by the gdal grid command
-    vrt_file = generate_vrt_file(XYZ_CSV)
+    vrt_file = generate_vrt_file(xyz_csv)
 
     # 8. Interpolate points and save the resampled Monthly precipitation raster in the results folder
-    # --7.1 Using GDAL_Grid interpolation
+    # 8.1 Using GDAL_Grid interpolation
     interpolated_path = interpolate_points(
         vrt_file, results_folder, snap_data, cell_resolution)
 
@@ -212,14 +211,14 @@ def main(original_raster, snap_raster, snap_boundary, save_name):
     rc.clip(snap_boundary, save_name, interpolated_path)
 
     # 10. Erase files that are no longer needed:
-    # --10.1 Erase the interpolated raster (before clipping)
+    # 10.1 Erase the interpolated raster (before clipping)
     if os.path.exists(interpolated_path):
         os.remove(interpolated_path)
 
-    # --10.2 Erase the vrt file
+    # 10.2 Erase the vrt file
     if os.path.exists(vrt_file):
         os.remove(vrt_file)
 
-    # --10.3 Erase .csv file with points
-    if os.path.exists(XYZ_CSV):
-        os.remove(XYZ_CSV)
+    # 10.3 Erase .csv file with points
+    if os.path.exists(xyz_csv):
+        os.remove(xyz_csv)

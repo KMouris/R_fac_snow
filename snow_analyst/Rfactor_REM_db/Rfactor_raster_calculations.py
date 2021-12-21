@@ -93,7 +93,7 @@ def create_masked_array(array, no_data):
         :return: masked array
         """
     mskd_array = np.ma.array(array, mask=(
-        array == no_data))  # Mask all NODATA values from the array
+            array == no_data))  # Mask all NODATA values from the array
     return mskd_array
 
 

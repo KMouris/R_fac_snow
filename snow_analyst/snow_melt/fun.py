@@ -1,6 +1,6 @@
-from data_management import *
 from array_calculations import *
 from compare_data import *
+from data_management import *
 from log import *
 
 

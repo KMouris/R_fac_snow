@@ -6,10 +6,10 @@ total R factor as the sum of the R factors due to snow melt and precipitation. L
 the R factor values for each cell, for each month being analyzed.
 """
 
-from package_handling import *
 import config_input
 import file_management
 import raster_calculations
+from package_handling import *
 
 
 def main():
@@ -19,9 +19,11 @@ def main():
     filenames_snow_melt = sorted(glob.glob(file_management.snow_melt_path + "/*.tif"))
 
     # 2. Filter precipitation raster list to only include rasters corresponding to the analysis date range
-    filenames_r_factor = file_management.filter_raster_lists(filenames_r_factor, config_input.start_date, config_input.end_date,
+    filenames_r_factor = file_management.filter_raster_lists(filenames_r_factor, config_input.start_date,
+                                                             config_input.end_date,
                                                              "R factor")
-    filenames_snow_melt = file_management.filter_raster_lists(filenames_snow_melt, config_input.start_date, config_input.end_date,
+    filenames_snow_melt = file_management.filter_raster_lists(filenames_snow_melt, config_input.start_date,
+                                                              config_input.end_date,
                                                               "snow melt")
 
     # 3. Check that files are in order and correspond to the same dates:

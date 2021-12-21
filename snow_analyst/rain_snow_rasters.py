@@ -25,10 +25,10 @@ in the original raster  and must contain the following information: year-month-d
 """
 
 import config_input
-from package_handling import *
-import resampling
-import raster_calculations as rc
 import file_management
+import raster_calculations as rc
+import resampling
+from package_handling import *
 
 
 def generate_rain_snow_rasters(path):
@@ -51,7 +51,6 @@ def generate_rain_snow_rasters(path):
     rows = int(config_input.ascii_data[1])
     columns = int(config_input.ascii_data[0])
 
-    # ------------------------------------------ Generate rasters -------------------------------------------------- #
     result_array_snow = np.full((rows, columns), no_data)  # Array for snow
     result_array_rain = np.full((rows, columns), no_data)  # Array for rain
     d = "Generating rain/snow data rasters for date: " + os.path.basename(path)
@@ -69,7 +68,7 @@ def generate_rain_snow_rasters(path):
         result_array_snow[rw, cl] = sn
         result_array_rain[rw, cl] = rn
 
-    # ---- Resample snow and rain rasters to the same cell resolution as the snap raster:
+    # Resample snow and rain rasters to the same cell resolution as the snap raster:
     # Get year and month from any of the .csv input files
     month = int(station_file[1, 1])
     if month < 10:
@@ -94,7 +93,7 @@ def generate_rain_snow_rasters(path):
     rc.save_raster(result_array_rain, original_rain_name,
                    gt_original, proj, config_input.nodata)
 
-    # -- Resample rasters to sample raster resolution and save:
+    # Resample rasters to sample raster resolution and save:
     resampled_snow_name = os.path.join(
         file_management.snow_raster_path, f'Snow_{str(date)}.tif')
     resampled_rain_name = os.path.join(

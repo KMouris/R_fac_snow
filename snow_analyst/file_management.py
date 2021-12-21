@@ -65,8 +65,8 @@ def get_PT_datefiles(paths, date):
     else:
         # Check if month is incomplete by calculating all possibilities: input files are monthly, daily or hourly
         num_days = int(calendar.monthrange(date.year, date.month)[1])
-        num_hours = num_days*24
-        num_3hours = (num_hours/3)
+        num_hours = num_days * 24
+        num_3hours = (num_hours / 3)
         if len(filenames) != num_days and len(filenames) != num_hours and len(filenames) != num_3hours:
             message = "Data for the month of{} is incomplete.".format(
                 str(date.strftime('%Y%m')))
@@ -177,15 +177,14 @@ def filter_raster_lists(raster_list, date1, date2, file_name):
         sys.exit(message)
 
     # Check if there is one input file per month to analyze
-    n_months = (date2.year - date1.year) * 12 + date2.month - \
-        date1.month + 1  # months to analyze
+    n_months = (date2.year - date1.year) * 12 + date2.month - date1.month + 1  # months to analyze
     n_days = (date2.replace(day=calendar.monthrange(
         date2.year, date2.month)[1]) - date1).days + 1
     n_hours = n_days * 24
     if not n_months == len(new_list) and not n_days == len(new_list) and not n_hours == len(new_list):
         message = "ERROR: One or more of the raster files between {} and {} is missing from {} input files.".format(
             str(date1.strftime('%Y%m')), str(date2.strftime('%Y%m')), file_name) + \
-                                         " Check input rasters for missing date(s) or check date range."
+                  " Check input rasters for missing date(s) or check date range."
         sys.exit(message)
 
     return new_list
@@ -213,8 +212,7 @@ def compare_dates(list1, list2, name1, name2):
     # Check if lists have the same number of files
     if not len(list1) == len(list2):
         message = "There are a different number of {} and {} raster files. Check that both file folders have the " \
-                  "same time discretization and number of files for the given date range.".format(
-                      name1, name2)
+                  "same time discretization and number of files for the given date range.".format(name1, name2)
         sys.exit(message)
 
     # If they do have the same number of files: check that the files are in the same order
@@ -260,7 +258,7 @@ def generate_satellite_image_date_list(folders, date_list):
         # if time difference is more than 15 days, it is no longer considered the end of the month.
         if sub[index] > datetime.timedelta(days=15):
             message = "There are no available satellite images for the analysis date: " + \
-                str(date.strftime('%Y%m'))
+                      str(date.strftime('%Y%m'))
             sys.exit(message)
         else:
             return_folder_list.append(mod_folder_list[index])
@@ -282,7 +280,6 @@ def check_input_si_dates(folders, date_list, si_image_dates):
         input SI dates with the folders corresponding to the end of the month. If the input date corresponds to the same
         month as one of the "end of the month" dates, then it substitutes it with the input date.
 
-    Args:
     :param folders: list of available sensing dates
     :param date_list: list with the dates to analyze (in datetime format)
     :param si_image_dates: the user input variable with the sensing dates to use
@@ -325,13 +322,13 @@ def check_input_si_dates(folders, date_list, si_image_dates):
 if __name__ == '__main__':
     pass
 else:
-    # Generate folder to save all results: -------------------------------------------------------------------------- #
+    # Generate folder to save all results:
     create_folder(config_input.results_path)
 
-    # Convert input dates (start and end date) to date format ------------------------------------------------------- #
-    config_input.start_date  = get_date(config_input.start_date)
+    # Convert input dates (start and end date) to date format
+    config_input.start_date = get_date(config_input.start_date)
     config_input.end_date = get_date(config_input.end_date, end=True)
-# ------------------------------------------------------------------------------------------------------------------- #
+
     if config_input.run_pt_manipulation:
         # Generate folder to save PT_manipulation results (.csv files)
         config_input.PT_path = os.path.join(config_input.results_path, "PT_CSV_per_cell")
@@ -341,19 +338,19 @@ else:
         check_folder(config_input.temperature_path, 'temperature_path')
     else:
         config_input.PT_path = config_input.PT_path_input
-# ------------------------------------------------------------------------------------------------------------------- #
+
     if config_input.run_rain_snow_rasters:
         snow_raster_path = os.path.join(config_input.results_path, "snow_per_month")
         create_folder(snow_raster_path)
         rain_raster_path = os.path.join(config_input.results_path, "rain_per_month")
         create_folder(rain_raster_path)
         # Check if needed input folders exist:
-        check_folder(config_input.PT_path, "PT_path")     # Folder with .csv files
+        check_folder(config_input.PT_path, "PT_path")  # Folder with .csv files
 
     else:
         snow_raster_path = config_input.snow_raster_input
         rain_raster_path = config_input.rain_raster_input
-# ------------------------------------------------------------------------------------------------------------------- #
+
     if config_input.run_snow_cover:
         snow_cover_path = os.path.join(config_input.results_path, "snow_cover")
         create_folder(snow_cover_path)
@@ -362,27 +359,23 @@ else:
     else:
         snow_cover_path = config_input.snowcover_raster_input
 
-# ------------------------------------------------------------------------------------------------------------------- #
-
     if config_input.run_wasim_snow:
         wasim_path = os.path.join(config_input.results_path, "wasim")
         create_folder(wasim_path)
         snow_cover_path = os.path.join(config_input.results_path, "snow_cover")
         create_folder(snow_cover_path)
 
-# ------------------------------------------------------------------------------------------------------------------- #
     if config_input.run_snow_melt:
         snow_melt_path = os.path.join(config_input.results_path, "Snowmelt")
         create_folder(snow_melt_path)
         # check if needed input folders exist:
         check_folder(snow_cover_path, 'snow_cover_path')
-         # snow cover raster
+        # snow cover raster
         check_folder(snow_raster_path, 'snow_raster_path')
         # snow per month raster
     else:
         snow_melt_path = config_input.snow_melt_input
 
-# ------------------------------------------------------------------------------------------------------------------- #
     if config_input.run_r_factor:
         r_factor_path = os.path.join(config_input.results_path, "R_factor_REM_db")
         create_folder(r_factor_path)
@@ -392,12 +385,9 @@ else:
     else:
         r_factor_path = config_input.r_factor_input
 
-# ------------------------------------------------------------------------------------------------------------------- #
     if config_input.run_total_factor:
         total_factor_path = os.path.join(config_input.results_path, "R_factor_Total")
         create_folder(total_factor_path)
         # Check needed folders:
         check_folder(r_factor_path, 'r_factor_path')
         check_folder(snow_melt_path, 'snow_melt_path')
-
-# ------------------------------------------------------------------------------------------------------------------- #

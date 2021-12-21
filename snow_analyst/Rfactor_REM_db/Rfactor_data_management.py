@@ -28,7 +28,7 @@ def filter_raster_lists(raster_list, s_date, e_date):
 
     # Check if there is one input file per month to analyze
     n_months = (e_date.year - s_date.year) * 12 + e_date.month - \
-        s_date.month + 1  # months to analyze
+               s_date.month + 1  # months to analyze
     if not n_months == len(new_list):
         message = "ERROR: Missing rain (precipitation) rasters in input folder." + \
                   "Check input rasters for missing date or check date range."
@@ -52,36 +52,30 @@ def get_date(file_path):
     if len(digits) == 6:  # Either MMYYYY or YYYYMM
         if int(digits[0:2]) > 12:  # YYYYMM format
             try:
-                # print(" Date in YYYYMM format")
                 date = datetime.datetime.strptime(digits, '%Y%m')
             except ValueError:
                 sys.exit("Wrong input date format.")
         else:  # MMYYYY format
             try:
-                # print("date in MMYYYY format")
                 date = datetime.datetime.strptime(digits, '%m%Y')
             except ValueError:
                 sys.exit("Wrong input date format.")
     elif len(digits) == 4:  # Should be YY_MM
-        # print("Date format in YYMM")
         try:
             date = datetime.datetime.strptime(digits, '%y%m')
         except ValueError:
             sys.exit("Wrong input date format in input file {}.".format(file_path))
     elif len(digits) == 8:  # YYYYMMDD format:
-        # print("Date format in YYYYMMDD")
         try:
             date = datetime.datetime.strptime(digits, '%Y%m%d')
         except ValueError:
             sys.exit("Wrong input date format in input file {}.".format(file_path))
     elif len(digits) == 10:  # YYYYMMDDHH
-        # print("Date format in YYYYMMDD_HH")
         try:
             date = datetime.datetime.strptime(digits, '%Y%m%d%H')
         except ValueError:
             sys.exit("Wrong input date format in input file {}.".format(file_path))
     elif len(digits) == 11:  # YYYYMMDD0HH
-        # print("Date format in YYYYMMDD_0HH")
         try:
             date = datetime.datetime.strptime(digits, '%Y%m%d0%H')
         except ValueError:

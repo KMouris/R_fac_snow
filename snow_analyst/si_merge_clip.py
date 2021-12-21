@@ -19,18 +19,16 @@ the satellite image name (DO NOT CHANGE)
 4. shape_path: path (location in folder + name.shp) of the shapefile with which to clip the resampled rastershape file
 """
 
-import file_management
 import config_input
-from package_handling import *
+import file_management
 import raster_calculations as rc
+from package_handling import *
 
 
 def find_image_path(suffix, path):
     """Function loops through each file in the folder "path" and looks for the file whose name contains "suffix" and
     returns the given file's path.
 
-    Args
-    -------------------------------------
     :param suffix: string with name of the band being read and that should be contained in the image name to merge in
     the given loop
     :param path: folder path in which the satellite images are located, and which should be looped to find the image
@@ -56,7 +54,7 @@ def find_image_path(suffix, path):
     for file in os.listdir(path):
         name = os.path.splitext(os.path.basename(file))[0]
         if suffix in name:
-            file_name = file
+            file_name: object = file
             break
     try:
         complete_path = os.path.join(path, file_name)
@@ -72,7 +70,6 @@ def find_image_path(suffix, path):
 def determine_image_level(path):
     """ Function determines if input satellite images correspond to level L1C or L2A, to name the folders respectively
 
-    Args:
         path: path of folder where files are located
 
     Returns: string with the name of the satellite image level
@@ -82,7 +79,7 @@ def determine_image_level(path):
         if any('MSIL2A' in string for string in dirs) or ('MSIL2A' in root):
             level = 'L2A'
             break
-        elif any('MSIL1C' in string for string in dirs) or ('MSIL1C' in  root):
+        elif any('MSIL1C' in string for string in dirs) or ('MSIL1C' in root):
             level = "L1C"
             break
     return level
@@ -91,7 +88,7 @@ def determine_image_level(path):
 def sat_image_merge_clip(folder):
     """
     Function to merge and clip different bands from satellite images from 2 or more different satellites.
-    Args:
+
         folder: folder path for a give sensing date. It must contain sub-folders, one for each satellite.
 
     Returns: list with the paths for each of the merged and clipped satellite band images (in .tif format) needed for
@@ -99,22 +96,22 @@ def sat_image_merge_clip(folder):
     """
     sat_time = time.time()
 
-    # Get satellite image date -------------------------------------------------------------------------------------- #
+    # Get satellite image date
     si_date = file_management.get_date(folder)
     level = determine_image_level(folder)
 
-    # Generate folder in which to save the results from the satellite clip and merge for the given date ------------- #
-    # ---- Generate a folder to save the Satellite Clipping and Merging
+    # Generate folder in which to save the results from the satellite clip and merge for the given date
+    # Generate a folder to save the Satellite Clipping and Merging
     si_results = os.path.join(config_input.results_path, f'SatelliteImages_{level}')
     file_management.create_folder(si_results)
-    # ---- Generate a folder to save the resulting rasters for the given date CHANGE NAME IF A SPECIFIC FORMAT IS NEEDED
+    # Generate a folder to save the resulting rasters for the given date
     si_results = os.path.join(si_results, str(si_date.strftime("%Y%m%d")))
     file_management.create_folder(si_results)
 
-    # -- Save to a list all folders in main folder (each sub-folder corresponds to a satellite image location) ------ #
+    # Save to a list all folders in main folder (each sub-folder corresponds to a satellite image location)
     satellite_list = os.listdir(folder)
 
-    # -- Loop through each sub-folder to find the location of the "image_location_folder_name" ---------------------- #
+    # Loop through each sub-folder to find the location of the "image_location_folder_name"
     location_images = np.full(len(satellite_list), "", dtype=object)  # array to save the location where images are
     for i in range(0, len(satellite_list)):  # Loop through each satellite
         path = os.path.join(folder, satellite_list[i])  # Satellite [i] complete path
@@ -124,31 +121,32 @@ def sat_image_merge_clip(folder):
                 location_images[i] = root
                 break
     if np.all(location_images == ""):
-        message = "The folder with name '{}' does not exist. Check input files".format(config_inputimage_location_folder_name)
+        message = "The folder with name '{}' does not exist. Check input files".format(
+            config_inputimage_location_folder_name)
         sys.exit(message)
 
-    # --- LOOP: through each suffix or band name to merge and clip -------------------------------------------------- #
+    # LOOP: through each suffix or band name to merge and clip
     band_results = []
     for suffix in config_input.image_list:  # Call variable from configuration
         print("Suffix: ", suffix)
         images = np.full(location_images.shape, "", dtype=object)
-        # -- Search the files for each satellite to find the satellite image corresponding to the given suffix ------ #
+        # Search the files for each satellite to find the satellite image corresponding to the given suffix
         for i in range(0, location_images.shape[0]):  # Search in each file location folder for each satellite
             # Save the complete satellite image path for the given suffix, for each satellite
             # images[i] = file_management.FindImagePath(suffix, location_images[i])
             images[i] = find_image_path(suffix, location_images[i])
 
-        # -- 0. Check list ------------------------------------------------------------------------------------------ #
+        # Check list
         if any(i == "0" for i in images):
             print("There are no TCI images in one or more of the satellite image files for {}. Skipping rasters".format(
                 str(si_date.strftime("%Y%m%d"))))
             break
 
-        # -- 1. Merge all images in the list ------------------------------------------------------------------------ #
+        # 1. Merge all images in the list
         merge_name = os.path.join(si_results, f'Merged_{suffix}_{si_date.strftime("%Y%m%d")}.tif')
         rc.merge(images, merge_name)
 
-        # -- 2. Check merged resolution ----------------------------------------------------------------------------- #
+        # 2. Check merged resolution
         # Check if merged rasters have the same resolution. If not, resample to smaller resolution. So all original
         # merged rasters have the same resolution before clipping
         resol = rc.get_resolution(merge_name)
@@ -162,11 +160,11 @@ def sat_image_merge_clip(folder):
             if os.path.exists(name2):
                 os.remove(name2)
 
-        # -- 3. Clip the merged rasters to shapefile ---------------------------------------------------------------- #
+        # 3. Clip the merged rasters to shapefile
         clip_name = os.path.join(si_results, f"{suffix}_{si_date.strftime('%Y%m%d')}_clip.tif")
         rc.clip(config_input.shape_path, clip_name, merge_name)
 
-        # -- 4. Resample clipped raster ----------------------------------------------------------------------------- #
+        # 4. Resample clipped raster
         if file_management.has_number(suffix):
             resample_name = os.path.join(si_results, f"{suffix}_{si_date.strftime('%Y%m%d')}_r.tif")
             rc.warp_resample(resample_name, clip_name, resolution=25)
@@ -174,7 +172,7 @@ def sat_image_merge_clip(folder):
             # Add band rasters to a list to later assign them to bands
             band_results.append(resample_name)
 
-        # -- 5. Erase merged file (can be commented out if user wants to save merged file) -------------------------- #
+        #  5. Erase merged file (can be commented out if user wants to save merged file)
         if os.path.exists(merge_name):
             os.remove(merge_name)
 

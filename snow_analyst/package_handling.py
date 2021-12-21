@@ -1,6 +1,5 @@
 """ package_handling.py imports all the needed modules and packages to run the code """
 
-
 # import all needed modules from the python standard library
 try:
     import glob
@@ -30,7 +29,6 @@ except ModuleNotFoundError as e:
     print('ModuleNotFoundError: Missing fundamental packages (required: gdal, maptlotlib.pyplot, numpy, '
           'pandas, rasterstats, scipy, tqdm')
     print(e)
-
 
 # import geo_utils
 try:

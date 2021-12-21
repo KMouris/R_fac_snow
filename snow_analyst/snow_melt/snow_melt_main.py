@@ -1,8 +1,8 @@
-from zon_statistics import *
-from fun import *
-from package_handling import *
 import config_input
 import file_management
+from fun import *
+from package_handling import *
+from zon_statistics import *
 
 start_time = time.time()
 
@@ -79,16 +79,16 @@ def snowcalc_over_list(initial_snow, satellite_data, measured_snow_next_period):
 
 
 @wrapper(entering, exiting)
-def filter_raster_lists(list):
+def filter_raster_lists(ras_list):
     """
     Function filters input list to only include dates in between the start and end date (analysis range). If there are
     no files for the given date range (new_list is empty), function throws an error.
     [Author: María Fernanda Morales]
-    :param list: list with file paths, whose names contain the date in either YYYYMM or YYMM format
+    :param ras_list: list with file paths, whose names contain the date in either YYYYMM or YYMM format
     :return: filtered list, without the files that are not within the analysis date range.
     """
     new_list = []
-    for elem in list:
+    for elem in ras_list:
         data_manager = DataManagement(
             path=r'' + os.path.abspath('../Results'), filename=elem)
         date = data_manager.get_date_format()
@@ -107,7 +107,8 @@ def filter_raster_lists(list):
         sys.exit(message)
 
     if n_months == 1:
-        message = "The snow melt code cannot run for one month only. Check input end_date and set at least 2 months to analyze."
+        message = "The snow melt code cannot run for one month only. Check input end_date and set at least 2 months " \
+                  "to analyze. "
         sys.exit(message)
 
     return new_list
@@ -115,7 +116,6 @@ def filter_raster_lists(list):
 
 @wrapper(entering, exiting)
 def main():
-
     # Get all file paths into a list: All raster files must be .tif format
     #   CHANGE: input file names
     snow_mm_paths = sorted(glob.glob(file_management.snow_raster_path + "/*.tif"))
@@ -139,7 +139,6 @@ def main():
     date, snow_mm, snow_cover = raster2list(snow_mm_paths, snow_cover_paths)
 
     # get projection and geotransformation of input raster
-    # das Script main_snow_codes.py enhält Aufrufe von main() Funktionen, die nicht existieren(gibt das keine Fehler?), in Line 93 (Rfactor_main.main())r.get_proj_data()
     gt, proj = data_manager.get_proj_data()
 
     # Check input data

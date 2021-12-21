@@ -15,18 +15,18 @@ NOTES:
       of value cells.
 """
 
-import file_management
 import config_input
-from package_handling import *
+import file_management
 import raster_calculations as rc
+from package_handling import *
 
 
-def get_values(P_array, T_array, no_data, cells):
+def get_values(p_array, t_array, no_data, cells):
     """Reads the data cells in the original input rasters and returns an array with the extracted P and T data
     from each cell
 
-    :param P_array: np.array with precipitation data
-    :param T_array: np.array with temperature data
+    :param p_array: np.array with precipitation data
+    :param t_array: np.array with temperature data
     :param no_data: float with no data value from the original input rasters
     :param cells: float with number of data cells in the arrays (should be the same for both)
     :return: np.array with the precipitation value, temperature value, cell row index, cell column index
@@ -35,12 +35,12 @@ def get_values(P_array, T_array, no_data, cells):
     value_array = np.zeros((int(cells), 4))
 
     n = 0  # -counter to fill each row in the new matrix "value", changes value in every "if"
-    for i in range(0, P_array.shape[0]):  # -go through every row
+    for i in range(0, p_array.shape[0]):  # -go through every row
         # -goes through every column in original matrix
-        for j in range(0, P_array.shape[1]):
-            if P_array[i, j] != no_data and T_array[i, j] != no_data:
-                value_array[n, 0] = P_array[i, j]  # Save precipitation value
-                value_array[n, 1] = T_array[i, j]  # Save Temperature value
+        for j in range(0, p_array.shape[1]):
+            if p_array[i, j] != no_data and t_array[i, j] != no_data:
+                value_array[n, 0] = p_array[i, j]  # Save precipitation value
+                value_array[n, 1] = t_array[i, j]  # Save Temperature value
                 # Save in first column the original row value, represented by "i"
                 value_array[n, 2] = i
                 # Save in second column the original column value, represented by "j"
@@ -105,7 +105,6 @@ def generate_csv(date):
     date. The function filters the raster files in the 'precipitation_path' and 'temperature_path' from the config_input
     file to extract those corresponding to the given input date's month.
 
-    Args:
         date: date (in datetime format) corresponding to the month being analyzed
 
     Returns: ---
@@ -114,12 +113,12 @@ def generate_csv(date):
     start_time = time.time()
     print("Analyzing date: {}.".format(str(date.strftime('%Y%m'))))
 
-    # -- Create a folder in which to save the results for the given date -------------------------------------------- #
+    # Create a folder in which to save the results for the given date
 
     save_folder = os.path.join(config_input.PT_path, str(date.strftime('%Y%m')))
     file_management.create_folder(save_folder)
 
-    # -- Get all txt files in the path directory, and save them in a list ------------------------------------------- #
+    # Get all txt files in the path directory, and save them in a list
     filenames_precip = glob.glob(config_input.precipitation_path + "/*.txt")
     filenames_temp = glob.glob(config_input.temperature_path + "/*.txt")
 
