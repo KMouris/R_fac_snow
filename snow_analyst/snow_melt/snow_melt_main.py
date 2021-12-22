@@ -115,7 +115,7 @@ def filter_raster_lists(ras_list):
 
 
 @wrapper(entering, exiting)
-def main():
+def process_snow_melt():
     # Get all file paths into a list: All raster files must be .tif format
     #   CHANGE: input file names
     snow_mm_paths = sorted(glob.glob(file_management.snow_raster_path + "/*.tif"))

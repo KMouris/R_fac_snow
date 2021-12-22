@@ -86,17 +86,17 @@ if __name__ == '__main__':
     # RUN wasim_snow
     if config_input.run_wasim_snow:
         print("Analyze snow raster from hydrological model WaSim")
-        wasim_snow.main()
+        wasim_snow.process_wasim_results()
 
     # RUN snow_melt
     # Generate end of month snow rasters and snow melt rasters
     if config_input.run_snow_melt:
-        snow_melt_main.main()
+        snow_melt_main.process_snow_melt()
 
     # RUN Rfactor_REM_db
     if config_input.run_r_factor:
-        Rfactor_main.main()
+        Rfactor_main.calculate_REM_db()
 
     # RUN total_precit_factor
     if config_input.run_total_factor:
-        total_R_factor.main()
+        total_R_factor.calculate_tot_R()

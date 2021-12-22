@@ -9,7 +9,7 @@ import resampling
 from package_handling import *
 
 
-def main():
+def process_wasim_results():
     # 1. Get all file paths into a list: All raster files must be .txt format
     snow_raster_wasim_paths = sorted(glob.glob(config_input.snow_wasim_path + "/*.txt"))
 

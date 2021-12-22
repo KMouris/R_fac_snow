@@ -12,7 +12,7 @@ import raster_calculations
 from package_handling import *
 
 
-def main():
+def calculate_tot_R():
     print("Calculating total R factor")
     # 1. Get lists with Rfactor and snow melt rasters
     filenames_r_factor = sorted(glob.glob(file_management.r_factor_path + "/*.tif"))

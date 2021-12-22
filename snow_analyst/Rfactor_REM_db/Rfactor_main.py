@@ -50,7 +50,7 @@ def rfactor(m, p_array, f_el_array):
     return r_factor
 
 
-def main():
+def calculate_REM_db():
     # 1. Save all monthly precipitation rasters, with .tif extension, in a list, to iterate over them
     filenames = glob.glob(file_management.rain_raster_path + "/*.tif")
 
