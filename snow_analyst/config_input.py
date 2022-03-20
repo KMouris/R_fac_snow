@@ -81,8 +81,8 @@ T_snow = 0
 """ If run_rain_snow_rasters = False: (AND run_snow_melt is True OR run_r_factor is True)
 - snow_raster: string, folder path where .tif snow rasters are located (needed for snow_melt calculation)
 - rain_raster: string, folder path where .tif rain rasters are located (needed for R factor calculation)"""
-snow_raster_input = r'/home/IWS/mouris/Desktop/Test_snow_codes_seb/R_fac_snow/results/snow_per_month/'
-rain_raster_input = r'/home/IWS/mouris/Desktop/Test_snow_codes_seb/R_fac_snow/results/rain_per_month/'
+snow_raster_input = r''
+rain_raster_input = r''
 
 """ If "run_snow_cover" = True:
 - si_folder_path: string, folder path where satellite images are: each folder must correspond to a sensing date,
@@ -104,8 +104,7 @@ rain_raster_input = r'/home/IWS/mouris/Desktop/Test_snow_codes_seb/R_fac_snow/re
 
 - NDSI_min: float with NDSI threshold for snow detection.
 - blue_min: float with Blue band threshold for snow detection."""
-si_folder_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Satellite_data\Downloaded_MF'
-# si_folder_path = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Satellite_data\Converted_L2A'
+si_folder_path = r''
 
 input_si_dates = False
 si_image_dates = [20161223]
@@ -126,7 +125,7 @@ snow_wasim_path = r'' + os.path.abspath('../input/snow_storage')
 If "run_snow_cover" = False (and run_snow_melt is True)
 - snowcover_raster_input: string, folder path where .tif binary snow cover rasters are located."""
 
-snowcover_raster_input = r'/home/IWS/mouris/Desktop/Test_snow_codes_seb/R_fac_snow/results/snow_cover'
+snowcover_raster_input = r''
 
 """If "run_snow_melt" is True:
 - plot_statistic: Boolean where if 'True', plots the snow melt statistics for a given input shapefile.
@@ -148,8 +147,7 @@ plot_result = os.path.join(results_path, 'Plots')
 - snow_melt_input: string, folder path where .tif snow melt rasters are located (each file name must contain the date)
 """
 
-snow_melt_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\results\Snowmelt'
-# snow_melt_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\Git_codes\R_fac_snow\results\Snowmelt'
+snow_melt_input = r''
 
 """If run_Rfactor = True:
 - fEl_path: string, path where the f(E,EL) raster is, including raster name and extension (must be .tif).
@@ -159,8 +157,7 @@ fEL_path = r'' + os.path.abspath('../input/DEM/f_L_E.tif')
 """ If run_Rfactor is False (AND run_total_factor is True)
 - r_factor_input: string, folder path with .tif R factor rasters (with the raster name including the date).
 """
-r_factor_input = r'C:\Users\Mouris\Desktop\Test_Snow\Test_Codes\results\R_factor_REM_db'
-# r_factor_input = r'Y:\Abt1\hiwi\Oreamuno\Tasks\Snow_Codes\Modifications_MF\results\R_factor_REM_db'
+r_factor_input = r''
 
 """If run_total_factor is True:
 - snow_factor: (float or int) Factor with which to multiply the snow melt raster values to get the snow melt erosivity.
